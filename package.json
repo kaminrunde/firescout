@@ -1,0 +1,22 @@
+{
+  "name": "firescout-wrapper",
+  "version": "1.0.0",
+  "description": "WIP",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaminrunde/firescout.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kaminrunde/firescout/issues"
+  },
+  "homepage": "https://github.com/kaminrunde/firescout#readme",
+  "devDependencies": {
+    "lerna": "^3.20.2"
+  }
+}
