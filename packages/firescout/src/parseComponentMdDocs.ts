@@ -5,17 +5,21 @@ import Visitor from './visitor'
 type Docs = {
   context: string,
   description: string,
+  _description: string,
   triggers: ChapterContent,
   states: ChapterContent
 }
 
 type Bullet = {
   name: string,
-  value: string
+  value: string,
+  _name: string,
+  _value: string
 }
 
 type ChapterContent = {
   description: string,
+  _description: string,
   bullets: Bullet[]
 }
 
@@ -32,12 +36,15 @@ export default function parseComponentMdDocs (text:string) {
   let result:Docs = {
     context: '',
     description: '',
+    _description: '',
     triggers: {
       description: '',
+      _description: '',
       bullets: []
     },
     states: {
       description: '',
+      _description: '',
       bullets: []
     }
   }
@@ -53,6 +60,7 @@ export default function parseComponentMdDocs (text:string) {
           contentNodes: [],
           content: {
             description: '',
+            _description: '',
             bullets: []
           }
         })
@@ -78,6 +86,7 @@ export default function parseComponentMdDocs (text:string) {
   if(main) {
     result.context = main.title
     result.description = main.content.description
+    result._description = main.content._description
   }
 
   if(triggers){
@@ -98,6 +107,7 @@ function buildChapterContent (chapter:Chapter) {
   
   // parse chapter description
   chapter.content.description = Visitor.getText(descNodes)
+  chapter.content._description = Visitor.getMd(descNodes)
   chapter.content.bullets = bulletNodes.map(node => parseBullet(node))
 }
 
@@ -105,6 +115,8 @@ function parseBullet (node:mdt.List):Bullet {
   const [title, ...rest] = node.block
   let name = Visitor.getText([title])
   let value = Visitor.getText(rest)
+  let _name = Visitor.getMd([title])
+  let _value = Visitor.getMd(rest)
   if(value.startsWith(': ')) value = value.replace(': ', '')
-  return { name, value }
+  return { name, value, _name, _value }
 }
