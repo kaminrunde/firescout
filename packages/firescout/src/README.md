@@ -2,26 +2,21 @@
 
 # organisms/Wishlist
 
-Here the wishlist products will be displayed. A wishlist product
-can be added to the list by clicking on the heart within a ProductWidget.
+Here the wishlist products will be displayed. A wishlist product can be added to the list by clicking on the heart within a ProductWidget.
 
 ## Triggers
 
-- **subscribe**: When clicking on the subscribe button the user inits the
-process to subscribe to wishlist
+- **subscribe**: When clicking on the subscribe button the user inits the process to subscribe to wishlist
 
 ## States
 
-- **login-required**: The wishlist needs the user to be logged in. If not
-the wishlist will show a login-screen to promt the user to login in order
-to see his products
-- **empty**: When the user does not have any products on his wishlist we
-want to tell the user that he has to add products first to see his wishlist
-- **filled**: The user can see his current wishlist products because he is
-logged in and has added some products
-- **not-subscribed**: The user does not have wishlist subscription. A button
-is displayed to inform the user about the subscription benefits
-- **pending-subscription**: The user already subscribed to wishlist updates
-but did not confirm the email. A notification text is displayed
-- **subscribed**: The user has subscribed and confirmed the email. A unsubscribe
-button is displayed if the user wants to cancel the subscription
+- **login-required**: The wishlist needs the user to be logged in. If not the wishlist will show a login-screen to promt the user to login in order to see his products
+- **empty**: When the user does not have any products on his wishlist we want to tell the user that he has to add products first to see his wishlist
+- **filled**: The user can see his current wishlist products because he is logged in and has added some products
+- **not-subscribed**: The user does not have wishlist subscription. A button is displayed to inform the user about the subscription benefits
+- **pending-subscription**: The user already subscribed to wishlist updates but did not confirm the email. A notification text is displayed
+- **subscribed**: The user has subscribed and confirmed the email. A unsubscribe button is displayed if the user wants to cancel the subscription
+
+## Collections
+
+- **ColorFilter**: description
