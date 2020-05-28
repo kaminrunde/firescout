@@ -103,8 +103,8 @@ function buildChapterContent (chapter:Chapter) {
 
 function parseBullet (node:mdt.List):Bullet {
   const [title, ...rest] = node.block
-  return {
-    name: Visitor.getText([title]),
-    value: Visitor.getText(rest)
-  }
+  let name = Visitor.getText([title])
+  let value = Visitor.getText(rest)
+  if(value.startsWith(': ')) value = value.replace(': ', '')
+  return { name, value }
 }
