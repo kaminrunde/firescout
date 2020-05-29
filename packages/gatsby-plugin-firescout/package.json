@@ -5,15 +5,24 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "npm run build -- --watch",
+    "type-check": "tsc --noEmit",
+    "build": "tsc --declaration",
+    "build:types": "tsc --emitDeclarationOnly"
+  },
+  "bin": {
+    "firescout-build": "./scripts/firescout-build.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^14.0.5",
-    "markdown-ast": "^0.2.1",
+    "markdown-ast": "^0.2.1"
+  },
+  "devDependencies": {
     "ts-node": "^8.10.1",
     "tsc": "^1.20150623.0",
+    "@types/node": "^14.0.5",
     "typescript": "^3.9.3"
   }
 }
