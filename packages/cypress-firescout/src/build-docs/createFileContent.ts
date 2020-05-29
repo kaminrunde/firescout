@@ -12,7 +12,7 @@ export default function createFileContent (tree:Tree):string {
            * @name ${trigger.name}
            * @file ${trigger.file}
            */
-          handle(name:'${trigger.name}', index?:number|string): Cypress.Chainable<Element>
+          trigger(name:'${trigger.name}', index?:number|string): Cypress.Chainable<Element>
         `).join('\n')}
 
         ${node.states.map(state => `
@@ -21,14 +21,14 @@ export default function createFileContent (tree:Tree):string {
            * @name ${state.name}
            * @file ${state.file}
            */
-          hasFlag(name:'${state.name}', index?:number|string): Cypress.Chainable<Element>
+          hasState(name:'${state.name}', index?:number|string): Cypress.Chainable<Element>
 
           /** 
            * ${node.docs?.states.bullets.find(row => row.name === state.name)?.value || ''}
            * @name ${state.name}
            * @file ${state.file}
            */
-          notHasFlag(name:'${state.name}', index?:number|string): Cypress.Chainable<Element>
+          notHasState(name:'${state.name}', index?:number|string): Cypress.Chainable<Element>
         `).join('\n')}
       }
     `)}
@@ -41,7 +41,7 @@ export default function createFileContent (tree:Tree):string {
          * @file ${node.file}
          * @docs_file ${node.docsFile || '-'}
          */
-        function component (name:'${node.context}', index?:number):${node.typesaveContext}
+        function component (name:'${node.context}', index?:number|string):${node.typesaveContext}
       `).join('\n')}
     }
   `.split('\n').slice(1).map(s => s.trim()).join('\n')

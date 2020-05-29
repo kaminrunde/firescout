@@ -3,8 +3,9 @@
 
 Cypress.Commands.add("widget", {prevSubject:'optional'}, (subject, name, index) => {
   let cmd
-  if(subject) cmd = cy.get(`${subject.selector} [data-cy-id="${name}"]`)
-  else cmd = cy.get(`[data-cy-id="${name}"]`)
+  if(subject) cmd = cy.get(`${subject.selector} [data-cy-ctx="${name}"]`)
+  else if (typeof index === 'string') cmd = cy.contains(`[data-cy-ctx="${name}"]`, index)
+  else cmd = cy.get(`[data-cy-ctx="${name}"]`)
 
   if(typeof index === 'number'){
     cmd = cmd.eq(index)
@@ -12,11 +13,12 @@ Cypress.Commands.add("widget", {prevSubject:'optional'}, (subject, name, index) 
   return cmd
 })
 
-Cypress.Commands.add("handle", {prevSubject:'optional'}, (subject, name, index) => {
+Cypress.Commands.add("trigger", {prevSubject:'optional'}, (subject, name, index) => {
   let cmd
-  if(subject.attr('data-cy-handle') === name) return cy.get(subject.selector)
-  if(subject) cmd = subject.find(`[data-cy-handle="${name}"]`)
-  else cmd = cy.get(`[data-cy-handle="${name}"]`)
+  if(subject.attr('data-cy-trigger') === name) return cy.get(subject.selector)
+  else if(subject) cmd = subject.find(`[data-cy-trigger="${name}"]`)
+  else if (typeof index === 'string') cmd = cy.contains(`[data-cy-trigger="${name}"]`, index)
+  else cmd = cy.get(`[data-cy-trigger="${name}"]`)
 
   if(typeof index === 'number'){
     cmd = cmd.eq(index)
@@ -25,12 +27,12 @@ Cypress.Commands.add("handle", {prevSubject:'optional'}, (subject, name, index) 
   return cmd
 })
 
-Cypress.Commands.add("hasFlag", {prevSubject:'optional'}, (subject, name) => {
-  return cy.get(subject).should('contain.html', `data-cy-flag="${name}"`)
+Cypress.Commands.add("hasState", {prevSubject:'optional'}, (subject, name) => {
+  return cy.get(subject).should('contain.html', `data-cy-state="${name}"`)
 })
 
-Cypress.Commands.add("notHasFlag", {prevSubject:'optional'}, (subject, name) => {
-  return cy.get(subject).should('not.contain.html', `data-cy-flag="${name}"`)
+Cypress.Commands.add("notHasState", {prevSubject:'optional'}, (subject, name) => {
+  return cy.get(subject).should('not.contain.html', `data-cy-state="${name}"`)
 })
 
 // Cypress.Commands.add('module', name => {
@@ -62,8 +64,8 @@ Cypress.Commands.add("notHasFlag", {prevSubject:'optional'}, (subject, name) => 
 //     let max = 500
 //     while(max--){
 //       if($parent.tagName === 'body') break
-//       let id = $parent.attr('data-cy-id')
-//       let handle = $parent.attr('data-cy-handle')
+//       let id = $parent.attr('data-cy-ctx')
+//       let handle = $parent.attr('data-cy-trigger')
 //       if(handle) list.push({type:'handle', el:$parent, payload:handle})
 //       if(id) list.push({type:'id', el:$parent, payload:id})
 //       $parent = $parent.parent()
