@@ -8,3 +8,7 @@ export function executeCmd (cmd:string):Promise<string> {
     })
   })
 }
+
+export function parseFile (file:string):string {
+  return file.replace(process.cwd(), '')
+}

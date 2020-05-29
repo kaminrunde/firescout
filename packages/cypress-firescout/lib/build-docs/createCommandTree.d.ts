@@ -1,12 +1,16 @@
+import parseComponendMdDocs from './parseComponentMdDocs';
 declare type RawItem = {
     type: 'ctx' | 'trigger' | 'state' | 'component-doc';
     payload: string;
     file: string;
 };
-declare type Tree = {
+export declare type Tree = {
     context: string;
+    typesaveContext: string;
     file: string;
     basePath: string;
+    docsFile?: string;
+    docs?: ReturnType<typeof parseComponendMdDocs>;
     triggers: {
         name: string;
         file: string;

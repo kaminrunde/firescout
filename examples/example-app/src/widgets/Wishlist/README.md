@@ -4,6 +4,8 @@
 
 Here the wishlist products will be displayed. A wishlist product can be added to the list by clicking on the heart within a ProductWidget.
 
+This is a new line
+
 ## Triggers
 
 - **subscribe**: When clicking on the subscribe button the user inits the process to subscribe to wishlist

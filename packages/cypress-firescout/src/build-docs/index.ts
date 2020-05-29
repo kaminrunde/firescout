@@ -1,5 +1,6 @@
-import {executeCmd} from './utils'
+import * as utils from './utils'
 import createCommandTree from './createCommandTree'
+import createFileContent from './createFileContent'
 import fs from 'fs'
 
 const configRaw = fs.readFileSync(process.cwd()+'/firescout.json', 'utf8')
@@ -15,8 +16,8 @@ type RawItem = {
 }
 
 Promise.all([
-  executeCmd(DOCS_CMD),
-  executeCmd(HANDLES_CMD),
+  utils.executeCmd(DOCS_CMD),
+  utils.executeCmd(HANDLES_CMD),
 ])
 
 // format
@@ -27,12 +28,12 @@ Promise.all([
 
 .then(([docs, handles]) => {
   const rawDocItems:RawItem[] = docs.map(doc => ({
-    file: doc,
+    file: utils.parseFile(doc),
     type: 'component-doc',
     payload: fs.readFileSync(doc, 'utf8')
   }))
   const rawHandleItems:RawItem[] = handles.map(handle => ({
-    file: handle.split(':')[0],
+    file: utils.parseFile(handle.split(':')[0]),
     // @ts-ignore
     type: handle.match(/data-cy-(state|ctx|trigger)/)[1] as string,
     // @ts-ignore
@@ -41,5 +42,7 @@ Promise.all([
   return [...rawDocItems, ...rawHandleItems]
 })
 .then(createCommandTree)
+.then(createFileContent)
+// .then(r => JSON.stringify(r,null,2))
 .then(console.log)
 .catch(console.log)
