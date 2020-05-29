@@ -1,0 +1,1 @@
+# EsLint Plugin Firescout
