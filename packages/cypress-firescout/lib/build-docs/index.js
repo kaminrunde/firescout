@@ -27,10 +27,9 @@ var createCommandTree_1 = __importDefault(require("./createCommandTree"));
 var createFileContent_1 = __importDefault(require("./createFileContent"));
 var parseInput_1 = __importDefault(require("./parseInput"));
 var fs_1 = __importDefault(require("fs"));
-var configRaw = fs_1.default.readFileSync(process.cwd() + '/firescout.json', 'utf8');
-var config = JSON.parse(configRaw);
-var DOCS_CMD = "grep -rl \"<!-- firescout-docs -->\" " + process.cwd() + "/" + config.widgetFolder;
-var HANDLES_CMD = "grep -HREo \"data-cy-(state|ctx|trigger)=(\\\"|').*(\\\"|')\" " + process.cwd() + "/" + config.widgetFolder;
+var config_1 = __importDefault(require("./config"));
+var DOCS_CMD = "grep -rl \"<!-- firescout-docs -->\" " + config_1.default.widgetFolder;
+var HANDLES_CMD = "grep -HREo \"data-cy-(state|ctx|trigger)=(\\\"|').*(\\\"|')\" " + config_1.default.widgetFolder;
 Promise.all([
     utils.executeCmd(DOCS_CMD),
     utils.executeCmd(HANDLES_CMD),
@@ -39,5 +38,5 @@ Promise.all([
     .then(createCommandTree_1.default)
     .then(createFileContent_1.default)
     // .then(r => JSON.stringify(r,null,2))
-    .then(function (file) { return fs_1.default.writeFileSync(process.cwd() + "/" + config.outPath, file, 'utf8'); })
+    .then(function (file) { return fs_1.default.writeFileSync(config_1.default.outPath, file, 'utf8'); })
     .catch(console.log);
