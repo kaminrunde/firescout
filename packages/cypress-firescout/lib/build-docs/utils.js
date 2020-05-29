@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.executeCmd = void 0;
 var child_process_1 = require("child_process");
 function executeCmd(cmd) {
     return new Promise(function (resolve, reject) {
@@ -11,4 +12,4 @@ function executeCmd(cmd) {
         });
     });
 }
-exports.default = executeCmd;
+exports.executeCmd = executeCmd;
