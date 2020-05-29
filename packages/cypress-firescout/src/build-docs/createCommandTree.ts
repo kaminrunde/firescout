@@ -1,10 +1,5 @@
 import parseComponendMdDocs from './parseComponentMdDocs'
-
-type RawItem = {
-  type: 'ctx' | 'trigger' | 'state' | 'component-doc',
-  payload: string,
-  file: string
-}
+import {RawItem} from './parseInput'
 
 export type Tree = {
   context: string,

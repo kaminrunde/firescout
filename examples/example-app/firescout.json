@@ -1,3 +1,4 @@
 {
-  "widgetFolder": "src/widgets"
+  "widgetFolder": "src/widgets",
+  "outPath": "cypress/support/firescout-types.ts"
 }

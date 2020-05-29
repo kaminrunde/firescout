@@ -1,9 +1,5 @@
 import parseComponendMdDocs from './parseComponentMdDocs';
-declare type RawItem = {
-    type: 'ctx' | 'trigger' | 'state' | 'component-doc';
-    payload: string;
-    file: string;
-};
+import { RawItem } from './parseInput';
 export declare type Tree = {
     context: string;
     typesaveContext: string;
@@ -21,4 +17,3 @@ export declare type Tree = {
     }[];
 }[];
 export default function createCommandTree(items: RawItem[]): Tree;
-export {};

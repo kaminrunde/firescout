@@ -18,26 +18,36 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils = __importStar(require("./utils"));
-var createCommandTree_1 = __importDefault(require("./createCommandTree"));
-var createFileContent_1 = __importDefault(require("./createFileContent"));
-var parseInput_1 = __importDefault(require("./parseInput"));
 var fs_1 = __importDefault(require("fs"));
-var configRaw = fs_1.default.readFileSync(process.cwd() + '/firescout.json', 'utf8');
-var config = JSON.parse(configRaw);
-var DOCS_CMD = "grep -rl \"<!-- firescout-docs -->\" " + process.cwd() + "/" + config.widgetFolder;
-var HANDLES_CMD = "grep -HREo \"data-cy-(state|ctx|trigger)=(\\\"|').*(\\\"|')\" " + process.cwd() + "/" + config.widgetFolder;
-Promise.all([
-    utils.executeCmd(DOCS_CMD),
-    utils.executeCmd(HANDLES_CMD),
-])
-    .then(parseInput_1.default)
-    .then(createCommandTree_1.default)
-    .then(createFileContent_1.default)
-    // .then(r => JSON.stringify(r,null,2))
-    .then(function (file) { return fs_1.default.writeFileSync(process.cwd() + "/" + config.outPath, file, 'utf8'); })
-    .catch(console.log);
+function parseInput(input) {
+    var _a = input.map(function (s) {
+        var list = s.split('\n').filter(Boolean);
+        return Array.from(new Set(list));
+    }), docs = _a[0], handles = _a[1];
+    var rawDocItems = docs.map(function (doc) { return ({
+        file: utils.parseFile(doc),
+        type: 'component-doc',
+        payload: fs_1.default.readFileSync(doc, 'utf8')
+    }); });
+    var rawHandleItems = handles.map(function (handle) { return ({
+        file: utils.parseFile(handle.split(':')[0]),
+        // @ts-ignore
+        type: handle.match(/data-cy-(state|ctx|trigger)/)[1],
+        // @ts-ignore
+        payload: handle.match(/data-cy-(state|ctx|trigger)=("|')(.*)("|')/)[3]
+    }); });
+    return __spreadArrays(rawDocItems, rawHandleItems);
+}
+exports.default = parseInput;
