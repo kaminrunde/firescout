@@ -1,2 +1,2 @@
 "use strict";
-// index
+// foo
