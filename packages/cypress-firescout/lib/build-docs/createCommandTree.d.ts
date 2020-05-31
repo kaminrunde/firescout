@@ -1,5 +1,7 @@
 import parseComponendMdDocs from './parseComponentMdDocs';
-import { RawItem } from './parseInput';
+import { RawItem as GrepRawItem } from './searchWithGrep';
+import { RawItem as NodeRawItem } from './searchWithNode';
+declare type RawItem = GrepRawItem | NodeRawItem;
 export declare type Tree = {
     context: string;
     typesaveContext: string;
@@ -17,3 +19,4 @@ export declare type Tree = {
     }[];
 }[];
 export default function createCommandTree(items: RawItem[]): Tree;
+export {};

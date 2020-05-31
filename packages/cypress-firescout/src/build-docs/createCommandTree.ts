@@ -1,5 +1,8 @@
 import parseComponendMdDocs from './parseComponentMdDocs'
-import {RawItem} from './parseInput'
+import {RawItem as GrepRawItem} from './searchWithGrep'
+import {RawItem as NodeRawItem} from './searchWithNode'
+
+type RawItem = GrepRawItem | NodeRawItem
 
 export type Tree = {
   context: string,

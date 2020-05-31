@@ -1,7 +1,6 @@
-// not used
-
 import * as utils from './utils'
 import fs from 'fs'
+import config from './config'
 
 export type RawItem = {
   type: 'ctx' | 'trigger' | 'state' | 'component-doc',
@@ -9,7 +8,17 @@ export type RawItem = {
   file: string
 }
 
-export default function parseInput (input: [string,string]):RawItem[] {
+const DOCS_CMD = `grep -rl "<!-- firescout-docs -->" ${config.widgetFolder}`
+const HANDLES_CMD = `grep -HREo "data-cy-(state|ctx|trigger)=(\\"|').*(\\"|')" ${config.widgetFolder}`
+
+export default function searchWithGrep ():Promise<RawItem[]> {
+  return Promise.all([
+    utils.executeCmd(DOCS_CMD), 
+    utils.executeCmd(HANDLES_CMD)
+  ]).then(parseInput)
+}
+
+function parseInput (input: [string,string]):RawItem[] {
   const [docs, handles] = input.map(s => {
     const list = s.split('\n').filter(Boolean)
     return Array.from(new Set(list))
