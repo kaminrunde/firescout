@@ -2,7 +2,8 @@ import fs from 'fs'
 
 type Config = {
   widgetFolder: string,
-  outPath: string
+  outPath: string,
+  extensions: string
 }
 
 const configRaw = fs.readFileSync(process.cwd()+'/firescout.json', 'utf8')
