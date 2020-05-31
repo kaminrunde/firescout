@@ -11,7 +11,7 @@ export type Tree = {
   basePath: string,
   docsFile?: string,
   docs?: ReturnType<typeof parseComponendMdDocs>
-  triggers: {
+  handles: {
     name: string,
     file: string
   }[],
@@ -41,8 +41,8 @@ export default function createCommandTree (items:RawItem[]):Tree {
         docsFile: docs[item.payload]?.file,
         docs: docs[item.payload]?.docs,
         file: item.file,
-        triggers: items
-          .filter(item => item.type === 'trigger')
+        handles: items
+          .filter(item => item.type === 'handle')
           .filter(item => item.file.includes(basePath))
           .map(item => ({
             name: item.payload,

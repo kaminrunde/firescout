@@ -1,6 +1,6 @@
 "use strict";
 /// <reference types="cypress" />
-Cypress.Commands.add("widget", { prevSubject: 'optional' }, function (subject, name, index) {
+Cypress.Commands.add("component", { prevSubject: 'optional' }, function (subject, name, index) {
     var cmd;
     if (subject)
         cmd = cy.get(subject.selector + " [data-cy-ctx=\"" + name + "\"]");
@@ -13,16 +13,16 @@ Cypress.Commands.add("widget", { prevSubject: 'optional' }, function (subject, n
     }
     return cmd;
 });
-Cypress.Commands.add("trigger", { prevSubject: 'optional' }, function (subject, name, index) {
+Cypress.Commands.add("handle", { prevSubject: 'optional' }, function (subject, name, index) {
     var cmd;
-    if (subject.attr('data-cy-trigger') === name)
+    if (subject.attr('data-cy-handle') === name)
         return cy.get(subject.selector);
     else if (subject)
-        cmd = subject.find("[data-cy-trigger=\"" + name + "\"]");
+        cmd = subject.find("[data-cy-handle=\"" + name + "\"]");
     else if (typeof index === 'string')
-        cmd = cy.contains("[data-cy-trigger=\"" + name + "\"]", index);
+        cmd = cy.contains("[data-cy-handle=\"" + name + "\"]", index);
     else
-        cmd = cy.get("[data-cy-trigger=\"" + name + "\"]");
+        cmd = cy.get("[data-cy-handle=\"" + name + "\"]");
     if (typeof index === 'number') {
         cmd = cmd.eq(index);
     }
@@ -62,7 +62,7 @@ Cypress.Commands.add("notHasState", { prevSubject: 'optional' }, function (subje
 //     while(max--){
 //       if($parent.tagName === 'body') break
 //       let id = $parent.attr('data-cy-ctx')
-//       let handle = $parent.attr('data-cy-trigger')
+//       let handle = $parent.attr('data-cy-handle')
 //       if(handle) list.push({type:'handle', el:$parent, payload:handle})
 //       if(id) list.push({type:'id', el:$parent, payload:id})
 //       $parent = $parent.parent()

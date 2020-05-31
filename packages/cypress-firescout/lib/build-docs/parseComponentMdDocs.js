@@ -11,7 +11,7 @@ function parseComponentMdDocs(text) {
         context: '',
         description: '',
         _description: '',
-        triggers: {
+        handles: {
             description: '',
             _description: '',
             bullets: []
@@ -49,13 +49,13 @@ function parseComponentMdDocs(text) {
     }
     // find sections by title
     var main = chapters.find(function (c) { return c.rank === 1; });
-    var triggers = chapters.find(function (c) { return c.title === 'Triggers'; });
-    var states = chapters.find(function (c) { return c.title === 'States'; });
+    var handles = chapters.find(function (c) { return c.title.toLowerCase() === 'handles'; });
+    var states = chapters.find(function (c) { return c.title.toLowerCase() === 'states'; });
     // chapter content is initially empty
     if (main)
         buildChapterContent(main);
-    if (triggers)
-        buildChapterContent(triggers);
+    if (handles)
+        buildChapterContent(handles);
     if (states)
         buildChapterContent(states);
     if (main) {
@@ -63,8 +63,8 @@ function parseComponentMdDocs(text) {
         result.description = main.content.description;
         result._description = main.content._description;
     }
-    if (triggers) {
-        result.triggers = triggers.content;
+    if (handles) {
+        result.handles = handles.content;
     }
     if (states) {
         result.states = states.content;

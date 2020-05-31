@@ -22,7 +22,7 @@ export default function Wishlist () {
     <div data-cy-ctx='organisms/Wishlist'>
       <span data-cy-state='filled'></span>
       <p>products found</p>
-      <button data-cy-trigger='subscribe'>subscribe</button>
+      <button data-cy-handle='subscribe'>subscribe</button>
     </div>
   )
 }

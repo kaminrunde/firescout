@@ -24,8 +24,8 @@ function createCommandTree(items) {
             docsFile: (_a = docs[item.payload]) === null || _a === void 0 ? void 0 : _a.file,
             docs: (_b = docs[item.payload]) === null || _b === void 0 ? void 0 : _b.docs,
             file: item.file,
-            triggers: items
-                .filter(function (item) { return item.type === 'trigger'; })
+            handles: items
+                .filter(function (item) { return item.type === 'handle'; })
                 .filter(function (item) { return item.file.includes(basePath); })
                 .map(function (item) { return ({
                 name: item.payload,

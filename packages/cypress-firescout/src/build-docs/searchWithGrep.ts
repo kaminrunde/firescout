@@ -3,13 +3,13 @@ import fs from 'fs'
 import config from './config'
 
 export type RawItem = {
-  type: 'ctx' | 'trigger' | 'state' | 'component-doc',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc',
   payload: string,
   file: string
 }
 
 const DOCS_CMD = `grep -rl "<!-- firescout-docs -->" ${config.widgetFolder}`
-const HANDLES_CMD = `grep -HREo "data-cy-(state|ctx|trigger)=(\\"|').*(\\"|')" ${config.widgetFolder}`
+const HANDLES_CMD = `grep -HREo "data-cy-(state|ctx|handle)=(\\"|').*(\\"|')" ${config.widgetFolder}`
 
 export default function searchWithGrep ():Promise<RawItem[]> {
   return Promise.all([
@@ -31,9 +31,9 @@ function parseInput (input: [string,string]):RawItem[] {
   const rawHandleItems:RawItem[] = handles.map(handle => ({
     file: utils.parseFile(handle.split(':')[0]),
     // @ts-ignore
-    type: handle.match(/data-cy-(state|ctx|trigger)/)[1] as string,
+    type: handle.match(/data-cy-(state|ctx|handle)/)[1] as string,
     // @ts-ignore
-    payload: handle.match(/data-cy-(state|ctx|trigger)=("|')(.*)("|')/)[3] as string
+    payload: handle.match(/data-cy-(state|ctx|handle)=("|')(.*)("|')/)[3] as string
   })) as any
   return [...rawDocItems, ...rawHandleItems]
 }

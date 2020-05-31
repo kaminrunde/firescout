@@ -6,13 +6,13 @@ export default function createFileContent (tree:Tree):string {
 
     ${tree.map(node => `
       interface ${node.typesaveContext} extends Cypress.Chainable<Element> {
-        ${node.triggers.map(trigger => `
+        ${node.handles.map(handle => `
           /** 
-           * ${node.docs?.triggers.bullets.find(row => row.name === trigger.name)?.value || ''}
-           * @name ${trigger.name}
-           * @file ${trigger.file}
+           * ${node.docs?.handles.bullets.find(row => row.name === handle.name)?.value || ''}
+           * @name ${handle.name}
+           * @file ${handle.file}
            */
-          trigger(name:'${trigger.name}', index?:number|string): Cypress.Chainable<Element>
+          handle(name:'${handle.name}', index?:number|string): Cypress.Chainable<Element>
         `).join('\n')}
 
         ${node.states.map(state => `

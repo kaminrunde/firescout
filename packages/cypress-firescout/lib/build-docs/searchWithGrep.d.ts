@@ -1,5 +1,5 @@
 export declare type RawItem = {
-    type: 'ctx' | 'trigger' | 'state' | 'component-doc';
+    type: 'ctx' | 'handle' | 'state' | 'component-doc';
     payload: string;
     file: string;
 };

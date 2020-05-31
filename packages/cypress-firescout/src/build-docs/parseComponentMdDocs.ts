@@ -6,7 +6,7 @@ type Docs = {
   context: string,
   description: string,
   _description: string,
-  triggers: ChapterContent,
+  handles: ChapterContent,
   states: ChapterContent
 }
 
@@ -37,7 +37,7 @@ export default function parseComponentMdDocs (text:string) {
     context: '',
     description: '',
     _description: '',
-    triggers: {
+    handles: {
       description: '',
       _description: '',
       bullets: []
@@ -75,12 +75,12 @@ export default function parseComponentMdDocs (text:string) {
 
   // find sections by title
   const main = chapters.find(c => c.rank === 1)
-  const triggers = chapters.find(c => c.title === 'Triggers')
-  const states = chapters.find(c => c.title === 'States')
+  const handles = chapters.find(c => c.title.toLowerCase() === 'handles')
+  const states = chapters.find(c => c.title.toLowerCase() === 'states')
 
   // chapter content is initially empty
   if(main) buildChapterContent(main)
-  if(triggers) buildChapterContent(triggers)
+  if(handles) buildChapterContent(handles)
   if(states) buildChapterContent(states)
 
   if(main) {
@@ -89,8 +89,8 @@ export default function parseComponentMdDocs (text:string) {
     result._description = main.content._description
   }
 
-  if(triggers){
-    result.triggers = triggers.content
+  if(handles){
+    result.handles = handles.content
   }
 
   if(states){

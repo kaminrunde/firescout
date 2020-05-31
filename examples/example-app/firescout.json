@@ -2,5 +2,5 @@
   "widgetFolder": "src",
   "extensions": "tsx|ts",
   "outPath": "cypress/support/firescout-types.ts",
-  "useGrep": true
+  "useGrep": false
 }

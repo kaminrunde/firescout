@@ -9,7 +9,7 @@ export declare type Tree = {
     basePath: string;
     docsFile?: string;
     docs?: ReturnType<typeof parseComponendMdDocs>;
-    triggers: {
+    handles: {
         name: string;
         file: string;
     }[];

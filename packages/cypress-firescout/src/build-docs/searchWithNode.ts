@@ -3,13 +3,13 @@ import * as utils from './utils'
 
 
 export type RawItem = {
-  type: 'ctx' | 'trigger' | 'state' | 'component-doc',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc',
   payload: string,
   file: string,
 }
 
 type Match = {
-  type: 'ctx' | 'trigger' | 'state' | 'component-doc',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc',
   payload: string,
 }
 
@@ -65,15 +65,15 @@ async function getMatch(path:string):Promise<Match[]|null> {
     else return null
   }
 
-  const regex = new RegExp("data-cy-(state|ctx|trigger)=(\"|')(.*)(\"|')", 'g')
+  const regex = new RegExp("data-cy-(state|ctx|handle)=(\"|')(.*)(\"|')", 'g')
   let rawMatches = result.match(regex)
   if(rawMatches) {
     rawMatches = Array.from(new Set(rawMatches.filter(Boolean)))
-    const regex = new RegExp("data-cy-(state|ctx|trigger)=(\"|')(.*)(\"|')")
+    const regex = new RegExp("data-cy-(state|ctx|handle)=(\"|')(.*)(\"|')")
     let matches = rawMatches.map(s => s.match(regex))
     return matches.map(match => ({
       // @ts-ignore
-      type: match[1] as 'ctx' | 'trigger' | 'state',
+      type: match[1] as 'ctx' | 'handle' | 'state',
       // @ts-ignore
       payload: match[3]
     }))

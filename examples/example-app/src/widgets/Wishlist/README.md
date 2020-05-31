@@ -6,7 +6,7 @@ Here the wishlist products will be displayed. A wishlist product can be added to
 
 This is a new line
 
-## Triggers
+## Handles
 
 - **subscribe**: When clicking on the subscribe button the user inits the process to subscribe to wishlist
 

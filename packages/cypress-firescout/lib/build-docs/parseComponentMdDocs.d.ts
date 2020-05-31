@@ -2,7 +2,7 @@ declare type Docs = {
     context: string;
     description: string;
     _description: string;
-    triggers: ChapterContent;
+    handles: ChapterContent;
     states: ChapterContent;
 };
 declare type Bullet = {

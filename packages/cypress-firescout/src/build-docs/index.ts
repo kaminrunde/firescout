@@ -11,6 +11,7 @@ let search = config.useGrep
   : searchWithNode
 
 search()
+// .then(r => console.log(JSON.stringify(r, null, 2)))
 .then(createCommandTree)
 .then(createFileContent)
 .then(file => fs.writeFileSync(config.outPath, file, 'utf8'))

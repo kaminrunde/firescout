@@ -13,6 +13,7 @@ var search = config_1.default.useGrep
     ? searchWithGrep_1.default
     : searchWithNode_1.default;
 search()
+    // .then(r => console.log(JSON.stringify(r, null, 2)))
     .then(createCommandTree_1.default)
     .then(createFileContent_1.default)
     .then(function (file) { return fs_1.default.writeFileSync(config_1.default.outPath, file, 'utf8'); })
