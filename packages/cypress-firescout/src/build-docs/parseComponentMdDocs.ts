@@ -7,8 +7,10 @@ import {RawItem as NodeRawItem} from './searchWithNode'
 
 type RawItem = GrepRawItem | NodeRawItem
 
-type Docs = {
+export type Docs = {
   context: string,
+  file: string,
+  folder: string,
   description: string,
   _description: string,
   handles: ChapterContent,
@@ -42,6 +44,8 @@ export default function parseComponentMdDocs (mdItem:RawItem, allCollections:Raw
   const ast = md(text)
   let result:Docs = {
     context: '',
+    file: mdItem.file,
+    folder: mdItem.folder,
     description: '',
     _description: '',
     handles: {

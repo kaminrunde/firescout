@@ -27,6 +27,6 @@ search()
     return createFileContent_1.default(tree, docs);
 })
     .then(console.log)
-    // .then(r => console.log(JSON.stringify(r,null,2)))
+    // .then(r => console.log(JSON.stringify(r.docs,null,2)))
     // .then(file => fs.writeFileSync(config.outPath, file, 'utf8'))
     .catch(console.log);

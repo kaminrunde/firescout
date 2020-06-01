@@ -11,6 +11,8 @@ function parseComponentMdDocs(mdItem, allCollections) {
     var ast = markdown_ast_1.default(text);
     var result = {
         context: '',
+        file: mdItem.file,
+        folder: mdItem.folder,
         description: '',
         _description: '',
         handles: {

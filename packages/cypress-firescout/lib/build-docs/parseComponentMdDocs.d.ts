@@ -1,8 +1,10 @@
 import { RawItem as GrepRawItem } from './searchWithGrep';
 import { RawItem as NodeRawItem } from './searchWithNode';
 declare type RawItem = GrepRawItem | NodeRawItem;
-declare type Docs = {
+export declare type Docs = {
     context: string;
+    file: string;
+    folder: string;
     description: string;
     _description: string;
     handles: ChapterContent;
