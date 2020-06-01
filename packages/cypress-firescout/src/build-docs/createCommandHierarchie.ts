@@ -22,12 +22,17 @@ type EnhancedCollection = RawItem & {
  * creates the hierarchie tree and enshures that collection commands won't be
  * stored on the root component. It splits the result
  */
-export default function createCommandHierarchie(rawItems:RawItem[]):{tree:HierarchieTree[],mdItems:RawItem[]} {
+export default function createCommandHierarchie(rawItems:RawItem[]):{
+  tree:HierarchieTree[],
+  mdItems:RawItem[],
+  moduleItems:RawItem[]
+} {
   let handleItems:RawItem[] = []
   let collectionItems:RawItem[] = []
   let stateItems:RawItem[] = []
   let ctxItems:RawItem[] = []
   let mdItems:RawItem[] = []
+  let moduleItems:RawItem[] = []
   for(let item of rawItems) {
     switch(item.type){
       case 'ctx': ctxItems.push(item); break;
@@ -36,6 +41,7 @@ export default function createCommandHierarchie(rawItems:RawItem[]):{tree:Hierar
       case 'handle': handleItems.push(item); break;
       case 'state': stateItems.push(item); break;
       case 'collection': collectionItems.push(item); break;
+      case 'module-fn': moduleItems.push(item); break;
     }
   }
 
@@ -69,7 +75,7 @@ export default function createCommandHierarchie(rawItems:RawItem[]):{tree:Hierar
     collections: enhancedCollections.filter(col => col.folder.includes(item.folder)),
   }))
 
-  return {tree, mdItems}
+  return {tree, mdItems, moduleItems}
 }
 
 /**

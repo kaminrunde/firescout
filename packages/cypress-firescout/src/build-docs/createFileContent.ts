@@ -1,9 +1,28 @@
 import {Tree} from './createCommandTree'
 import {Docs} from './createDocs'
+import {ModuleTree} from './createModuleTree'
 
-export default function createFileContent (tree:Tree[], docs:Docs):string {
+export default function createFileContent (
+  tree:Tree[], 
+  docs:Docs,
+  modules:ModuleTree[]
+):string {
+
+  console.log(modules)
   return `
     /// <reference types="cypress" />
+
+    ${modules.map(node => `
+      interface ${node.typesaveContext} {
+        ${node.commands.map(cmd => `
+          /**
+           * @name ${cmd.name}
+           * @file ${cmd.file}
+           */
+          fn(name:'${cmd.name}'):never
+        `)}
+      }
+    `)}
 
     ${tree.map(node => `
       ${node.collections.map(colNode => `
@@ -82,11 +101,16 @@ export default function createFileContent (tree:Tree[], docs:Docs):string {
          */
         function component (name:'${node.context}', index?:number|string):${node.typesaveContext}
       `).join('\n')}
+
+      ${modules.map(node => `
+        function module (name: '${node.context}'):${node.typesaveContext}
+      `)}
     }
 
     declare namespace Cypress {
       interface Chainable {
         component: typeof Firescout.component;
+        module: typeof Firescout.module;
       }
     }
   `.split('\n').slice(1).map(s => s.trim()).join('\n')

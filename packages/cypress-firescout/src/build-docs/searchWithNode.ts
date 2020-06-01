@@ -3,14 +3,14 @@ import * as utils from './utils'
 
 
 export type RawItem = {
-  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection' | 'module-fn',
   payload: string,
   file: string,
   folder: string
 }
 
 type Match = {
-  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection' | 'module-fn',
   payload: string,
 }
 
@@ -67,20 +67,29 @@ async function getMatch(path:string):Promise<Match[]|null> {
     }]
     else return null
   }
+  let allMatches:Match[] = []
 
-  const regex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')", 'g')
-  let rawMatches = result.match(regex)
-  if(rawMatches) {
-    rawMatches = Array.from(new Set(rawMatches.filter(Boolean)))
+  const cRegex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')", 'g')
+  const moduleRegex = new RegExp("firescoutMockFn(<.*>)? *\\((\"|').*(\"|')", 'g')
+  let cMatches = result.match(cRegex)
+  const moduleMatches = result.match(moduleRegex)
+  if(cMatches) {
+    cMatches = Array.from(new Set(cMatches.filter(Boolean)))
     const regex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')")
-    let matches = rawMatches.map(s => s.match(regex))
-    return matches.map(match => ({
-      // @ts-ignore
+    let matches:any = cMatches.map(s => s.match(regex))
+    allMatches.push(...matches.map((match:any) => ({
       type: match[1] as 'ctx' | 'handle' | 'state' | 'collection',
-      // @ts-ignore
       payload: match[3]
-    }))
+    })))
+  }
+  if(moduleMatches) {
+    const regex = new RegExp("firescoutMockFn(<.*>)? *\\((\"|')(.*)(\"|')")
+    let matches:any = moduleMatches.map(s => s.match(regex))
+    allMatches.push(...matches.map((match:any) => ({
+      type: 'module-fn',
+      payload: match[3]
+    })))
   }
   
-  return null
+  return allMatches.length ? allMatches : null
 }

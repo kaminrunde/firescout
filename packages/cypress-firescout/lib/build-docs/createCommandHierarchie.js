@@ -21,6 +21,7 @@ function createCommandHierarchie(rawItems) {
     var stateItems = [];
     var ctxItems = [];
     var mdItems = [];
+    var moduleItems = [];
     for (var _i = 0, rawItems_1 = rawItems; _i < rawItems_1.length; _i++) {
         var item = rawItems_1[_i];
         switch (item.type) {
@@ -41,6 +42,9 @@ function createCommandHierarchie(rawItems) {
                 break;
             case 'collection':
                 collectionItems.push(item);
+                break;
+            case 'module-fn':
+                moduleItems.push(item);
                 break;
         }
     }
@@ -68,7 +72,7 @@ function createCommandHierarchie(rawItems) {
         }));
     }
     var tree = ctxItems.map(function (item) { return (__assign(__assign({}, item), { states: stateItems, handles: handleItems, collections: enhancedCollections.filter(function (col) { return col.folder.includes(item.folder); }) })); });
-    return { tree: tree, mdItems: mdItems };
+    return { tree: tree, mdItems: mdItems, moduleItems: moduleItems };
 }
 exports.default = createCommandHierarchie;
 /**

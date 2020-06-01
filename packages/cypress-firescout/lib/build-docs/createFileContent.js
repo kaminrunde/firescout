@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function createFileContent(tree, docs) {
-    return ("\n    /// <reference types=\"cypress\" />\n\n    " + tree.map(function (node) { return "\n      " + node.collections.map(function (colNode) { return "\n        interface " + (node.typesaveContext + colNode.typesaveContext) + " extends Cypress.Chainable<Element> {\n          " + colNode.handles.map(function (handle) {
+function createFileContent(tree, docs, modules) {
+    console.log(modules);
+    return ("\n    /// <reference types=\"cypress\" />\n\n    " + modules.map(function (node) { return "\n      interface " + node.typesaveContext + " {\n        " + node.commands.map(function (cmd) { return "\n          /**\n           * @name " + cmd.name + "\n           * @file " + cmd.file + "\n           */\n          fn(name:'" + cmd.name + "'):never\n        "; }) + "\n      }\n    "; }) + "\n\n    " + tree.map(function (node) { return "\n      " + node.collections.map(function (colNode) { return "\n        interface " + (node.typesaveContext + colNode.typesaveContext) + " extends Cypress.Chainable<Element> {\n          " + colNode.handles.map(function (handle) {
         var _a, _b;
         return "\n            /** \n             * " + (((_b = (_a = docs[node.context]) === null || _a === void 0 ? void 0 : _a.collections[colNode.context].handles.bullets.find(function (row) { return row.name === handle.name; })) === null || _b === void 0 ? void 0 : _b.value) || '') + "\n             * @name " + handle.name + "\n             * @file " + handle.file + "\n             */\n            handle(name:'" + handle.name + "', index?:number|string): Cypress.Chainable<Element>\n          ";
     }).join('\n') + "\n\n          " + colNode.states.map(function (state) {
@@ -19,6 +20,6 @@ function createFileContent(tree, docs) {
     }).join('\n') + "\n      }\n    "; }) + "\n\n    declare namespace Firescout {\n      " + tree.map(function (node) {
         var _a, _b;
         return "\n        /**\n         * " + (((_a = docs[node.context]) === null || _a === void 0 ? void 0 : _a.description) || '...') + " \n         * @name " + node.context + "\n         * @file " + node.file + "\n         * @docs_file " + (((_b = docs[node.context]) === null || _b === void 0 ? void 0 : _b.file) || '-') + "\n         */\n        function component (name:'" + node.context + "', index?:number|string):" + node.typesaveContext + "\n      ";
-    }).join('\n') + "\n    }\n\n    declare namespace Cypress {\n      interface Chainable {\n        component: typeof Firescout.component;\n      }\n    }\n  ").split('\n').slice(1).map(function (s) { return s.trim(); }).join('\n');
+    }).join('\n') + "\n\n      " + modules.map(function (node) { return "\n        function module (name: '" + node.context + "'):" + node.typesaveContext + "\n      "; }) + "\n    }\n\n    declare namespace Cypress {\n      interface Chainable {\n        component: typeof Firescout.component;\n        module: typeof Firescout.module;\n      }\n    }\n  ").split('\n').slice(1).map(function (s) { return s.trim(); }).join('\n');
 }
 exports.default = createFileContent;

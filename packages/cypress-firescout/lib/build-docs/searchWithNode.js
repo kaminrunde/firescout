@@ -130,16 +130,16 @@ function findAllFiles(paths) {
 }
 function getMatch(path) {
     return __awaiter(this, void 0, void 0, function () {
-        var result, regex_1, match, regex, rawMatches, regex_2, matches;
+        var result, regex, match, allMatches, cRegex, moduleRegex, cMatches, moduleMatches, regex_1, matches, regex_2, matches;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, utils.readFile(path)];
                 case 1:
                     result = _a.sent();
                     if (path.endsWith('.md')) {
-                        regex_1 = new RegExp("<!-- firescout-(component|collection) -->");
+                        regex = new RegExp("<!-- firescout-(component|collection) -->");
                         match = null;
-                        if (match = result.match(regex_1))
+                        if (match = result.match(regex))
                             return [2 /*return*/, [{
                                         type: match[1] === 'component' ? 'component-doc' : 'collection-doc',
                                         payload: result
@@ -147,20 +147,29 @@ function getMatch(path) {
                         else
                             return [2 /*return*/, null];
                     }
-                    regex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')", 'g');
-                    rawMatches = result.match(regex);
-                    if (rawMatches) {
-                        rawMatches = Array.from(new Set(rawMatches.filter(Boolean)));
-                        regex_2 = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')");
-                        matches = rawMatches.map(function (s) { return s.match(regex_2); });
-                        return [2 /*return*/, matches.map(function (match) { return ({
-                                // @ts-ignore
-                                type: match[1],
-                                // @ts-ignore
-                                payload: match[3]
-                            }); })];
+                    allMatches = [];
+                    cRegex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')", 'g');
+                    moduleRegex = new RegExp("firescoutMockFn(<.*>)? *\\((\"|').*(\"|')", 'g');
+                    cMatches = result.match(cRegex);
+                    moduleMatches = result.match(moduleRegex);
+                    if (cMatches) {
+                        cMatches = Array.from(new Set(cMatches.filter(Boolean)));
+                        regex_1 = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')");
+                        matches = cMatches.map(function (s) { return s.match(regex_1); });
+                        allMatches.push.apply(allMatches, matches.map(function (match) { return ({
+                            type: match[1],
+                            payload: match[3]
+                        }); }));
                     }
-                    return [2 /*return*/, null];
+                    if (moduleMatches) {
+                        regex_2 = new RegExp("firescoutMockFn(<.*>)? *\\((\"|')(.*)(\"|')");
+                        matches = moduleMatches.map(function (s) { return s.match(regex_2); });
+                        allMatches.push.apply(allMatches, matches.map(function (match) { return ({
+                            type: 'module-fn',
+                            payload: match[3]
+                        }); }));
+                    }
+                    return [2 /*return*/, allMatches.length ? allMatches : null];
             }
         });
     });

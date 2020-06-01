@@ -1,3 +1,4 @@
 import { Tree } from './createCommandTree';
 import { Docs } from './createDocs';
-export default function createFileContent(tree: Tree[], docs: Docs): string;
+import { ModuleTree } from './createModuleTree';
+export default function createFileContent(tree: Tree[], docs: Docs, modules: ModuleTree[]): string;

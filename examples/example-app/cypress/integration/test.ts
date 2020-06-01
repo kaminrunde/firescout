@@ -9,6 +9,10 @@ context('Actions', () => {
       .handle('clear-button')
       .click()
 
+    cy.module('cart')
+      .fn('fetch')
+    
+
     // cy.module('cart').function('fetch').mockWith('default')
   })
 })
