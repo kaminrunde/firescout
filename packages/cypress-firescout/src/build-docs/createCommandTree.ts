@@ -1,4 +1,3 @@
-import parseComponendMdDocs from './parseComponentMdDocs'
 import {HierarchieTree} from './createCommandHierarchie'
 import * as utils from './utils'
 
@@ -7,8 +6,6 @@ export type Tree = {
   typesaveContext: string,
   file: string,
   folder: string,
-  docsFile?: string,
-  docs?: ReturnType<typeof parseComponendMdDocs>
   handles: {
     name: string,
     file: string

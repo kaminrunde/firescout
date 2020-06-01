@@ -8,6 +8,11 @@ function createDocs(mdItems) {
     var componentDocs = mdItems.filter(function (item) { return item.type === 'component-doc'; });
     var collectionDocs = mdItems.filter(function (item) { return item.type === 'collection-doc'; });
     var docs = componentDocs.map(function (item) { return parseComponentMdDocs_1.default(item, collectionDocs); });
-    return docs;
+    var result = {};
+    for (var _i = 0, docs_1 = docs; _i < docs_1.length; _i++) {
+        var doc = docs_1[_i];
+        result[doc.context] = doc;
+    }
+    return result;
 }
 exports.default = createDocs;

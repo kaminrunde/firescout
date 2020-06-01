@@ -1,7 +1,7 @@
 import {Tree} from './createCommandTree'
 import {Docs} from './createDocs'
 
-export default function createFileContent (tree:Tree[], docs:Docs[]):string {
+export default function createFileContent (tree:Tree[], docs:Docs):string {
   return `
     /// <reference types="cypress" />
 
@@ -9,7 +9,7 @@ export default function createFileContent (tree:Tree[], docs:Docs[]):string {
       interface ${node.typesaveContext} extends Cypress.Chainable<Element> {
         ${node.handles.map(handle => `
           /** 
-           * ${node.docs?.handles.bullets.find(row => row.name === handle.name)?.value || ''}
+           * ${docs[node.context]?.handles.bullets.find(row => row.name === handle.name)?.value || ''}
            * @name ${handle.name}
            * @file ${handle.file}
            */
@@ -18,14 +18,14 @@ export default function createFileContent (tree:Tree[], docs:Docs[]):string {
 
         ${node.states.map(state => `
           /** 
-           * ${node.docs?.states.bullets.find(row => row.name === state.name)?.value || ''}
+           * ${docs[node.context]?.states.bullets.find(row => row.name === state.name)?.value || ''}
            * @name ${state.name}
            * @file ${state.file}
            */
           hasState(name:'${state.name}', index?:number|string): Cypress.Chainable<Element>
 
           /** 
-           * ${node.docs?.states.bullets.find(row => row.name === state.name)?.value || ''}
+           * ${docs[node.context]?.states.bullets.find(row => row.name === state.name)?.value || ''}
            * @name ${state.name}
            * @file ${state.file}
            */
@@ -36,11 +36,11 @@ export default function createFileContent (tree:Tree[], docs:Docs[]):string {
 
     declare namespace Firescout {
       ${tree.map(node => `
-        /** 
-         * ${node.docs?.description || '...'} 
+        /**
+         * ${docs[node.context]?.description || '...'} 
          * @name ${node.context}
          * @file ${node.file}
-         * @docs_file ${node.docsFile || '-'}
+         * @docs_file ${docs[node.context]?.file || '-'}
          */
         function component (name:'${node.context}', index?:number|string):${node.typesaveContext}
       `).join('\n')}
