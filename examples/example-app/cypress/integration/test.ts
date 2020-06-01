@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-/// <reference path="../support/index.d.ts" />
+/// <reference path="../support/firescout-types.ts" />
 
 context('Actions', () => {
   it('test', () => {

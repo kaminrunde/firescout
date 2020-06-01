@@ -83,5 +83,11 @@ export default function createFileContent (tree:Tree[], docs:Docs):string {
         function component (name:'${node.context}', index?:number|string):${node.typesaveContext}
       `).join('\n')}
     }
+
+    declare namespace Cypress {
+      interface Chainable {
+        component: typeof Firescout.component;
+      }
+    }
   `.split('\n').slice(1).map(s => s.trim()).join('\n')
 }

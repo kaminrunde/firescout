@@ -19,6 +19,6 @@ function createFileContent(tree, docs) {
     }).join('\n') + "\n      }\n    "; }) + "\n\n    declare namespace Firescout {\n      " + tree.map(function (node) {
         var _a, _b;
         return "\n        /**\n         * " + (((_a = docs[node.context]) === null || _a === void 0 ? void 0 : _a.description) || '...') + " \n         * @name " + node.context + "\n         * @file " + node.file + "\n         * @docs_file " + (((_b = docs[node.context]) === null || _b === void 0 ? void 0 : _b.file) || '-') + "\n         */\n        function component (name:'" + node.context + "', index?:number|string):" + node.typesaveContext + "\n      ";
-    }).join('\n') + "\n    }\n  ").split('\n').slice(1).map(function (s) { return s.trim(); }).join('\n');
+    }).join('\n') + "\n    }\n\n    declare namespace Cypress {\n      interface Chainable {\n        component: typeof Firescout.component;\n      }\n    }\n  ").split('\n').slice(1).map(function (s) { return s.trim(); }).join('\n');
 }
 exports.default = createFileContent;
