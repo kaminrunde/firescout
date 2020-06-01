@@ -11,13 +11,18 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * creates the hierarchie tree and enshures that collection commands won't be
+ * stored on the root component. It splits the result
+ *
+ * @returns [HierarchieTree,mdItems]
+ */
 function createCommandHierarchie(rawItems) {
     var handleItems = [];
     var collectionItems = [];
     var stateItems = [];
     var ctxItems = [];
-    var componentDocsItems = [];
-    var collectionDocsItems = [];
+    var mdItems = [];
     for (var _i = 0, rawItems_1 = rawItems; _i < rawItems_1.length; _i++) {
         var item = rawItems_1[_i];
         switch (item.type) {
@@ -25,10 +30,10 @@ function createCommandHierarchie(rawItems) {
                 ctxItems.push(item);
                 break;
             case 'collection-doc':
-                collectionDocsItems.push(item);
+                mdItems.push(item);
                 break;
             case 'component-doc':
-                componentDocsItems.push(item);
+                mdItems.push(item);
                 break;
             case 'handle':
                 handleItems.push(item);
@@ -62,11 +67,10 @@ function createCommandHierarchie(rawItems) {
             handles: includeHandles,
             states: includeStates,
             collections: includeColls,
-            componentDocs: [],
-            collectionDocs: []
         }));
     }
-    return ctxItems.map(function (item) { return (__assign(__assign({}, item), { states: stateItems, handles: handleItems, collections: enhancedCollections.filter(function (col) { return col.folder.includes(item.folder); }), componentDocs: componentDocsItems, collectionDocs: collectionDocsItems })); });
+    var tree = ctxItems.map(function (item) { return (__assign(__assign({}, item), { states: stateItems, handles: handleItems, collections: enhancedCollections.filter(function (col) { return col.folder.includes(item.folder); }) })); });
+    return [tree, mdItems];
 }
 exports.default = createCommandHierarchie;
 /**

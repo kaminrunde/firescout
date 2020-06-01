@@ -14,8 +14,16 @@ var search = config_1.default.useGrep
     : searchWithNode_1.default;
 search()
     .then(createCommandHierarchie_1.default)
-    .then(createCommandTree_1.default)
-    .then(createFileContent_1.default)
+    .then(function (_a) {
+    var tree = _a[0], mdItems = _a[1];
+    return [
+        createCommandTree_1.default(tree)
+    ];
+})
+    .then(function (_a) {
+    var tree = _a[0];
+    return createFileContent_1.default(tree);
+})
     .then(console.log)
     // .then(r => console.log(JSON.stringify(r,null,2)))
     // .then(file => fs.writeFileSync(config.outPath, file, 'utf8'))

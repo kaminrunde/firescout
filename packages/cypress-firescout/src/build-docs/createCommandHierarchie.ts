@@ -9,31 +9,32 @@ export type HierarchieTree = {
   folder: string,
   handles: RawItem[],
   states: RawItem[],
-  componentDocs: RawItem[],
-  collectionDocs: RawItem[],
   collections: HierarchieTree[],
 }
 
 type EnhancedCollection = RawItem & {
   handles: RawItem[],
   states: RawItem[],
-  collections: EnhancedCollection[],
-  componentDocs: never[],
-  collectionDocs: never[],
+  collections: EnhancedCollection[]
 }
 
-export default function createCommandHierarchie(rawItems:RawItem[]):HierarchieTree[] {
+/**
+ * creates the hierarchie tree and enshures that collection commands won't be
+ * stored on the root component. It splits the result
+ * 
+ * @returns [HierarchieTree,mdItems]
+ */
+export default function createCommandHierarchie(rawItems:RawItem[]):[HierarchieTree[], RawItem[]] {
   let handleItems:RawItem[] = []
   let collectionItems:RawItem[] = []
   let stateItems:RawItem[] = []
   let ctxItems:RawItem[] = []
-  let componentDocsItems:RawItem[] = []
-  let collectionDocsItems:RawItem[] = []
+  let mdItems:RawItem[] = []
   for(let item of rawItems) {
     switch(item.type){
       case 'ctx': ctxItems.push(item); break;
-      case 'collection-doc': collectionDocsItems.push(item);break;
-      case 'component-doc': componentDocsItems.push(item); break;
+      case 'collection-doc': mdItems.push(item);break;
+      case 'component-doc': mdItems.push(item); break;
       case 'handle': handleItems.push(item); break;
       case 'state': stateItems.push(item); break;
       case 'collection': collectionItems.push(item); break;
@@ -60,19 +61,17 @@ export default function createCommandHierarchie(rawItems:RawItem[]):HierarchieTr
       handles: includeHandles,
       states: includeStates,
       collections: includeColls,
-      componentDocs: [],
-      collectionDocs: []
     }))
   }
 
-  return ctxItems.map(item => ({
+  const tree = ctxItems.map(item => ({
     ...item,
     states: stateItems,
     handles: handleItems,
     collections: enhancedCollections.filter(col => col.folder.includes(item.folder)),
-    componentDocs: componentDocsItems,
-    collectionDocs: collectionDocsItems
   }))
+
+  return [tree, mdItems]
 }
 
 /**

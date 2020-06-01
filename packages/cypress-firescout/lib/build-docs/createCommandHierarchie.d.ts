@@ -7,9 +7,13 @@ export declare type HierarchieTree = {
     folder: string;
     handles: RawItem[];
     states: RawItem[];
-    componentDocs: RawItem[];
-    collectionDocs: RawItem[];
     collections: HierarchieTree[];
 };
-export default function createCommandHierarchie(rawItems: RawItem[]): HierarchieTree[];
+/**
+ * creates the hierarchie tree and enshures that collection commands won't be
+ * stored on the root component. It splits the result
+ *
+ * @returns [HierarchieTree,mdItems]
+ */
+export default function createCommandHierarchie(rawItems: RawItem[]): [HierarchieTree[], RawItem[]];
 export {};

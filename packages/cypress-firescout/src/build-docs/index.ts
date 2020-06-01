@@ -13,8 +13,10 @@ let search = config.useGrep
 
 search()
 .then(createCommandHierarchie)
-.then(createCommandTree)
-.then(createFileContent)
+.then(([tree, mdItems]) => [
+  createCommandTree(tree)
+])
+.then(([tree]) => createFileContent(tree))
 .then(console.log)
 // .then(r => console.log(JSON.stringify(r,null,2)))
 // .then(file => fs.writeFileSync(config.outPath, file, 'utf8'))
