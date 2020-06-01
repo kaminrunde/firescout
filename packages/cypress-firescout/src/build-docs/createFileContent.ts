@@ -23,14 +23,14 @@ export default function createFileContent (tree:Tree[], docs:Docs):string {
              * @name ${state.name}
              * @file ${state.file}
              */
-            hasState(name:'${state.name}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
+            shouldHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
 
             /** 
              * ${docs[node.context]?.collections[colNode.context].states.bullets.find(row => row.name === state.name)?.value || ''}
              * @name ${state.name}
              * @file ${state.file}
              */
-            notHasState(name:'${state.name}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
+            shouldNotHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
           `).join('\n')}
         }
       `)}
@@ -60,14 +60,14 @@ export default function createFileContent (tree:Tree[], docs:Docs):string {
            * @name ${state.name}
            * @file ${state.file}
            */
-          hasState(name:'${state.name}', index?:number|string): ${node.typesaveContext}
+          shouldHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext}
 
           /** 
            * ${docs[node.context]?.states.bullets.find(row => row.name === state.name)?.value || ''}
            * @name ${state.name}
            * @file ${state.file}
            */
-          notHasState(name:'${state.name}', index?:number|string): ${node.typesaveContext}
+          shouldNotHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext}
         `).join('\n')}
       }
     `)}

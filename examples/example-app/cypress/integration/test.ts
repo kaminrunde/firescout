@@ -5,8 +5,10 @@ context('Actions', () => {
   it('test', () => {
     cy.component('organisms/Wishlist')
       .collection('ColorFilter')
-      .hasState('selected')
+      .shouldHaveState('selected')
       .handle('clear-button')
       .click()
+
+    // cy.module('cart').function('fetch').mockWith('default')
   })
 })
