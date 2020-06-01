@@ -7,8 +7,6 @@ export default function createFileContent (
   docs:Docs,
   modules:ModuleTree[]
 ):string {
-
-  console.log(modules)
   return `
     /// <reference types="cypress" />
 

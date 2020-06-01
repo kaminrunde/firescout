@@ -1,5 +1,5 @@
 declare type Config = {
-    widgetFolder: string;
+    widgetFolders: string[];
     outPath: string;
     extensions: string;
     useGrep: boolean;

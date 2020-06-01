@@ -65,7 +65,7 @@ function findInFiles() {
         var files, extensionsRegex, matches, rawItems, _loop_1, i;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, findAllFiles([config_1.default.widgetFolder])];
+                case 0: return [4 /*yield*/, findAllFiles(config_1.default.widgetFolders)];
                 case 1:
                     files = _a.sent();
                     extensionsRegex = config_1.default.extensions

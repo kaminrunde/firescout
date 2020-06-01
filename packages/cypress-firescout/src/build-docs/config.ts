@@ -1,7 +1,7 @@
 import fs from 'fs'
 
 type Config = {
-  widgetFolder: string,
+  widgetFolders: string[],
   outPath: string,
   extensions: string,
   useGrep: boolean
@@ -10,7 +10,7 @@ type Config = {
 const configRaw = fs.readFileSync(process.cwd()+'/firescout.json', 'utf8')
 const config:Config = JSON.parse(configRaw)
 
-config.widgetFolder = `${process.cwd()}/${config.widgetFolder}`
+config.widgetFolders = config.widgetFolders.map(s => `${process.cwd()}/${s}`)
 config.outPath = `${process.cwd()}/${config.outPath}`
 
 export default config

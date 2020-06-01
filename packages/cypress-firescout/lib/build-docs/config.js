@@ -6,6 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
 var configRaw = fs_1.default.readFileSync(process.cwd() + '/firescout.json', 'utf8');
 var config = JSON.parse(configRaw);
-config.widgetFolder = process.cwd() + "/" + config.widgetFolder;
+config.widgetFolders = config.widgetFolders.map(function (s) { return process.cwd() + "/" + s; });
 config.outPath = process.cwd() + "/" + config.outPath;
 exports.default = config;

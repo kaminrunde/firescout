@@ -15,7 +15,7 @@ type Match = {
 }
 
 export default async function findInFiles ():Promise<RawItem[]> {
-  let files = await findAllFiles([config.widgetFolder])
+  let files = await findAllFiles(config.widgetFolders)
   const extensionsRegex = config.extensions
     .split('|').concat('md').map(s => `.${s}$`).join('|')
   files = files.filter(f => f.name.match(new RegExp(extensionsRegex)))
