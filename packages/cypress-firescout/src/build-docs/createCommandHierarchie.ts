@@ -21,10 +21,8 @@ type EnhancedCollection = RawItem & {
 /**
  * creates the hierarchie tree and enshures that collection commands won't be
  * stored on the root component. It splits the result
- * 
- * @returns [HierarchieTree,mdItems]
  */
-export default function createCommandHierarchie(rawItems:RawItem[]):[HierarchieTree[], RawItem[]] {
+export default function createCommandHierarchie(rawItems:RawItem[]):{tree:HierarchieTree[],mdItems:RawItem[]} {
   let handleItems:RawItem[] = []
   let collectionItems:RawItem[] = []
   let stateItems:RawItem[] = []
@@ -71,7 +69,7 @@ export default function createCommandHierarchie(rawItems:RawItem[]):[HierarchieT
     collections: enhancedCollections.filter(col => col.folder.includes(item.folder)),
   }))
 
-  return [tree, mdItems]
+  return {tree, mdItems}
 }
 
 /**

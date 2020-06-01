@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function createFileContent(tree) {
+function createFileContent(tree, docs) {
     return ("\n    /// <reference types=\"cypress\" />\n\n    " + tree.map(function (node) { return "\n      interface " + node.typesaveContext + " extends Cypress.Chainable<Element> {\n        " + node.handles.map(function (handle) {
         var _a, _b;
         return "\n          /** \n           * " + (((_b = (_a = node.docs) === null || _a === void 0 ? void 0 : _a.handles.bullets.find(function (row) { return row.name === handle.name; })) === null || _b === void 0 ? void 0 : _b.value) || '') + "\n           * @name " + handle.name + "\n           * @file " + handle.file + "\n           */\n          handle(name:'" + handle.name + "', index?:number|string): Cypress.Chainable<Element>\n        ";

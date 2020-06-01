@@ -1,2 +1,3 @@
 import { Tree } from './createCommandTree';
-export default function createFileContent(tree: Tree[]): string;
+import { Docs } from './createDocs';
+export default function createFileContent(tree: Tree[], docs: Docs[]): string;

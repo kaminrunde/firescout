@@ -14,8 +14,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * creates the hierarchie tree and enshures that collection commands won't be
  * stored on the root component. It splits the result
- *
- * @returns [HierarchieTree,mdItems]
  */
 function createCommandHierarchie(rawItems) {
     var handleItems = [];
@@ -70,7 +68,7 @@ function createCommandHierarchie(rawItems) {
         }));
     }
     var tree = ctxItems.map(function (item) { return (__assign(__assign({}, item), { states: stateItems, handles: handleItems, collections: enhancedCollections.filter(function (col) { return col.folder.includes(item.folder); }) })); });
-    return [tree, mdItems];
+    return { tree: tree, mdItems: mdItems };
 }
 exports.default = createCommandHierarchie;
 /**
