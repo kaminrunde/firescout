@@ -3,14 +3,14 @@ import fs from 'fs'
 import config from './config'
 
 export type RawItem = {
-  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection',
   payload: string,
   file: string,
   folder: string
 }
 
 const DOCS_CMD = `grep -rl "<!-- firescout-(component|collection) -->" ${config.widgetFolder}`
-const HANDLES_CMD = `grep -HREo "data-cy-(state|ctx|handle)=(\\"|').*(\\"|')" ${config.widgetFolder}`
+const HANDLES_CMD = `grep -HREo "data-cy-(state|ctx|handle|collection)=(\\"|').*(\\"|')" ${config.widgetFolder}`
 
 export default function searchWithGrep ():Promise<RawItem[]> {
   return Promise.all([
@@ -33,9 +33,9 @@ function parseInput (input: [string,string]):RawItem[] {
   const rawHandleItems:RawItem[] = handles.map(handle => ({
     file: utils.normalizeFilePath(handle.split(':')[0]),
     // @ts-ignore
-    type: handle.match(/data-cy-(state|ctx|handle)/)[1] as string,
+    type: handle.match(/data-cy-(state|ctx|handle|collection)/)[1] as string,
     // @ts-ignore
-    payload: handle.match(/data-cy-(state|ctx|handle)=("|')(.*)("|')/)[3] as string
+    payload: handle.match(/data-cy-(state|ctx|handle|collection)=("|')(.*)("|')/)[3] as string
   })) as any
   return [...rawDocItems, ...rawHandleItems]
 }

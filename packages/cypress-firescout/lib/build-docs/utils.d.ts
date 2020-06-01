@@ -10,3 +10,4 @@ export declare function readFile(path: string): Promise<string>;
 export declare function readStats(path: string, name: string): Promise<File>;
 export declare function normalizeFilePath(file: string): string;
 export declare function getFileFolder(file: string): string;
+export declare function getTypesaveId(id: string): string;

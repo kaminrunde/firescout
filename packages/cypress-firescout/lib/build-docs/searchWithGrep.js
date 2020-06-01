@@ -33,7 +33,7 @@ var utils = __importStar(require("./utils"));
 var fs_1 = __importDefault(require("fs"));
 var config_1 = __importDefault(require("./config"));
 var DOCS_CMD = "grep -rl \"<!-- firescout-(component|collection) -->\" " + config_1.default.widgetFolder;
-var HANDLES_CMD = "grep -HREo \"data-cy-(state|ctx|handle)=(\\\"|').*(\\\"|')\" " + config_1.default.widgetFolder;
+var HANDLES_CMD = "grep -HREo \"data-cy-(state|ctx|handle|collection)=(\\\"|').*(\\\"|')\" " + config_1.default.widgetFolder;
 function searchWithGrep() {
     return Promise.all([
         utils.executeCmd(DOCS_CMD),
@@ -55,9 +55,9 @@ function parseInput(input) {
     var rawHandleItems = handles.map(function (handle) { return ({
         file: utils.normalizeFilePath(handle.split(':')[0]),
         // @ts-ignore
-        type: handle.match(/data-cy-(state|ctx|handle)/)[1],
+        type: handle.match(/data-cy-(state|ctx|handle|collection)/)[1],
         // @ts-ignore
-        payload: handle.match(/data-cy-(state|ctx|handle)=("|')(.*)("|')/)[3]
+        payload: handle.match(/data-cy-(state|ctx|handle|collection)=("|')(.*)("|')/)[3]
     }); });
     return __spreadArrays(rawDocItems, rawHandleItems);
 }

@@ -4,6 +4,7 @@ import fs from 'fs'
 import config from './config'
 import searchWithNode from './searchWithNode'
 import searchWithGrep from './searchWithGrep'
+import createCommandHierarchie from './createCommandHierarchie'
 
 
 let search = config.useGrep
@@ -11,8 +12,9 @@ let search = config.useGrep
   : searchWithNode
 
 search()
+.then(createCommandHierarchie)
 .then(createCommandTree)
 .then(r => console.log(JSON.stringify(r,null,2)))
 // .then(createFileContent)
 // .then(file => fs.writeFileSync(config.outPath, file, 'utf8'))
-// .catch(console.log)
+.catch(console.log)

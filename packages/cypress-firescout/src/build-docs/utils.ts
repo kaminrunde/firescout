@@ -58,3 +58,7 @@ export function getFileFolder (file:string):string {
   file = normalizeFilePath(file)
   return file.split('/').slice(0,-1).join('/')
 }
+
+export function getTypesaveId (id:string):string {
+  return (id.charAt(0).toUpperCase() + id.slice(1)).replace(/\//g, '')
+}

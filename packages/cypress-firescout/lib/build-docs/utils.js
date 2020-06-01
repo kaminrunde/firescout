@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFileFolder = exports.normalizeFilePath = exports.readStats = exports.readFile = exports.readDir = exports.executeCmd = void 0;
+exports.getTypesaveId = exports.getFileFolder = exports.normalizeFilePath = exports.readStats = exports.readFile = exports.readDir = exports.executeCmd = void 0;
 var child_process_1 = require("child_process");
 var fs_1 = __importDefault(require("fs"));
 function executeCmd(cmd) {
@@ -64,3 +64,7 @@ function getFileFolder(file) {
     return file.split('/').slice(0, -1).join('/');
 }
 exports.getFileFolder = getFileFolder;
+function getTypesaveId(id) {
+    return (id.charAt(0).toUpperCase() + id.slice(1)).replace(/\//g, '');
+}
+exports.getTypesaveId = getTypesaveId;

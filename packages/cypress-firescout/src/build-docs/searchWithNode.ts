@@ -3,14 +3,14 @@ import * as utils from './utils'
 
 
 export type RawItem = {
-  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection',
   payload: string,
   file: string,
   folder: string
 }
 
 type Match = {
-  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection',
   payload: string,
 }
 
@@ -68,15 +68,15 @@ async function getMatch(path:string):Promise<Match[]|null> {
     else return null
   }
 
-  const regex = new RegExp("data-cy-(state|ctx|handle)=(\"|')(.*)(\"|')", 'g')
+  const regex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')", 'g')
   let rawMatches = result.match(regex)
   if(rawMatches) {
     rawMatches = Array.from(new Set(rawMatches.filter(Boolean)))
-    const regex = new RegExp("data-cy-(state|ctx|handle)=(\"|')(.*)(\"|')")
+    const regex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')")
     let matches = rawMatches.map(s => s.match(regex))
     return matches.map(match => ({
       // @ts-ignore
-      type: match[1] as 'ctx' | 'handle' | 'state',
+      type: match[1] as 'ctx' | 'handle' | 'state' | 'collection',
       // @ts-ignore
       payload: match[3]
     }))

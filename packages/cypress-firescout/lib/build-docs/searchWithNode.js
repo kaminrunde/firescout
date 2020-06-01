@@ -147,11 +147,11 @@ function getMatch(path) {
                         else
                             return [2 /*return*/, null];
                     }
-                    regex = new RegExp("data-cy-(state|ctx|handle)=(\"|')(.*)(\"|')", 'g');
+                    regex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')", 'g');
                     rawMatches = result.match(regex);
                     if (rawMatches) {
                         rawMatches = Array.from(new Set(rawMatches.filter(Boolean)));
-                        regex_2 = new RegExp("data-cy-(state|ctx|handle)=(\"|')(.*)(\"|')");
+                        regex_2 = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')");
                         matches = rawMatches.map(function (s) { return s.match(regex_2); });
                         return [2 /*return*/, matches.map(function (match) { return ({
                                 // @ts-ignore

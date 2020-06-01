@@ -1,6 +1,6 @@
 import {Tree} from './createCommandTree'
 
-export default function createFileContent (tree:Tree):string {
+export default function createFileContent (tree:Tree[]):string {
   return `
     /// <reference types="cypress" />
 

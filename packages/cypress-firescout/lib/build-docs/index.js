@@ -7,12 +7,14 @@ var createCommandTree_1 = __importDefault(require("./createCommandTree"));
 var config_1 = __importDefault(require("./config"));
 var searchWithNode_1 = __importDefault(require("./searchWithNode"));
 var searchWithGrep_1 = __importDefault(require("./searchWithGrep"));
+var createCommandHierarchie_1 = __importDefault(require("./createCommandHierarchie"));
 var search = config_1.default.useGrep
     ? searchWithGrep_1.default
     : searchWithNode_1.default;
 search()
+    .then(createCommandHierarchie_1.default)
     .then(createCommandTree_1.default)
-    .then(function (r) { return console.log(JSON.stringify(r, null, 2)); });
-// .then(createFileContent)
-// .then(file => fs.writeFileSync(config.outPath, file, 'utf8'))
-// .catch(console.log)
+    .then(function (r) { return console.log(JSON.stringify(r, null, 2)); })
+    // .then(createFileContent)
+    // .then(file => fs.writeFileSync(config.outPath, file, 'utf8'))
+    .catch(console.log);
