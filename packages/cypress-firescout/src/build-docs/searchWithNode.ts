@@ -3,38 +3,45 @@ import * as utils from './utils'
 
 
 export type RawItem = {
-  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection' | 'module-fn',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection' | 'module-fn' | 'fixture',
   payload: string,
   file: string,
   folder: string
 }
 
 type Match = {
-  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection' | 'module-fn',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection' | 'module-fn' | 'fixture',
   payload: string,
 }
 
 export default async function findInFiles ():Promise<RawItem[]> {
-  let files = await findAllFiles(config.widgetFolders)
+  let files = await findAllFiles([...config.widgetFolders, config.fixturesFolder])
   const extensionsRegex = config.extensions
     .split('|').concat('md').map(s => `.${s}$`).join('|')
-  files = files.filter(f => f.name.match(new RegExp(extensionsRegex)))
-  const matches = await Promise.all(files.map(f => getMatch(f.path)))
+  const srcFiles = files.filter(f => f.name.match(new RegExp(extensionsRegex)))
+  const fixtureFiles = files.filter(f => f.path.includes(config.fixturesFolder))
+  const allFiles = [...srcFiles, ...fixtureFiles]
   let rawItems:RawItem[] = []
-
-  for (let i=0; i<files.length; i++) {
+  
+  // find matches
+  const matches = await Promise.all([
+    ...srcFiles.map(f => getSrcMatch(f.path)),
+    ...fixtureFiles.map(f => getFixtureMatch(f.path))
+  ])
+  for (let i=0; i<allFiles.length; i++) {
     if(matches[i]) {
       let m = matches[i] as Match[]
       m.forEach(row => {
         rawItems.push({
           type: row.type,
           payload: row.payload,
-          file: utils.normalizeFilePath(files[i].path),
-          folder: utils.getFileFolder(files[i].path)
+          file: utils.normalizeFilePath(allFiles[i].path),
+          folder: utils.getFileFolder(allFiles[i].path)
         })
       })
     }
   }
+
   return rawItems
 }
 
@@ -56,7 +63,7 @@ async function findAllFiles (paths:string[]):Promise<utils.File[]> {
   return files
 }
 
-async function getMatch(path:string):Promise<Match[]|null> {
+async function getSrcMatch(path:string):Promise<Match[]|null> {
   const result = await utils.readFile(path)
   if(path.endsWith('.md')) {
     const regex = new RegExp("<!-- firescout-(component|collection) -->")
@@ -92,4 +99,16 @@ async function getMatch(path:string):Promise<Match[]|null> {
   }
   
   return allMatches.length ? allMatches : null
+}
+
+async function getFixtureMatch (path:string):Promise<Match[]|null> {
+  const content = await utils.readFile(path)
+
+  let match = content.match(/\/\*\*(.|\n)*@module(.|\n)*@name(.|\n)*@variation(.|\n)*\*\//)
+  if(match) return [{
+    type: 'fixture',
+    payload: match[0]
+  }]
+
+  return null
 }

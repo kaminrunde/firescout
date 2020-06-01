@@ -15,10 +15,10 @@ let search = config.useGrep
 
 search()
 .then(createCommandHierarchie)
-.then(({tree, mdItems, moduleItems}) => ({
+.then(({tree, mdItems, moduleItems, fixtureItems}) => ({
   tree: createCommandTree(tree),
   docs: createDocs(mdItems),
-  modules: createModuleTree(moduleItems)
+  modules: createModuleTree(moduleItems, fixtureItems)
 }))
 .then(({tree, docs, modules}) => createFileContent(tree, docs, modules))
 // .then(console.log)

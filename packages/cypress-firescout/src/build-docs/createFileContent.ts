@@ -11,13 +11,22 @@ export default function createFileContent (
     /// <reference types="cypress" />
 
     ${modules.map(node => `
+      ${node.commands.map(cmd => `
+        interface ${cmd.typesaveId} {
+          ${cmd.fixtures.map(f => `
+            ${f.description}
+            mock(name:'${f.variation}'):${node.typesaveContext}
+          `)}
+        }
+      `)}
+
       interface ${node.typesaveContext} {
         ${node.commands.map(cmd => `
           /**
            * @name ${cmd.name}
            * @file ${cmd.file}
            */
-          fn(name:'${cmd.name}'):never
+          fn(name:'${cmd.name}'):${cmd.typesaveId}
         `)}
       }
     `)}

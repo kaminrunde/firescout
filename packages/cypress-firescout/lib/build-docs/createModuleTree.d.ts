@@ -8,7 +8,17 @@ export declare type ModuleTree = {
         name: string;
         file: string;
         folder: string;
+        typesaveId: string;
+        fixtures: Fixture[];
     }[];
 };
-export default function createModuleTree(items: ModuleItem[]): ModuleTree[];
+declare type Fixture = {
+    module: string;
+    name: string;
+    variation: string;
+    description: string;
+    file: string;
+    folder: string;
+};
+export default function createModuleTree(items: ModuleItem[], fixtureItems: ModuleItem[]): ModuleTree[];
 export {};

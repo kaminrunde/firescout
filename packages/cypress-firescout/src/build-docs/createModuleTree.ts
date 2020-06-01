@@ -11,12 +11,30 @@ export type ModuleTree = {
   commands: {
     name: string,
     file: string,
-    folder: string
+    folder: string,
+    typesaveId: string,
+    fixtures: Fixture[]
   }[]
 }
 
-export default function createModuleTree (items:ModuleItem[]):ModuleTree[] {
+type Fixture = {
+  module: string,
+  name: string,
+  variation: string,
+  description: string,
+  file: string,
+  folder: string
+}
+
+export default function createModuleTree (items:ModuleItem[], fixtureItems:ModuleItem[]):ModuleTree[] {
   let dict:Record<string,ModuleTree> = {}
+  const fixtures = fixtureItems.map(item => createFixture(item))
+  let fixtureDict:Record<string,Fixture[]> = {}
+  for(let f of fixtures) {
+    let id = `${f.module}.${f.name}`
+    if(!fixtureDict[id]) fixtureDict[id] = []
+    fixtureDict[id].push(f)
+  }
 
   for(let item of items) {
     let [context, name] = item.payload.split('.')
@@ -28,9 +46,26 @@ export default function createModuleTree (items:ModuleItem[]):ModuleTree[] {
     dict[context].commands.push({
       name: name,
       file: item.file,
-      folder: item.folder
+      folder: item.folder,
+      typesaveId: utils.getTypesaveId(context+name),
+      fixtures: fixtureDict[item.payload] || []
     })
   }
 
   return Object.values(dict)
+}
+
+function createFixture(item:ModuleItem):Fixture {
+  const moduleMatch = item.payload.match(/@module (.*)/)
+  const nameMatch = item.payload.match(/@name (.*)/)
+  const variationMatch = item.payload.match(/@variation (.*)/)
+  return {
+    description: item.payload
+      .replace('*/', `* @file ${item.file}\n */`),
+    file: item.file,
+    folder: item.folder,
+    variation: variationMatch ? variationMatch[1] : '',
+    name: nameMatch ? nameMatch[1] : '',
+    module: moduleMatch ? moduleMatch[1] : ''
+  }
 }

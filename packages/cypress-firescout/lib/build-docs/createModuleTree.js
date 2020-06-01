@@ -20,11 +20,20 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils = __importStar(require("./utils"));
-function createModuleTree(items) {
+function createModuleTree(items, fixtureItems) {
     var dict = {};
-    for (var _i = 0, items_1 = items; _i < items_1.length; _i++) {
-        var item = items_1[_i];
-        var _a = item.payload.split('.'), context_1 = _a[0], name_1 = _a[1];
+    var fixtures = fixtureItems.map(function (item) { return createFixture(item); });
+    var fixtureDict = {};
+    for (var _i = 0, fixtures_1 = fixtures; _i < fixtures_1.length; _i++) {
+        var f = fixtures_1[_i];
+        var id = f.module + "." + f.name;
+        if (!fixtureDict[id])
+            fixtureDict[id] = [];
+        fixtureDict[id].push(f);
+    }
+    for (var _a = 0, items_1 = items; _a < items_1.length; _a++) {
+        var item = items_1[_a];
+        var _b = item.payload.split('.'), context_1 = _b[0], name_1 = _b[1];
         if (!dict[context_1])
             dict[context_1] = {
                 context: context_1,
@@ -34,9 +43,25 @@ function createModuleTree(items) {
         dict[context_1].commands.push({
             name: name_1,
             file: item.file,
-            folder: item.folder
+            folder: item.folder,
+            typesaveId: utils.getTypesaveId(context_1 + name_1),
+            fixtures: fixtureDict[item.payload] || []
         });
     }
     return Object.values(dict);
 }
 exports.default = createModuleTree;
+function createFixture(item) {
+    var moduleMatch = item.payload.match(/@module (.*)/);
+    var nameMatch = item.payload.match(/@name (.*)/);
+    var variationMatch = item.payload.match(/@variation (.*)/);
+    return {
+        description: item.payload
+            .replace('*/', "* @file " + item.file + "\n */"),
+        file: item.file,
+        folder: item.folder,
+        variation: variationMatch ? variationMatch[1] : '',
+        name: nameMatch ? nameMatch[1] : '',
+        module: moduleMatch ? moduleMatch[1] : ''
+    };
+}

@@ -17,5 +17,6 @@ export default function createCommandHierarchie(rawItems: RawItem[]): {
     tree: HierarchieTree[];
     mdItems: RawItem[];
     moduleItems: RawItem[];
+    fixtureItems: RawItem[];
 };
 export {};

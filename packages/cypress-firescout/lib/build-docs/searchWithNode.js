@@ -54,6 +54,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -62,19 +69,21 @@ var config_1 = __importDefault(require("./config"));
 var utils = __importStar(require("./utils"));
 function findInFiles() {
     return __awaiter(this, void 0, void 0, function () {
-        var files, extensionsRegex, matches, rawItems, _loop_1, i;
+        var files, extensionsRegex, srcFiles, fixtureFiles, allFiles, rawItems, matches, _loop_1, i;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, findAllFiles(config_1.default.widgetFolders)];
+                case 0: return [4 /*yield*/, findAllFiles(__spreadArrays(config_1.default.widgetFolders, [config_1.default.fixturesFolder]))];
                 case 1:
                     files = _a.sent();
                     extensionsRegex = config_1.default.extensions
                         .split('|').concat('md').map(function (s) { return "." + s + "$"; }).join('|');
-                    files = files.filter(function (f) { return f.name.match(new RegExp(extensionsRegex)); });
-                    return [4 /*yield*/, Promise.all(files.map(function (f) { return getMatch(f.path); }))];
+                    srcFiles = files.filter(function (f) { return f.name.match(new RegExp(extensionsRegex)); });
+                    fixtureFiles = files.filter(function (f) { return f.path.includes(config_1.default.fixturesFolder); });
+                    allFiles = __spreadArrays(srcFiles, fixtureFiles);
+                    rawItems = [];
+                    return [4 /*yield*/, Promise.all(__spreadArrays(srcFiles.map(function (f) { return getSrcMatch(f.path); }), fixtureFiles.map(function (f) { return getFixtureMatch(f.path); })))];
                 case 2:
                     matches = _a.sent();
-                    rawItems = [];
                     _loop_1 = function (i) {
                         if (matches[i]) {
                             var m = matches[i];
@@ -82,13 +91,13 @@ function findInFiles() {
                                 rawItems.push({
                                     type: row.type,
                                     payload: row.payload,
-                                    file: utils.normalizeFilePath(files[i].path),
-                                    folder: utils.getFileFolder(files[i].path)
+                                    file: utils.normalizeFilePath(allFiles[i].path),
+                                    folder: utils.getFileFolder(allFiles[i].path)
                                 });
                             });
                         }
                     };
-                    for (i = 0; i < files.length; i++) {
+                    for (i = 0; i < allFiles.length; i++) {
                         _loop_1(i);
                     }
                     return [2 /*return*/, rawItems];
@@ -128,7 +137,7 @@ function findAllFiles(paths) {
         });
     });
 }
-function getMatch(path) {
+function getSrcMatch(path) {
     return __awaiter(this, void 0, void 0, function () {
         var result, regex, match, allMatches, cRegex, moduleRegex, cMatches, moduleMatches, regex_1, matches, regex_2, matches;
         return __generator(this, function (_a) {
@@ -170,6 +179,25 @@ function getMatch(path) {
                         }); }));
                     }
                     return [2 /*return*/, allMatches.length ? allMatches : null];
+            }
+        });
+    });
+}
+function getFixtureMatch(path) {
+    return __awaiter(this, void 0, void 0, function () {
+        var content, match;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, utils.readFile(path)];
+                case 1:
+                    content = _a.sent();
+                    match = content.match(/\/\*\*(.|\n)*@module(.|\n)*@name(.|\n)*@variation(.|\n)*\*\//);
+                    if (match)
+                        return [2 /*return*/, [{
+                                    type: 'fixture',
+                                    payload: match[0]
+                                }]];
+                    return [2 /*return*/, null];
             }
         });
     });

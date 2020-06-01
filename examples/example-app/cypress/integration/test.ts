@@ -11,6 +11,7 @@ context('Actions', () => {
 
     cy.module('cart')
       .fn('fetch')
+      .mock('default')
     
 
     // cy.module('cart').function('fetch').mockWith('default')

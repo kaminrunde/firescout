@@ -18,11 +18,11 @@ var search = config_1.default.useGrep
 search()
     .then(createCommandHierarchie_1.default)
     .then(function (_a) {
-    var tree = _a.tree, mdItems = _a.mdItems, moduleItems = _a.moduleItems;
+    var tree = _a.tree, mdItems = _a.mdItems, moduleItems = _a.moduleItems, fixtureItems = _a.fixtureItems;
     return ({
         tree: createCommandTree_1.default(tree),
         docs: createDocs_1.default(mdItems),
-        modules: createModuleTree_1.default(moduleItems)
+        modules: createModuleTree_1.default(moduleItems, fixtureItems)
     });
 })
     .then(function (_a) {

@@ -8,4 +8,5 @@ var configRaw = fs_1.default.readFileSync(process.cwd() + '/firescout.json', 'ut
 var config = JSON.parse(configRaw);
 config.widgetFolders = config.widgetFolders.map(function (s) { return process.cwd() + "/" + s; });
 config.outPath = process.cwd() + "/" + config.outPath;
+config.fixturesFolder = process.cwd() + "/" + config.fixturesFolder;
 exports.default = config;
