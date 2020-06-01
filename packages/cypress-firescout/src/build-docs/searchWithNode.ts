@@ -3,13 +3,14 @@ import * as utils from './utils'
 
 
 export type RawItem = {
-  type: 'ctx' | 'handle' | 'state' | 'component-doc',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc',
   payload: string,
   file: string,
+  folder: string
 }
 
 type Match = {
-  type: 'ctx' | 'handle' | 'state' | 'component-doc',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc',
   payload: string,
 }
 
@@ -28,7 +29,8 @@ export default async function findInFiles ():Promise<RawItem[]> {
         rawItems.push({
           type: row.type,
           payload: row.payload,
-          file: files[i].path.replace(process.cwd(), ''),
+          file: utils.normalizeFilePath(files[i].path),
+          folder: utils.getFileFolder(files[i].path)
         })
       })
     }
@@ -57,9 +59,10 @@ async function findAllFiles (paths:string[]):Promise<utils.File[]> {
 async function getMatch(path:string):Promise<Match[]|null> {
   const result = await utils.readFile(path)
   if(path.endsWith('.md')) {
-    const regex = new RegExp("<!-- firescout-docs -->")
-    if(result.match(regex)) return [{
-      type: 'component-doc',
+    const regex = new RegExp("<!-- firescout-(component|collection) -->")
+    let match = null
+    if(match=result.match(regex)) return [{
+      type: match[1] === 'component' ? 'component-doc' : 'collection-doc',
       payload: result
     }]
     else return null

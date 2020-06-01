@@ -50,6 +50,11 @@ export function readStats (path:string, name:string):Promise<File> {
   })
 }
 
-export function parseFile (file:string):string {
+export function normalizeFilePath (file:string):string {
   return file.replace(process.cwd(), '')
+}
+
+export function getFileFolder (file:string):string {
+  file = normalizeFilePath(file)
+  return file.split('/').slice(0,-1).join('/')
 }

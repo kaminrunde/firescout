@@ -1,6 +1,7 @@
 export declare type RawItem = {
-    type: 'ctx' | 'handle' | 'state' | 'component-doc';
+    type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc';
     payload: string;
     file: string;
+    folder: string;
 };
 export default function findInFiles(): Promise<RawItem[]>;

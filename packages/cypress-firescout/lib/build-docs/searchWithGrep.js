@@ -32,7 +32,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var utils = __importStar(require("./utils"));
 var fs_1 = __importDefault(require("fs"));
 var config_1 = __importDefault(require("./config"));
-var DOCS_CMD = "grep -rl \"<!-- firescout-docs -->\" " + config_1.default.widgetFolder;
+var DOCS_CMD = "grep -rl \"<!-- firescout-(component|collection) -->\" " + config_1.default.widgetFolder;
 var HANDLES_CMD = "grep -HREo \"data-cy-(state|ctx|handle)=(\\\"|').*(\\\"|')\" " + config_1.default.widgetFolder;
 function searchWithGrep() {
     return Promise.all([
@@ -47,12 +47,13 @@ function parseInput(input) {
         return Array.from(new Set(list));
     }), docs = _a[0], handles = _a[1];
     var rawDocItems = docs.map(function (doc) { return ({
-        file: utils.parseFile(doc),
-        type: 'component-doc',
-        payload: fs_1.default.readFileSync(doc, 'utf8')
+        file: utils.normalizeFilePath(doc),
+        type: doc.match(/firescout-component/) ? 'component-doc' : 'collection-doc',
+        payload: fs_1.default.readFileSync(doc, 'utf8'),
+        folder: utils.getFileFolder(doc)
     }); });
     var rawHandleItems = handles.map(function (handle) { return ({
-        file: utils.parseFile(handle.split(':')[0]),
+        file: utils.normalizeFilePath(handle.split(':')[0]),
         // @ts-ignore
         type: handle.match(/data-cy-(state|ctx|handle)/)[1],
         // @ts-ignore

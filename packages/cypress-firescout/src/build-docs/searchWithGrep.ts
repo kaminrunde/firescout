@@ -3,12 +3,13 @@ import fs from 'fs'
 import config from './config'
 
 export type RawItem = {
-  type: 'ctx' | 'handle' | 'state' | 'component-doc',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc',
   payload: string,
-  file: string
+  file: string,
+  folder: string
 }
 
-const DOCS_CMD = `grep -rl "<!-- firescout-docs -->" ${config.widgetFolder}`
+const DOCS_CMD = `grep -rl "<!-- firescout-(component|collection) -->" ${config.widgetFolder}`
 const HANDLES_CMD = `grep -HREo "data-cy-(state|ctx|handle)=(\\"|').*(\\"|')" ${config.widgetFolder}`
 
 export default function searchWithGrep ():Promise<RawItem[]> {
@@ -24,12 +25,13 @@ function parseInput (input: [string,string]):RawItem[] {
     return Array.from(new Set(list))
   })
   const rawDocItems:RawItem[] = docs.map(doc => ({
-    file: utils.parseFile(doc),
-    type: 'component-doc',
-    payload: fs.readFileSync(doc, 'utf8')
+    file: utils.normalizeFilePath(doc),
+    type: doc.match(/firescout-component/) ? 'component-doc' : 'collection-doc',
+    payload: fs.readFileSync(doc, 'utf8'),
+    folder: utils.getFileFolder(doc)
   }))
   const rawHandleItems:RawItem[] = handles.map(handle => ({
-    file: utils.parseFile(handle.split(':')[0]),
+    file: utils.normalizeFilePath(handle.split(':')[0]),
     // @ts-ignore
     type: handle.match(/data-cy-(state|ctx|handle)/)[1] as string,
     // @ts-ignore

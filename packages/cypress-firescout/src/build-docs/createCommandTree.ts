@@ -22,11 +22,12 @@ export type Tree = {
 }[]
 
 export default function createCommandTree (items:RawItem[]):Tree {
+  const collectionDocs = items.filter(item => item.type === 'collection-doc')
   const docs = items
     .filter(item => item.type === 'component-doc')
     .map(item => ({
       file: item.file,
-      docs: parseComponendMdDocs(item.payload)
+      docs: parseComponendMdDocs(item, collectionDocs)
     }))
     .reduce<any>((p,n) => (p[n.docs.context]=n) && p, {})
 

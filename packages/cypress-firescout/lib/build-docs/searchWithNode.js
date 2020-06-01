@@ -82,7 +82,8 @@ function findInFiles() {
                                 rawItems.push({
                                     type: row.type,
                                     payload: row.payload,
-                                    file: files[i].path.replace(process.cwd(), ''),
+                                    file: utils.normalizeFilePath(files[i].path),
+                                    folder: utils.getFileFolder(files[i].path)
                                 });
                             });
                         }
@@ -129,17 +130,18 @@ function findAllFiles(paths) {
 }
 function getMatch(path) {
     return __awaiter(this, void 0, void 0, function () {
-        var result, regex_1, regex, rawMatches, regex_2, matches;
+        var result, regex_1, match, regex, rawMatches, regex_2, matches;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, utils.readFile(path)];
                 case 1:
                     result = _a.sent();
                     if (path.endsWith('.md')) {
-                        regex_1 = new RegExp("<!-- firescout-docs -->");
-                        if (result.match(regex_1))
+                        regex_1 = new RegExp("<!-- firescout-(component|collection) -->");
+                        match = null;
+                        if (match = result.match(regex_1))
                             return [2 /*return*/, [{
-                                        type: 'component-doc',
+                                        type: match[1] === 'component' ? 'component-doc' : 'collection-doc',
                                         payload: result
                                     }]];
                         else

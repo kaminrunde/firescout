@@ -5,11 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var parseComponentMdDocs_1 = __importDefault(require("./parseComponentMdDocs"));
 function createCommandTree(items) {
+    var collectionDocs = items.filter(function (item) { return item.type === 'collection-doc'; });
     var docs = items
         .filter(function (item) { return item.type === 'component-doc'; })
         .map(function (item) { return ({
         file: item.file,
-        docs: parseComponentMdDocs_1.default(item.payload)
+        docs: parseComponentMdDocs_1.default(item, collectionDocs)
     }); })
         .reduce(function (p, n) { return (p[n.docs.context] = n) && p; }, {});
     return items
