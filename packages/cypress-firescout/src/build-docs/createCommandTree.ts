@@ -26,9 +26,15 @@ export default function createCommandTree (tree:HierarchieTree[]):Tree[] {
     typesaveContext: utils.getTypesaveId(target.payload),
     file: target.file,
     folder: target.folder,
-    handles: [],
-    states: [],
-    collections: []
+    handles: target.handles.map(item => ({
+      name: item.payload,
+      file: item.file
+    })),
+    states: target.states.map(item => ({
+      name: item.payload,
+      file: item.file
+    })),
+    collections: createCommandTree(target.collections)
   }))
 }
 

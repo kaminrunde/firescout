@@ -26,9 +26,15 @@ function createCommandTree(tree) {
         typesaveContext: utils.getTypesaveId(target.payload),
         file: target.file,
         folder: target.folder,
-        handles: [],
-        states: [],
-        collections: []
+        handles: target.handles.map(function (item) { return ({
+            name: item.payload,
+            file: item.file
+        }); }),
+        states: target.states.map(function (item) { return ({
+            name: item.payload,
+            file: item.file
+        }); }),
+        collections: createCommandTree(target.collections)
     }); });
 }
 exports.default = createCommandTree;
