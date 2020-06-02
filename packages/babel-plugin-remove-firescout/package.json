@@ -2,7 +2,7 @@
   "name": "babel-plugin-remove-firescout",
   "version": "1.0.0",
   "description": "removes all firescout references from the bundle",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,14 +14,10 @@
   "author": "Manuel Jung",
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "^7.10.2",
+    "@babel/core": "^7.10.2"
+  },
+  "devDependencies": {
     "@babel/preset-react": "^7.10.1",
-    "@types/babel-core": "^6.25.6",
-    "@types/babel__core": "^7.1.8",
-    "@types/babel__generator": "^7.6.1",
-    "@types/babel__traverse": "^7.0.12",
-    "jsx-ast-utils": "^2.3.0",
-    "tsc": "^1.20150623.0",
-    "typescript": "^3.9.3"
+    "jsx-ast-utils": "^2.3.0"
   }
 }

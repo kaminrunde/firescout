@@ -1,43 +1,26 @@
-var {transformSync} = require('@babel/core')
-var plugin = require('./plugin')
+var {getProp} = require('jsx-ast-utils')
 
-const code = `
-import * as React from 'react'
+module.exports = function removeFirescoutPlugin() {
+  return {
+    name: 'remove-firescout',
+    visitor: {
+      JSXOpeningElement({node}) {
+        const ctx = getProp(node.attributes, 'data-cy-ctx')
+        const handle = getProp(node.attributes, 'data-cy-handle')
+        const state = getProp(node.attributes, 'data-cy-state')
+        const collection = getProp(node.attributes, 'data-cy-collection')
 
-export default function Wishlist () {
-  let loggedIn = false
-  let hits = []
-
-  if(!loggedIn) return (
-    <div className="foo" data-cy-ctx='organisms/Wishlist'>
-      <span data-cy-state='login-required'></span>
-      <p>You need to login</p>
-    </div>
-  )
-
-  if(hits.length === 0) return (
-    <div data-cy-ctx='organisms/Wishlist'>
-      {loggedIn && <span data-cy-state='empty'></span>}
-      <p>no products found</p>
-    </div>
-  )
-
-  return (
-    <div data-cy-ctx='organisms/Wishlist'>
-      {loggedIn && <span data-cy-state='filled'/>}
-      <p>products found</p>
-      <button data-cy-handle='subscribe'>subscribe</button>
-    </div>
-  )
+        // remove data-cy attributes
+        if(ctx || handle || state || collection) {
+          node.attributes = node.attributes.filter(node => {
+            if(node === ctx 
+            || node === handle
+            || node === state
+            || node === collection) return false
+            return true
+          })
+        }
+      },
+    },
+  };
 }
-`
-
-const output = transformSync(code, {
-  presets: ["@babel/preset-react"],
-  plugins: [plugin],
-});
-
-if(output){
-  console.log(output.code); // 'const x = 1;'
-}
-else console.log('null')
