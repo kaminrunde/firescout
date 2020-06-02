@@ -13,6 +13,18 @@ Cypress.Commands.add("component", {prevSubject:'optional'}, (subject, name, inde
   return cmd
 })
 
+Cypress.Commands.add("collection", {prevSubject:'optional'}, (subject, name, index) => {
+  let cmd
+  if(subject) cmd = cy.get(`${subject.selector} [data-cy-collection="${name}"]`)
+  else if (typeof index === 'string') cmd = cy.contains(`[data-cy-collection="${name}"]`, index)
+  else cmd = cy.get(`[data-cy-collection="${name}"]`)
+
+  if(typeof index === 'number'){
+    cmd = cmd.eq(index)
+  }
+  return cmd
+})
+
 Cypress.Commands.add("handle", {prevSubject:'optional'}, (subject, name, index) => {
   let cmd
   if(subject.attr('data-cy-handle') === name) return cy.get(subject.selector)
