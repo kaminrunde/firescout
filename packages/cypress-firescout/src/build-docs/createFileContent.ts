@@ -33,14 +33,14 @@ export default function createFileContent (
 
     ${tree.map(node => `
       ${node.collections.map(colNode => `
-        interface ${node.typesaveContext+colNode.typesaveContext} extends Cypress.Chainable<Element> {
+        interface ${node.typesaveContext+colNode.typesaveContext} extends Cypress.Chainable {
           ${colNode.handles.map(handle => `
             /** 
              * ${docs[node.context]?.collections[colNode.context].handles.bullets.find(row => row.name === handle.name)?.value || ''}
              * @name ${handle.name}
              * @file ${handle.file}
              */
-            handle(name:'${handle.name}', index?:number|string): Cypress.Chainable<Element>
+            handle(name:'${handle.name}', index?:number|string): Cypress.Chainable
           `).join('\n')}
 
           ${colNode.states.map(state => `
@@ -61,7 +61,7 @@ export default function createFileContent (
         }
       `)}
 
-      interface ${node.typesaveContext} extends Cypress.Chainable<Element> {
+      interface ${node.typesaveContext} extends Cypress.Chainable {
         ${node.collections.map(colNode => `
           /**
            * ${docs[node.context]?.collections[colNode.context]?.description || '...'}
@@ -77,7 +77,7 @@ export default function createFileContent (
            * @name ${handle.name}
            * @file ${handle.file}
            */
-          handle(name:'${handle.name}', index?:number|string): Cypress.Chainable<Element>
+          handle(name:'${handle.name}', index?:number|string): Cypress.Chainable
         `).join('\n')}
 
         ${node.states.map(state => `
@@ -120,5 +120,7 @@ export default function createFileContent (
         module: typeof Firescout.module;
       }
     }
+
+    export type F = string
   `.split('\n').slice(1).map(s => s.trim()).join('\n')
 }

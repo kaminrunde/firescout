@@ -44,12 +44,14 @@ Cypress.Commands.add('fn', {prevSubject:true}, (module, name) => {
 })
 
 Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation) => {
+  let out:any
+  cy.fixture(`firescout/${module}/${name}.${variation}.ts`).then(file => {
+    out = file
+  })
   const cb = (win:any) => {
-    // const id = `${module}.${name}`
-    // if(!win.cymocks) win.cymocks = {}
-    // cy.fixture(`firescout/${module}/${name}.${variation}.ts`).then(file => {
-
-    // })
+    const id = `${module}.${name}`
+    if(!win.cymocks) win.cymocks = {}
+    win.cymocks[id] = cy.stub().as(id).resolves(out)
     // let fixture = response
     // if(typeof response === 'string'){
     //   fixture = require(`../fixtures/${subject}/${name}${response !== 'default' ? ('.'+response) : ''}.ts`).default
