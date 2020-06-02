@@ -1,9 +1,9 @@
+import {firescoutMockFn} from 'cypress-firescout'
 
-
-const firescoutMockFn:any = () => null
+export type Fetch = string
 
 export function fetch () {
-  return firescoutMockFn('cart.fetch', arguments, () => {
-    return null
+  return firescoutMockFn<Fetch>('cart.fetch', arguments, async () => {
+    return 'foo'
   })
 }
