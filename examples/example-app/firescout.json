@@ -3,5 +3,5 @@
   "extensions": "tsx|ts",
   "outPath": "cypress/support/firescout.d.ts",
   "useGrep": false,
-  "fixturesFolder": "cypress/fixtures"
+  "fixturesFolder": "cypress/fixtures/firescout"
 }

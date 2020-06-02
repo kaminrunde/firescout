@@ -185,19 +185,31 @@ function getSrcMatch(path) {
 }
 function getFixtureMatch(path) {
     return __awaiter(this, void 0, void 0, function () {
-        var content, match;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, utils.readFile(path)];
+        var content, result, match, relPath, _a, module, fileName, _b, name, variation;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    if (!path.endsWith('.ts'))
+                        return [2 /*return*/, null];
+                    return [4 /*yield*/, utils.readFile(path)];
                 case 1:
-                    content = _a.sent();
-                    match = content.match(/\/\*\*(.|\n)*@module(.|\n)*@name(.|\n)*@variation(.|\n)*\*\//);
+                    content = _c.sent();
+                    result = '/**\n * ...\n */';
+                    match = content.match(/\/\*\*(.|\n)*/);
                     if (match)
-                        return [2 /*return*/, [{
-                                    type: 'fixture',
-                                    payload: match[0]
-                                }]];
-                    return [2 /*return*/, null];
+                        result = match[0].split('*/')[0] + '*/';
+                    relPath = path.replace(config_1.default.fixturesFolder + '/', '');
+                    if (relPath.split('/').length !== 2)
+                        return [2 /*return*/, null];
+                    _a = relPath.split('/'), module = _a[0], fileName = _a[1];
+                    _b = fileName.split('.'), name = _b[0], variation = _b[1];
+                    if (variation === '.ts')
+                        variation = 'default';
+                    result = result.replace('*/', "* @module " + module + "\n * @name " + name + "\n * @variation " + variation + "\n */");
+                    return [2 /*return*/, [{
+                                type: 'fixture',
+                                payload: result
+                            }]];
             }
         });
     });
