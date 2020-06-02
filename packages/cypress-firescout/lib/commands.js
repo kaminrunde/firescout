@@ -42,20 +42,19 @@ Cypress.Commands.add('fn', { prevSubject: true }, function (module, name) {
 });
 Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation) {
     var module = _a[0], name = _a[1];
-    var out;
+    var get = function () { return null; };
     cy.fixture("firescout/" + module + "/" + name + "." + variation + ".ts").then(function (file) {
-        out = file;
+        var match = file.match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//);
+        if (!match)
+            throw new Error("firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/" + module + "/" + name + "." + variation + ".ts");
+        var fn = new Function("return " + match[1]);
+        get = function () { return fn(); };
     });
     var cb = function (win) {
         var id = module + "." + name;
         if (!win.cymocks)
             win.cymocks = {};
-        win.cymocks[id] = cy.stub().as(id).resolves(out);
-        // let fixture = response
-        // if(typeof response === 'string'){
-        //   fixture = require(`../fixtures/${subject}/${name}${response !== 'default' ? ('.'+response) : ''}.ts`).default
-        // }
-        // win.cymocks[id] = cy.stub().as(as || id).resolves(fixture)
+        win.cymocks[id] = cy.stub().as(id).resolves(get());
     };
     cy.window({ log: false }).then(cb);
     Cypress.on('window:before:load', cb);

@@ -4,6 +4,6 @@ import {Fetch} from '../../../../src/modules/cart/api'
  * 
  * @since 13.05.2020
  */
-const data:Fetch = 'mocked'
+const data:Fetch = /*fs-start*/'mocked'/*fs-end*/
 
 export default data
