@@ -11,7 +11,7 @@ context('Actions', () => {
 
     cy.visit('localhost:3000')
     
-    cy.component('organisms/Wishlist')
+    cy.context('organisms/Wishlist')
       .collection('ColorFilter')
       .shouldHaveState('selected')
       .handle('clear-button')

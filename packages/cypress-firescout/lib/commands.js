@@ -1,6 +1,6 @@
 "use strict";
 /// <reference types="cypress" />
-Cypress.Commands.add("component", { prevSubject: 'optional' }, function (subject, name, index) {
+Cypress.Commands.add("context", { prevSubject: 'optional' }, function (subject, name, index) {
     var cmd;
     if (subject)
         cmd = cy.get(subject.selector + " [data-cy-ctx=\"" + name + "\"]");

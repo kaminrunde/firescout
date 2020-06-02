@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 
-Cypress.Commands.add("component", {prevSubject:'optional'}, (subject, name, index) => {
+Cypress.Commands.add("context", {prevSubject:'optional'}, (subject, name, index) => {
   let cmd
   if(subject) cmd = cy.get(`${subject.selector} [data-cy-ctx="${name}"]`)
   else if (typeof index === 'string') cmd = cy.contains(`[data-cy-ctx="${name}"]`, index)

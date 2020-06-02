@@ -106,7 +106,7 @@ export default function createFileContent (
          * @file ${node.file}
          * @docs_file ${docs[node.context]?.file || '-'}
          */
-        function component (name:'${node.context}', index?:number|string):${node.typesaveContext}
+        function context (name:'${node.context}', index?:number|string):${node.typesaveContext}
       `).join('\n')}
 
       ${modules.map(node => `
@@ -116,7 +116,7 @@ export default function createFileContent (
 
     declare namespace Cypress {
       interface Chainable {
-        component: typeof Firescout.component;
+        context: typeof Firescout.context;
         module: typeof Firescout.module;
       }
     }
