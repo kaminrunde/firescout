@@ -5,5 +5,7 @@ export default function Component1 () {
   React.useEffect(() => {
     api.fetch().then(console.log)
   })
-  return <div/>
+  return (
+    <div data-cy-ctx='Component1'>Component1</div>
+  )
 }
