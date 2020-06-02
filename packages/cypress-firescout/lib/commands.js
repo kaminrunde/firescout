@@ -28,15 +28,38 @@ Cypress.Commands.add("handle", { prevSubject: 'optional' }, function (subject, n
     }
     return cmd;
 });
-Cypress.Commands.add("hasState", { prevSubject: 'optional' }, function (subject, name) {
+Cypress.Commands.add("shouldHaveState", { prevSubject: 'optional' }, function (subject, name) {
     return cy.get(subject).should('contain.html', "data-cy-state=\"" + name + "\"");
 });
-Cypress.Commands.add("notHasState", { prevSubject: 'optional' }, function (subject, name) {
+Cypress.Commands.add("shouldNotHaveState", { prevSubject: 'optional' }, function (subject, name) {
     return cy.get(subject).should('not.contain.html', "data-cy-state=\"" + name + "\"");
 });
-// Cypress.Commands.add('module', name => {
-//   return cy.wrap(name, {log:false})
-// })
+Cypress.Commands.add('module', function (module) {
+    return cy.wrap(module, { log: false });
+});
+Cypress.Commands.add('fn', { prevSubject: true }, function (module, name) {
+    return cy.wrap([module, name], { log: false });
+});
+Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation) {
+    var module = _a[0], name = _a[1];
+    var cb = function (win) {
+        // const id = `${module}.${name}`
+        // if(!win.cymocks) win.cymocks = {}
+        // cy.fixture(`firescout/${module}/${name}.${variation}.ts`).then(file => {
+        // })
+        // let fixture = response
+        // if(typeof response === 'string'){
+        //   fixture = require(`../fixtures/${subject}/${name}${response !== 'default' ? ('.'+response) : ''}.ts`).default
+        // }
+        // win.cymocks[id] = cy.stub().as(as || id).resolves(fixture)
+    };
+    cy.window({ log: false }).then(cb);
+    Cypress.on('window:before:load', cb);
+    Cypress.on('test:after:run', function () {
+        Cypress.off('window:before:load', cb);
+    });
+    return cy.wrap([module, name], { log: false });
+});
 // Cypress.Commands.add('mock', {prevSubject:true}, (subject,name,response='default',as) => {
 //   const id = `${subject}.${name}`
 //   const cb = win => {

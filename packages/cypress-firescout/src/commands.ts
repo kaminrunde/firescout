@@ -27,17 +27,42 @@ Cypress.Commands.add("handle", {prevSubject:'optional'}, (subject, name, index) 
   return cmd
 })
 
-Cypress.Commands.add("hasState", {prevSubject:'optional'}, (subject, name) => {
+Cypress.Commands.add("shouldHaveState", {prevSubject:'optional'}, (subject, name) => {
   return cy.get(subject).should('contain.html', `data-cy-state="${name}"`)
 })
 
-Cypress.Commands.add("notHasState", {prevSubject:'optional'}, (subject, name) => {
+Cypress.Commands.add("shouldNotHaveState", {prevSubject:'optional'}, (subject, name) => {
   return cy.get(subject).should('not.contain.html', `data-cy-state="${name}"`)
 })
 
-// Cypress.Commands.add('module', name => {
-//   return cy.wrap(name, {log:false})
-// })
+Cypress.Commands.add('module', module => {
+  return cy.wrap(module, {log:false})
+})
+
+Cypress.Commands.add('fn', {prevSubject:true}, (module, name) => {
+  return cy.wrap([module,name], {log:false})
+})
+
+Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation) => {
+  const cb = (win:any) => {
+    // const id = `${module}.${name}`
+    // if(!win.cymocks) win.cymocks = {}
+    // cy.fixture(`firescout/${module}/${name}.${variation}.ts`).then(file => {
+
+    // })
+    // let fixture = response
+    // if(typeof response === 'string'){
+    //   fixture = require(`../fixtures/${subject}/${name}${response !== 'default' ? ('.'+response) : ''}.ts`).default
+    // }
+    // win.cymocks[id] = cy.stub().as(as || id).resolves(fixture)
+  }
+  cy.window({log:false}).then(cb)
+  Cypress.on('window:before:load', cb)
+  Cypress.on('test:after:run', () => {
+    Cypress.off('window:before:load', cb)
+  })
+  return cy.wrap([module,name], {log:false})
+})
 
 // Cypress.Commands.add('mock', {prevSubject:true}, (subject,name,response='default',as) => {
 //   const id = `${subject}.${name}`
