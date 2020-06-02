@@ -76,23 +76,6 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation) {
     });
     return cy.wrap([module, name], { log: false });
 });
-// Cypress.Commands.add('mock', {prevSubject:true}, (subject,name,response='default',as) => {
-//   const id = `${subject}.${name}`
-//   const cb = win => {
-//     let fixture = response
-//     if(!win.cymocks) win.cymocks = {}
-//     if(typeof response === 'string'){
-//       fixture = require(`../fixtures/${subject}/${name}${response !== 'default' ? ('.'+response) : ''}.ts`).default
-//     }
-//     win.cymocks[id] = cy.stub().as(as || id).resolves(fixture)
-//   }
-//   cy.window({log:false}).then(cb)
-//   Cypress.on('window:before:load', cb)
-//   Cypress.on('test:after:run', () => {
-//     Cypress.off('window:before:load', cb)
-//   })
-//   return cy.wrap(subject, {log:false})
-// })
 // Cypress.SelectorPlayground.defaults({
 //   onElement: ($el) => {
 //     let list = []
