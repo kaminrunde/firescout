@@ -1,8 +1,10 @@
 {
   "name": "@kaminrunde/example-app-firescout",
-  "version": "1.0.0",
+  "version": "1.0.1-alpha.0",
   "private": true,
   "dependencies": {
+    "@kaminrunde/babel-plugin-remove-firescout": "^1.0.1-alpha.0",
+    "@kaminrunde/cypress-firescout": "^1.0.1-alpha.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -10,10 +12,8 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
-    "@kaminrunde/babel-plugin-remove-firescout": "^1.0.0",
     "customize-cra": "^1.0.0",
     "cypress": "^4.7.0",
-    "@kaminrunde/cypress-firescout": "1.0.0",
     "react": "^16.13.1",
     "react-app-rewired": "^2.1.6",
     "react-dom": "^16.13.1",
