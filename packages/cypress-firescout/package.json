@@ -1,5 +1,5 @@
 {
-  "name": "cypress-firescout",
+  "name": "@kaminrunde/cypress-firescout",
   "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
@@ -30,6 +30,6 @@
     "cypress": "^4.7.0"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   }
 }

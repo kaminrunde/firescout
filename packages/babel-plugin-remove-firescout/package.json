@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-remove-firescout",
+  "name": "@kaminrunde/babel-plugin-remove-firescout",
   "version": "1.0.0",
   "description": "removes all firescout references from the bundle",
   "main": "src/index.js",
@@ -21,6 +21,6 @@
     "jsx-ast-utils": "^2.3.0"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   }
 }

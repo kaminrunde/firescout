@@ -6,7 +6,9 @@
   "version": "1.0.0",
   "command": {
     "publish": {
+      "allowBranch": "master",
       "registry": "https://npm.pkg.github.com"
     }
-  }
+  },
+  "npmClient": "yarn"
 }
