@@ -37,6 +37,10 @@ npm login --registry=https://npm.pkg.github.com --scope=@kaminrunde
 > Email: PUBLIC-EMAIL-ADDRESS
 ```
 
+Publishing a package using a local `.npmrc` file
+
+<https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages#publishing-a-package-using-a-local-npmrc-file>
+
 ### manual prerelease `lerna publish prerelease`
 
 ```bash
