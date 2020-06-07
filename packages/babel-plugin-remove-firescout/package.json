@@ -16,6 +16,10 @@
   "dependencies": {
     "@babel/core": "^7.10.2"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaminrunde/firescout.git"
+  },
   "devDependencies": {
     "@babel/preset-react": "^7.10.1",
     "jsx-ast-utils": "^2.3.0"
@@ -23,5 +27,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "cac5a17f57f62391629cd11218a72b1fa321a88b"
+  "gitHead": "9ed1612cf6478a5095c1d5384844aff42b7a3e2a"
 }

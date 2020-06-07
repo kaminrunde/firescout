@@ -6,10 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaminrunde/firescout.git"
+  },
   "author": "Manuel Jung",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "cac5a17f57f62391629cd11218a72b1fa321a88b"
+  "gitHead": "9ed1612cf6478a5095c1d5384844aff42b7a3e2a"
 }
