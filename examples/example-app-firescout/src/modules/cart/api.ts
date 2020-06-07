@@ -1,4 +1,4 @@
-import {firescoutMockFn} from 'cypress-firescout'
+import {firescoutMockFn} from '@kaminrunde/cypress-firescout'
 
 export type Fetch = string
 
