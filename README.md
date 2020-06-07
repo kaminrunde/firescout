@@ -22,6 +22,16 @@ To publish packages with a scope (e.g., `@kaminrunde/rocks`), [you must set `acc
 
 Lerna copies root license (`LICENSE`) into package location, no need to do this manually (of via symlink for that matter).
 
+## Configuring npm for use with GitHub Packages
+
+<https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages>
+
+> To authenticate by adding your personal access token to your `~/.npmrc` file, edit the `~/.npmrc` file for your project to include the following line, replacing TOKEN with your [personal access token](https://github.com/settings/tokens). Create a new `~/.npmrc` file if one doesn't exist.
+
+```bash
+//npm.pkg.github.com/:_authToken=TOKEN
+```
+
 ### manual prerelease `lerna publish prerelease`
 
 ```bash
