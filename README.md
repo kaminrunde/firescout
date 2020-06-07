@@ -26,10 +26,15 @@ Lerna copies root license (`LICENSE`) into package location, no need to do this 
 
 <https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages>
 
-> To authenticate by adding your personal access token to your `~/.npmrc` file, edit the `~/.npmrc` file for your project to include the following line, replacing TOKEN with your [personal access token](https://github.com/settings/tokens). Create a new `~/.npmrc` file if one doesn't exist.
+<https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line>
+
+> To authenticate by logging in to npm, use the npm login command, replacing USERNAME with your GitHub username, TOKEN with your [personal access token](https://github.com/settings/tokens), and PUBLIC-EMAIL-ADDRESS with your email address.
 
 ```bash
-//npm.pkg.github.com/:_authToken=TOKEN
+npm login --registry=https://npm.pkg.github.com --scope=@kaminrunde
+> Username: USERNAME
+> Password: TOKEN
+> Email: PUBLIC-EMAIL-ADDRESS
 ```
 
 ### manual prerelease `lerna publish prerelease`
