@@ -28,5 +28,8 @@
   },
   "peerDependencies": {
     "cypress": "^4.7.0"
+  },
+  "publishConfig": {
+    "access": "restricted"
   }
 }
