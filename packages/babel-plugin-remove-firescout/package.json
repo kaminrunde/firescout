@@ -5,11 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "npm run build -- --watch",
-    "type-check": "tsc --noEmit",
-    "build": "tsc --declaration",
-    "build:types": "tsc --emitDeclarationOnly"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Manuel Jung",
   "license": "MIT",
