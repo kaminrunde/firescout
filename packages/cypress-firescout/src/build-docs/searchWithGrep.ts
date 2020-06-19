@@ -9,8 +9,8 @@ export type RawItem = {
   folder: string
 }
 
-const DOCS_CMD = `grep -rl "<!-- firescout-(component|collection) -->" ${config.widgetFolder}`
-const HANDLES_CMD = `grep -HREo "data-cy-(state|ctx|handle|collection)=(\\"|').*(\\"|')" ${config.widgetFolder}`
+const DOCS_CMD = `grep -rl "<!-- firescout-(component|collection) -->" ${config.widgetFolders}`
+const HANDLES_CMD = `grep -HREo "data-cy-(state|ctx|handle|collection)=(\\"|').*(\\"|')" ${config.widgetFolders}`
 
 export default function searchWithGrep ():Promise<RawItem[]> {
   return Promise.all([

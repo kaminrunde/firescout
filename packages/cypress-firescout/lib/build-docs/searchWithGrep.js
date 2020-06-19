@@ -32,8 +32,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var utils = __importStar(require("./utils"));
 var fs_1 = __importDefault(require("fs"));
 var config_1 = __importDefault(require("./config"));
-var DOCS_CMD = "grep -rl \"<!-- firescout-(component|collection) -->\" " + config_1.default.widgetFolder;
-var HANDLES_CMD = "grep -HREo \"data-cy-(state|ctx|handle|collection)=(\\\"|').*(\\\"|')\" " + config_1.default.widgetFolder;
+var DOCS_CMD = "grep -rl \"<!-- firescout-(component|collection) -->\" " + config_1.default.widgetFolders;
+var HANDLES_CMD = "grep -HREo \"data-cy-(state|ctx|handle|collection)=(\\\"|').*(\\\"|')\" " + config_1.default.widgetFolders;
 function searchWithGrep() {
     return Promise.all([
         utils.executeCmd(DOCS_CMD),

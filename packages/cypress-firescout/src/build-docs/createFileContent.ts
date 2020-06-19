@@ -96,7 +96,7 @@ export default function createFileContent (
           shouldNotHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext}
         `).join('\n')}
       }
-    `)}
+    `).join('\n')}
 
     declare namespace Firescout {
       ${tree.map(node => `
