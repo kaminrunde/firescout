@@ -1,6 +1,6 @@
 {
-  "name": "babel-plugin-remove-firescout",
-  "version": "1.0.0",
+  "name": "@kaminrunde/babel-plugin-remove-firescout",
+  "version": "1.0.1-alpha.4",
   "description": "removes all firescout references from the bundle",
   "main": "src/index.js",
   "scripts": {
@@ -16,8 +16,16 @@
   "dependencies": {
     "@babel/core": "^7.10.2"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaminrunde/firescout.git"
+  },
   "devDependencies": {
     "@babel/preset-react": "^7.10.1",
     "jsx-ast-utils": "^2.3.0"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "9ed1612cf6478a5095c1d5384844aff42b7a3e2a"
 }

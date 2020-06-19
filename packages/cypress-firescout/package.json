@@ -1,6 +1,6 @@
 {
-  "name": "cypress-firescout",
-  "version": "1.0.0",
+  "name": "@kaminrunde/cypress-firescout",
+  "version": "1.0.1-alpha.4",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -19,6 +19,10 @@
   "dependencies": {
     "markdown-ast": "^0.2.1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaminrunde/firescout.git"
+  },
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.10.2",
@@ -33,5 +37,9 @@
   },
   "peerDependencies": {
     "cypress": "^4.7.0"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "9ed1612cf6478a5095c1d5384844aff42b7a3e2a"
 }
