@@ -12,6 +12,7 @@ var searchWithGrep_1 = __importDefault(require("./searchWithGrep"));
 var createCommandHierarchie_1 = __importDefault(require("./createCommandHierarchie"));
 var createDocs_1 = __importDefault(require("./createDocs"));
 var createModuleTree_1 = __importDefault(require("./createModuleTree"));
+var reporter_1 = require("./reporter");
 var search = config_1.default.useGrep
     ? searchWithGrep_1.default
     : searchWithNode_1.default;
@@ -25,6 +26,7 @@ search()
         modules: createModuleTree_1.default(moduleItems, fixtureItems)
     });
 })
+    .then(reporter_1.validate)
     .then(function (_a) {
     var tree = _a.tree, docs = _a.docs, modules = _a.modules;
     return createFileContent_1.default(tree, docs, modules);

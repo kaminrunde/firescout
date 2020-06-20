@@ -7,6 +7,7 @@ import searchWithGrep from './searchWithGrep'
 import createCommandHierarchie from './createCommandHierarchie'
 import createDocs from './createDocs'
 import createModuleTree from './createModuleTree'
+import {validate} from './reporter'
 
 
 let search = config.useGrep
@@ -20,6 +21,7 @@ search()
   docs: createDocs(mdItems),
   modules: createModuleTree(moduleItems, fixtureItems)
 }))
+.then(validate)
 .then(({tree, docs, modules}) => createFileContent(tree, docs, modules))
 // .then(console.log)
 // .then(r => console.log(JSON.stringify(r.docs,null,2)))

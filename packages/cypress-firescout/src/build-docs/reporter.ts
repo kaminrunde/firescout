@@ -1,5 +1,8 @@
 import {RawItem as GrepRawItem} from './searchWithGrep'
 import {RawItem as NodeRawItem} from './searchWithNode'
+import {Tree} from './createCommandTree'
+import {Docs} from './createDocs'
+import {ModuleTree} from './createModuleTree'
 
 type RawItem = GrepRawItem | NodeRawItem
 
@@ -17,4 +20,14 @@ export function report(code:'STATE_WITHOUT_PARENT', item:RawItem):void
 export function report(code:'COLLECTION_WITHOUT_PARENT', item:RawItem):void
 export function report (code:keyof typeof codes, ctx:any) {
   console.log(code, codes[code](ctx))
+}
+
+type Input = {
+  tree:Tree[], 
+  docs:Docs,
+  modules:ModuleTree[]
+}
+
+export function validate (input:Input):Input {
+  return input
 }
