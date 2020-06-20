@@ -11,11 +11,13 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var reporter_1 = require("./reporter");
 /**
  * creates the hierarchie tree and enshures that collection commands won't be
  * stored on the root component. It splits the result
  */
 function createCommandHierarchie(rawItems) {
+    var tree = [];
     var handleItems = [];
     var collectionItems = [];
     var stateItems = [];
@@ -75,7 +77,31 @@ function createCommandHierarchie(rawItems) {
             collections: includeColls,
         }));
     }
-    var tree = ctxItems.map(function (item) { return (__assign(__assign({}, item), { states: stateItems, handles: handleItems, collections: enhancedCollections.filter(function (col) { return col.folder.includes(item.folder); }) })); });
+    for (var _e = 0, ctxItems_1 = ctxItems; _e < ctxItems_1.length; _e++) {
+        var ctx = ctxItems_1[_e];
+        var _f = extractItems(ctx, handleItems), includeHandles = _f[0], excludeHandles = _f[1];
+        var _g = extractItems(ctx, stateItems), includeStates = _g[0], excludeStates = _g[1];
+        var _h = extractItems(ctx, enhancedCollections), includeColls = _h[0], excludeColls = _h[1];
+        handleItems = excludeHandles;
+        stateItems = excludeStates;
+        enhancedCollections = excludeColls;
+        tree.push(__assign(__assign({}, ctx), { handles: includeHandles, states: includeStates, collections: includeColls }));
+    }
+    if (handleItems.length)
+        for (var _j = 0, handleItems_1 = handleItems; _j < handleItems_1.length; _j++) {
+            var item = handleItems_1[_j];
+            reporter_1.report('HANDLE_WITHOUT_PARENT', item);
+        }
+    if (stateItems.length)
+        for (var _k = 0, stateItems_1 = stateItems; _k < stateItems_1.length; _k++) {
+            var item = stateItems_1[_k];
+            reporter_1.report('STATE_WITHOUT_PARENT', item);
+        }
+    if (enhancedCollections.length)
+        for (var _l = 0, enhancedCollections_1 = enhancedCollections; _l < enhancedCollections_1.length; _l++) {
+            var item = enhancedCollections_1[_l];
+            reporter_1.report('COLLECTION_WITHOUT_PARENT', item);
+        }
     return { tree: tree, mdItems: mdItems, moduleItems: moduleItems, fixtureItems: fixtureItems };
 }
 exports.default = createCommandHierarchie;

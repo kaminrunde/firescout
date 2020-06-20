@@ -1,5 +1,6 @@
 import {RawItem as GrepRawItem} from './searchWithGrep'
 import {RawItem as NodeRawItem} from './searchWithNode'
+import {report} from './reporter'
 
 type RawItem = GrepRawItem | NodeRawItem
 
@@ -28,6 +29,7 @@ export default function createCommandHierarchie(rawItems:RawItem[]):{
   moduleItems:RawItem[],
   fixtureItems:RawItem[]
 } {
+  let tree:HierarchieTree[] = []
   let handleItems:RawItem[] = []
   let collectionItems:RawItem[] = []
   let stateItems:RawItem[] = []
@@ -70,13 +72,25 @@ export default function createCommandHierarchie(rawItems:RawItem[]):{
       collections: includeColls,
     }))
   }
+  
+  for(let ctx of ctxItems) {
+    const [includeHandles, excludeHandles] = extractItems(ctx, handleItems)
+    const [includeStates, excludeStates] = extractItems(ctx, stateItems)
+    const [includeColls, excludeColls] = extractItems(ctx, enhancedCollections)
+    handleItems = excludeHandles
+    stateItems = excludeStates
+    enhancedCollections = excludeColls
+    tree.push({
+      ...ctx,
+      handles: includeHandles,
+      states: includeStates,
+      collections: includeColls,
+    })
+  }
 
-  const tree = ctxItems.map(item => ({
-    ...item,
-    states: stateItems,
-    handles: handleItems,
-    collections: enhancedCollections.filter(col => col.folder.includes(item.folder)),
-  }))
+  if(handleItems.length) for(let item of handleItems) report('HANDLE_WITHOUT_PARENT', item)
+  if(stateItems.length) for(let item of stateItems) report('STATE_WITHOUT_PARENT', item)
+  if(enhancedCollections.length) for(let item of enhancedCollections) report('COLLECTION_WITHOUT_PARENT', item)
 
   return {tree, mdItems, moduleItems, fixtureItems}
 }
