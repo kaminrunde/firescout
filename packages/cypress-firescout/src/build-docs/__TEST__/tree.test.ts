@@ -136,8 +136,6 @@ describe('tree', () => {
 
     const {tree} = await createOutput(files)
 
-    console.log(tree[0].collections)
-
     e(tree[0].collections.length).toBe(1)
     e(tree[0].collections[0].collections.length).toBe(1)
     e(tree[0].collections[0].states.length).toBe(1)

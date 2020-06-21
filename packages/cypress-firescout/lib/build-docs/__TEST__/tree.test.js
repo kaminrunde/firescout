@@ -163,7 +163,6 @@ describe('tree', function () {
                     return [4 /*yield*/, testHelper_1.createOutput(files)];
                 case 1:
                     tree = (_a.sent()).tree;
-                    console.log(tree[0].collections);
                     e(tree[0].collections.length).toBe(1);
                     e(tree[0].collections[0].collections.length).toBe(1);
                     e(tree[0].collections[0].states.length).toBe(1);
