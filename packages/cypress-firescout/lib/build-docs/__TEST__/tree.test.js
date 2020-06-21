@@ -98,4 +98,34 @@ describe('tree', function () {
             }
         });
     }); });
+    test('handles do not have to be in the same file', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var files, tree;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    files = {
+                        'widgets/Component1/Component1.ts': "\n        data-cy-ctx=\"c/Component1\"\n          data-cy-handle='handle-1'\n      ",
+                        'widgets/Component1/Component2.ts': "\n        data-cy-handle='handle-2'\n      ",
+                        'widgets/Component1/Component3/Component3.ts': "\n        data-cy-handle='handle-3'\n      ",
+                        'widgets/Component2/Component2.ts': "\n        data-cy-handle='handle-4'\n      ",
+                    };
+                    return [4 /*yield*/, testHelper_1.createOutput(files)];
+                case 1:
+                    tree = (_a.sent()).tree;
+                    e(tree[0].handles[0]).toEqual({
+                        name: 'handle-1',
+                        file: 'widgets/Component1/Component1.ts'
+                    });
+                    e(tree[0].handles[1]).toEqual({
+                        name: 'handle-2',
+                        file: 'widgets/Component1/Component2.ts'
+                    });
+                    e(tree[0].handles[2]).toEqual({
+                        name: 'handle-3',
+                        file: 'widgets/Component1/Component3/Component3.ts'
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });
