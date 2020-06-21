@@ -1,18 +1,23 @@
 import fs from 'fs'
 
-type Config = {
+export type Config = {
   widgetFolders: string[],
   outPath: string,
   extensions: string,
   useGrep: boolean,
   fixturesFolder: string
 }
+let config:Config|null = null
 
-const configRaw = fs.readFileSync(process.cwd()+'/firescout.json', 'utf8')
-const config:Config = JSON.parse(configRaw)
 
-config.widgetFolders = config.widgetFolders.map(s => `${process.cwd()}/${s}`)
-config.outPath = `${process.cwd()}/${config.outPath}`
-config.fixturesFolder = `${process.cwd()}/${config.fixturesFolder}`
+export default function getConfig():Config{
+  if(!config){
+    const configRaw = fs.readFileSync(process.cwd()+'/firescout.json', 'utf8')
+    config = JSON.parse(configRaw) as Config
 
-export default config
+    config.widgetFolders = config.widgetFolders.map(s => `${process.cwd()}/${s}`)
+    config.outPath = `${process.cwd()}/${config.outPath}`
+    config.fixturesFolder = `${process.cwd()}/${config.fixturesFolder}`
+  }
+  return config
+}

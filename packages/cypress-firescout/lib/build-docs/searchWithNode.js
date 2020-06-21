@@ -69,16 +69,18 @@ var config_1 = __importDefault(require("./config"));
 var utils = __importStar(require("./utils"));
 function findInFiles() {
     return __awaiter(this, void 0, void 0, function () {
-        var files, extensionsRegex, srcFiles, fixtureFiles, allFiles, rawItems, matches, _loop_1, i;
+        var config, files, extensionsRegex, srcFiles, fixtureFiles, allFiles, rawItems, matches, _loop_1, i;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, findAllFiles(__spreadArrays(config_1.default.widgetFolders, [config_1.default.fixturesFolder]))];
+                case 0:
+                    config = config_1.default();
+                    return [4 /*yield*/, findAllFiles(__spreadArrays(config.widgetFolders, [config.fixturesFolder]))];
                 case 1:
                     files = _a.sent();
-                    extensionsRegex = config_1.default.extensions
+                    extensionsRegex = config.extensions
                         .split('|').concat('md').map(function (s) { return "." + s + "$"; }).join('|');
                     srcFiles = files.filter(function (f) { return f.name.match(new RegExp(extensionsRegex)); });
-                    fixtureFiles = files.filter(function (f) { return f.path.includes(config_1.default.fixturesFolder); });
+                    fixtureFiles = files.filter(function (f) { return f.path.includes(config.fixturesFolder); });
                     allFiles = __spreadArrays(srcFiles, fixtureFiles);
                     rawItems = [];
                     return [4 /*yield*/, Promise.all(__spreadArrays(srcFiles.map(function (f) { return getSrcMatch(f.path); }), fixtureFiles.map(function (f) { return getFixtureMatch(f.path); })))];
@@ -185,10 +187,11 @@ function getSrcMatch(path) {
 }
 function getFixtureMatch(path) {
     return __awaiter(this, void 0, void 0, function () {
-        var content, result, match, relPath, _a, module, fileName, _b, name, variation;
+        var config, content, result, match, relPath, _a, module, fileName, _b, name, variation;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
+                    config = config_1.default();
                     if (!path.endsWith('.ts'))
                         return [2 /*return*/, null];
                     return [4 /*yield*/, utils.readFile(path)];
@@ -198,7 +201,7 @@ function getFixtureMatch(path) {
                     match = content.match(/\/\*\*(.|\n)*/);
                     if (match)
                         result = match[0].split('*/')[0] + '*/';
-                    relPath = path.replace(config_1.default.fixturesFolder + '/', '');
+                    relPath = path.replace(config.fixturesFolder + '/', '');
                     if (relPath.split('/').length !== 2)
                         return [2 /*return*/, null];
                     _a = relPath.split('/'), module = _a[0], fileName = _a[1];

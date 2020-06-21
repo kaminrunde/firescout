@@ -1,6 +1,6 @@
 import * as utils from './utils'
 import fs from 'fs'
-import config from './config'
+import getConfig from './config'
 
 export type RawItem = {
   type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection',
@@ -9,10 +9,10 @@ export type RawItem = {
   folder: string
 }
 
-const DOCS_CMD = `grep -rl "<!-- firescout-(component|collection) -->" ${config.widgetFolders}`
-const HANDLES_CMD = `grep -HREo "data-cy-(state|ctx|handle|collection)=(\\"|').*(\\"|')" ${config.widgetFolders}`
-
 export default function searchWithGrep ():Promise<RawItem[]> {
+  const config = getConfig()
+  const DOCS_CMD = `grep -rl "<!-- firescout-(component|collection) -->" ${config.widgetFolders}`
+  const HANDLES_CMD = `grep -HREo "data-cy-(state|ctx|handle|collection)=(\\"|').*(\\"|')" ${config.widgetFolders}`
   return Promise.all([
     utils.executeCmd(DOCS_CMD), 
     utils.executeCmd(HANDLES_CMD)

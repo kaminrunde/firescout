@@ -1,4 +1,4 @@
-import config from './config'
+import getConfig from './config'
 import * as utils from './utils'
 
 
@@ -15,6 +15,7 @@ type Match = {
 }
 
 export default async function findInFiles ():Promise<RawItem[]> {
+  const config = getConfig()
   let files = await findAllFiles([...config.widgetFolders, config.fixturesFolder])
   const extensionsRegex = config.extensions
     .split('|').concat('md').map(s => `.${s}$`).join('|')
@@ -102,6 +103,7 @@ async function getSrcMatch(path:string):Promise<Match[]|null> {
 }
 
 async function getFixtureMatch (path:string):Promise<Match[]|null> {
+  const config = getConfig()
   if(!path.endsWith('.ts')) return null
   const content = await utils.readFile(path)
   let result = '/**\n * ...\n */'

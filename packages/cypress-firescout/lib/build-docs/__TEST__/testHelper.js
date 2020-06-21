@@ -36,32 +36,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var testHelper_1 = require("./testHelper");
-var e = expect;
-function sum(a, b) {
-    return a + b;
+exports.createOutput = exports.setup = void 0;
+// import {firescout} from '../index'
+// import fs from 'fs'
+// let utils:any
+function setup() {
+    // const config = require('')
+    // utils = require('../utils')
+    // utils.readFile = (path:string) => Prom
 }
-// test('adds 1 + 2 to equal 3', () => {
-//   e(sum(1, 2)).toBe(3)
-// });
-describe('foo-bar', function () {
-    beforeEach(testHelper_1.setup);
-    test('foo', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var files;
+exports.setup = setup;
+function createOutput(files, configExt) {
+    return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    files = {
-                        'Component1/Component1.ts': "\n        data-cy-ctx=\"c/Component1\"\n          data-cy-handle=\"handle-1\"\n      ",
-                        'Component1/Inner1.ts': "\n        data-cy-state=\"state-1\"\n      "
-                    };
-                    return [4 /*yield*/, testHelper_1.createOutput(files)
-                        // const {tree,docs,modules,file} = await createOutput(files)
-                    ];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+            return [2 /*return*/];
         });
-    }); });
-});
+    });
+}
+exports.createOutput = createOutput;
