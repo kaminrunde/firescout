@@ -43,20 +43,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createOutput = exports.setup = void 0;
-// import {firescout} from '../index'
-// let utils:any
-function setup() {
-    // const config = require('../config')
-    // config.default = () => ({
-    //   widgetFolders: ['widgets'],
-    //   outPath: 'out',
-    //   extensions: 'ts',
-    //   useGrep: false,
-    //   fixturesFolder: 'fixtures',
-    // })
-}
-exports.setup = setup;
+exports.createOutput = void 0;
 function createOutput(files, configExt, mdIndent) {
     if (mdIndent === void 0) { mdIndent = 8; }
     return __awaiter(this, void 0, void 0, function () {

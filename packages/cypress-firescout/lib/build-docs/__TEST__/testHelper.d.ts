@@ -1,11 +1,15 @@
 import { Config } from '../config';
-export declare function setup(): void;
+import { Tree } from '../createCommandTree';
+import { Docs } from '../createDocs';
+import { ModuleTree } from '../createModuleTree';
+declare type Result = {
+    tree: Tree[];
+    docs: Docs;
+    modules: ModuleTree[];
+    content: string;
+    warnings: [string, string][];
+};
 export declare function createOutput(files: {
     [path: string]: string;
-}, configExt?: Partial<Config>, mdIndent?: number): Promise<{
-    tree: any;
-    docs: any;
-    modules: any;
-    content: any;
-    warnings: any;
-}>;
+}, configExt?: Partial<Config>, mdIndent?: number): Promise<Result>;
+export {};

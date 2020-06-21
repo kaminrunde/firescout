@@ -15,30 +15,30 @@ describe('tree', () => {
       `,
     }
 
-    const {tree,content} = await createOutput(files)
+    const {tree} = await createOutput(files)
+
+    e(tree.length).toBe(2)
+
+    e(tree[0]).toEqual({
+      context: 'c/Component1',
+      typesaveContext: 'CComponent1',
+      file: 'widgets/Component1/Component1.ts',
+      folder: 'widgets/Component1',
+      handles: [],
+      states: [],
+      collections: []
+    })
+
+    e(tree[1]).toEqual({
+      context: 'c/Component2',
+      typesaveContext: 'CComponent2',
+      file: 'widgets/Component2/Component2.ts',
+      folder: 'widgets/Component2',
+      handles: [],
+      states: [],
+      collections: []
+    })
   })
+
   
-  test.skip('foo', async () => {
-    const files = {
-      'widgets/Component1/Component1.ts': `
-        data-cy-ctx="c/Component1"
-          data-cy-handle="handle-1"
-      `,
-      'widgets/Component1/Inner1.ts': `
-        data-cy-state="state-1"
-      `,
-      'widgets/Component1/Component1.md': `
-        <!-- firescout-component -->
-        # c/Component1
-        
-        ## Handles
-        - **handle-1**: foo
-        
-        ## States
-        - **state-1**: foo
-      `
-    }
-    const {tree,docs,modules,content,warnings} = await createOutput(files)
-    // console.log(warnings)
-  })
 })

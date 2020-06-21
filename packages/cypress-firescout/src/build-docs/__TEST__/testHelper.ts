@@ -1,24 +1,21 @@
 import {Config} from '../config'
-// import {firescout} from '../index'
+import {Tree} from '../createCommandTree'
+import {Docs} from '../createDocs'
+import {ModuleTree} from '../createModuleTree'
 
-// let utils:any
-
-export function setup(){
-  // const config = require('../config')
-  // config.default = () => ({
-  //   widgetFolders: ['widgets'],
-  //   outPath: 'out',
-  //   extensions: 'ts',
-  //   useGrep: false,
-  //   fixturesFolder: 'fixtures',
-  // })
+type Result = {
+  tree:Tree[], 
+  docs:Docs,
+  modules:ModuleTree[],
+  content: string,
+  warnings: [string,string][]
 }
 
 export async function createOutput (
   files:{[path:string]:string},
   configExt?:Partial<Config>,
   mdIndent:number=8
-){
+):Promise<Result>{
   let tree:any, docs:any, modules:any, content:any, warnings:any=[];
   const config = require('../config')
   config.default = () => ({

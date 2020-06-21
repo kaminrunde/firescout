@@ -40,9 +40,9 @@ var testHelper_1 = require("./testHelper");
 var e = expect;
 describe('tree', function () {
     test('all contexts should be added', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var files, _a, tree, content;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var files, tree;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
                     files = {
                         'widgets/Component1/Component1.ts': "\n        data-cy-ctx=\"c/Component1\"\n      ",
@@ -50,26 +50,26 @@ describe('tree', function () {
                     };
                     return [4 /*yield*/, testHelper_1.createOutput(files)];
                 case 1:
-                    _a = _b.sent(), tree = _a.tree, content = _a.content;
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    test.skip('foo', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var files, _a, tree, docs, modules, content, warnings;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    files = {
-                        'widgets/Component1/Component1.ts': "\n        data-cy-ctx=\"c/Component1\"\n          data-cy-handle=\"handle-1\"\n      ",
-                        'widgets/Component1/Inner1.ts': "\n        data-cy-state=\"state-1\"\n      ",
-                        'widgets/Component1/Component1.md': "\n        <!-- firescout-component -->\n        # c/Component1\n        \n        ## Handles\n        - **handle-1**: foo\n        \n        ## States\n        - **state-1**: foo\n      "
-                    };
-                    return [4 /*yield*/, testHelper_1.createOutput(files)
-                        // console.log(warnings)
-                    ];
-                case 1:
-                    _a = _b.sent(), tree = _a.tree, docs = _a.docs, modules = _a.modules, content = _a.content, warnings = _a.warnings;
+                    tree = (_a.sent()).tree;
+                    e(tree.length).toBe(2);
+                    e(tree[0]).toEqual({
+                        context: 'c/Component1',
+                        typesaveContext: 'CComponent1',
+                        file: 'widgets/Component1/Component1.ts',
+                        folder: 'widgets/Component1',
+                        handles: [],
+                        states: [],
+                        collections: []
+                    });
+                    e(tree[1]).toEqual({
+                        context: 'c/Component2',
+                        typesaveContext: 'CComponent2',
+                        file: 'widgets/Component2/Component2.ts',
+                        folder: 'widgets/Component2',
+                        handles: [],
+                        states: [],
+                        collections: []
+                    });
                     return [2 /*return*/];
             }
         });
