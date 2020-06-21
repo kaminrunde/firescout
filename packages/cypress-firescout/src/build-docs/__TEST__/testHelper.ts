@@ -1,5 +1,5 @@
 import {Config} from '../config'
-import {firescout} from '../index'
+// import {firescout} from '../index'
 
 // let utils:any
 
@@ -19,7 +19,7 @@ export async function createOutput (
   configExt?:Partial<Config>,
   mdIndent:number=8
 ){
-  let tree:any, docs:any, modules:any, content:any;
+  let tree:any, docs:any, modules:any, content:any, warnings:any=[];
   const config = require('../config')
   config.default = () => ({
     widgetFolders: ['widgets'],
@@ -69,6 +69,32 @@ export async function createOutput (
 
     return Promise.resolve(result)
   }
+
+  const createFileContent = require('../createFileContent')
+  const createFileContentDefault = createFileContent.default
+  createFileContent.default = (_tree:any, _docs:any, _modules:any) => {
+    tree = _tree
+    docs = _docs
+    modules = _modules
+    const _content = createFileContentDefault(_tree,_docs,_modules)
+    content = _content
+    return _content
+  }
+
+  const reporter = require('../reporter')
+  const consoleLog = global.console.log
+  var colors = require('colors')
+  global.console = {
+    log: (key:string, ...rest:any) => {
+      if(reporter.codes[key]) warnings.push([key, rest[0]])
+      else consoleLog(key,...rest)
+    }
+  } as any
+
+  const index = require('../index')
   
-  firescout()
+  colors.disable()
+  await index.firescout()
+  colors.enable()
+  return {tree,docs,modules,content,warnings}
 }

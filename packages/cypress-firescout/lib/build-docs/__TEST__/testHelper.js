@@ -35,9 +35,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createOutput = exports.setup = void 0;
-var index_1 = require("../index");
+// import {firescout} from '../index'
 // let utils:any
 function setup() {
     // const config = require('../config')
@@ -53,60 +60,94 @@ exports.setup = setup;
 function createOutput(files, configExt, mdIndent) {
     if (mdIndent === void 0) { mdIndent = 8; }
     return __awaiter(this, void 0, void 0, function () {
-        var tree, docs, modules, content, config, utils;
+        var tree, docs, modules, content, warnings, config, utils, createFileContent, createFileContentDefault, reporter, consoleLog, colors, index;
         return __generator(this, function (_a) {
-            config = require('../config');
-            config.default = function () { return ({
-                widgetFolders: ['widgets'],
-                outPath: 'out',
-                extensions: 'ts',
-                useGrep: false,
-                fixturesFolder: 'fixtures',
-            }); };
-            utils = require('../utils');
-            utils.readDir = function (path) {
-                var cwd = process.cwd();
-                path = path.replace(cwd, '');
-                var allFolders = new Map();
-                var allFiles = new Map();
-                var fileNames = Object.keys(files)
-                    .filter(function (s) { return s.startsWith(path); });
-                // .map(s => s.replace(path+'/', ''))
-                for (var _i = 0, fileNames_1 = fileNames; _i < fileNames_1.length; _i++) {
-                    var path_1 = fileNames_1[_i];
-                    var fullSection = '';
-                    for (var _a = 0, _b = path_1.split('/'); _a < _b.length; _a++) {
-                        var section = _b[_a];
-                        fullSection += '/' + section;
-                        if (section.includes('.'))
-                            allFiles.set(path_1, section);
-                        else
-                            allFolders.set(fullSection, section);
-                    }
-                }
-                utils.readFile = function (path) {
-                    var content = files[path];
-                    if (path.includes('.md')) {
-                        content = content
-                            .split('\n')
-                            .map(function (s) { return s.slice(mdIndent); })
-                            .join('\n');
-                    }
-                    return Promise.resolve(content);
-                };
-                var result = [];
-                for (var _c = 0, _d = Array.from(allFolders); _c < _d.length; _c++) {
-                    var _e = _d[_c], path_2 = _e[0], name_1 = _e[1];
-                    result.push({ name: name_1, path: path_2, isFile: false, isDir: true });
-                }
-                for (var _f = 0, _g = Array.from(allFiles); _f < _g.length; _f++) {
-                    var _h = _g[_f], path_3 = _h[0], name_2 = _h[1];
-                    result.push({ name: name_2, path: path_3, isFile: true, isDir: false });
-                }
-                return Promise.resolve(result);
-            };
-            index_1.firescout();
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    warnings = [];
+                    config = require('../config');
+                    config.default = function () { return ({
+                        widgetFolders: ['widgets'],
+                        outPath: 'out',
+                        extensions: 'ts',
+                        useGrep: false,
+                        fixturesFolder: 'fixtures',
+                    }); };
+                    utils = require('../utils');
+                    utils.readDir = function (path) {
+                        var cwd = process.cwd();
+                        path = path.replace(cwd, '');
+                        var allFolders = new Map();
+                        var allFiles = new Map();
+                        var fileNames = Object.keys(files)
+                            .filter(function (s) { return s.startsWith(path); });
+                        // .map(s => s.replace(path+'/', ''))
+                        for (var _i = 0, fileNames_1 = fileNames; _i < fileNames_1.length; _i++) {
+                            var path_1 = fileNames_1[_i];
+                            var fullSection = '';
+                            for (var _a = 0, _b = path_1.split('/'); _a < _b.length; _a++) {
+                                var section = _b[_a];
+                                fullSection += '/' + section;
+                                if (section.includes('.'))
+                                    allFiles.set(path_1, section);
+                                else
+                                    allFolders.set(fullSection, section);
+                            }
+                        }
+                        utils.readFile = function (path) {
+                            var content = files[path];
+                            if (path.includes('.md')) {
+                                content = content
+                                    .split('\n')
+                                    .map(function (s) { return s.slice(mdIndent); })
+                                    .join('\n');
+                            }
+                            return Promise.resolve(content);
+                        };
+                        var result = [];
+                        for (var _c = 0, _d = Array.from(allFolders); _c < _d.length; _c++) {
+                            var _e = _d[_c], path_2 = _e[0], name_1 = _e[1];
+                            result.push({ name: name_1, path: path_2, isFile: false, isDir: true });
+                        }
+                        for (var _f = 0, _g = Array.from(allFiles); _f < _g.length; _f++) {
+                            var _h = _g[_f], path_3 = _h[0], name_2 = _h[1];
+                            result.push({ name: name_2, path: path_3, isFile: true, isDir: false });
+                        }
+                        return Promise.resolve(result);
+                    };
+                    createFileContent = require('../createFileContent');
+                    createFileContentDefault = createFileContent.default;
+                    createFileContent.default = function (_tree, _docs, _modules) {
+                        tree = _tree;
+                        docs = _docs;
+                        modules = _modules;
+                        var _content = createFileContentDefault(_tree, _docs, _modules);
+                        content = _content;
+                        return _content;
+                    };
+                    reporter = require('../reporter');
+                    consoleLog = global.console.log;
+                    colors = require('colors');
+                    global.console = {
+                        log: function (key) {
+                            var rest = [];
+                            for (var _i = 1; _i < arguments.length; _i++) {
+                                rest[_i - 1] = arguments[_i];
+                            }
+                            if (reporter.codes[key])
+                                warnings.push([key, rest[0]]);
+                            else
+                                consoleLog.apply(void 0, __spreadArrays([key], rest));
+                        }
+                    };
+                    index = require('../index');
+                    colors.disable();
+                    return [4 /*yield*/, index.firescout()];
+                case 1:
+                    _a.sent();
+                    colors.enable();
+                    return [2 /*return*/, { tree: tree, docs: docs, modules: modules, content: content, warnings: warnings }];
+            }
         });
     });
 }

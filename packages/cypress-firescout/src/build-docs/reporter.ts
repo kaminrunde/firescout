@@ -7,7 +7,7 @@ import colors from 'colors/safe'
 
 type RawItem = GrepRawItem | NodeRawItem
 
-const codes = {
+export const codes = {
   // HANDLE_WITHOUT_PARENT: (item:RawItem) => `You declared a "data-cy-handle='${item.payload}'" `
   // + `in "${item.file}" but there was no parent found. You have define a "data-cy-ctx" in `
   // + `either the same file or `,

@@ -1,20 +1,24 @@
-import {setup,createOutput} from './testHelper'
+import {createOutput} from './testHelper'
 
 
 const e:any = expect
 
-function sum(a:any, b:any) {
-  return a + b;
-}
+describe('tree', () => {
 
-// test('adds 1 + 2 to equal 3', () => {
-//   e(sum(1, 2)).toBe(3)
-// });
+  test('all contexts should be added', async () => {
+    const files = {
+      'widgets/Component1/Component1.ts': `
+        data-cy-ctx="c/Component1"
+      `,
+      'widgets/Component2/Component2.ts': `
+        data-cy-ctx="c/Component2",
+      `,
+    }
 
-describe('foo-bar', () => {
-  beforeEach(setup)
+    const {tree,content} = await createOutput(files)
+  })
   
-  test('foo', async () => {
+  test.skip('foo', async () => {
     const files = {
       'widgets/Component1/Component1.ts': `
         data-cy-ctx="c/Component1"
@@ -34,13 +38,7 @@ describe('foo-bar', () => {
         - **state-1**: foo
       `
     }
-    try {
-      await createOutput(files)
-    }
-    catch(e){
-      console.log(e)
-    }
-    e(sum(1, 2)).toBe(3)
-    // const {tree,docs,modules,file} = await createOutput(files)
+    const {tree,docs,modules,content,warnings} = await createOutput(files)
+    // console.log(warnings)
   })
 })

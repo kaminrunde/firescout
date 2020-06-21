@@ -3,9 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validate = exports.report = void 0;
+exports.validate = exports.report = exports.codes = void 0;
 var safe_1 = __importDefault(require("colors/safe"));
-var codes = {
+exports.codes = {
     // HANDLE_WITHOUT_PARENT: (item:RawItem) => `You declared a "data-cy-handle='${item.payload}'" `
     // + `in "${item.file}" but there was no parent found. You have define a "data-cy-ctx" in `
     // + `either the same file or `,
@@ -22,7 +22,7 @@ var codes = {
     NO_CTX_REF: function (item) { return [item.name, item.file]; }
 };
 function report(code, ctx) {
-    var _a = codes[code](ctx), name = _a[0], file = _a[1];
+    var _a = exports.codes[code](ctx), name = _a[0], file = _a[1];
     console.log(safe_1.default.yellow(code), safe_1.default.green(name), safe_1.default.grey(file.slice(1)));
 }
 exports.report = report;

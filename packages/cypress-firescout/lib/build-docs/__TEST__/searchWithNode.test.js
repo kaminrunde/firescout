@@ -38,37 +38,38 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var testHelper_1 = require("./testHelper");
 var e = expect;
-function sum(a, b) {
-    return a + b;
-}
-// test('adds 1 + 2 to equal 3', () => {
-//   e(sum(1, 2)).toBe(3)
-// });
-describe('foo-bar', function () {
-    beforeEach(testHelper_1.setup);
-    test('foo', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var files, e_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+describe('tree', function () {
+    test('all contexts should be added', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var files, _a, tree, content;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    files = {
+                        'widgets/Component1/Component1.ts': "\n        data-cy-ctx=\"c/Component1\"\n      ",
+                        'widgets/Component2/Component2.ts': "\n        data-cy-ctx=\"c/Component2\",\n      ",
+                    };
+                    return [4 /*yield*/, testHelper_1.createOutput(files)];
+                case 1:
+                    _a = _b.sent(), tree = _a.tree, content = _a.content;
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    test.skip('foo', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var files, _a, tree, docs, modules, content, warnings;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     files = {
                         'widgets/Component1/Component1.ts': "\n        data-cy-ctx=\"c/Component1\"\n          data-cy-handle=\"handle-1\"\n      ",
                         'widgets/Component1/Inner1.ts': "\n        data-cy-state=\"state-1\"\n      ",
                         'widgets/Component1/Component1.md': "\n        <!-- firescout-component -->\n        # c/Component1\n        \n        ## Handles\n        - **handle-1**: foo\n        \n        ## States\n        - **state-1**: foo\n      "
                     };
-                    _a.label = 1;
+                    return [4 /*yield*/, testHelper_1.createOutput(files)
+                        // console.log(warnings)
+                    ];
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, testHelper_1.createOutput(files)];
-                case 2:
-                    _a.sent();
-                    return [3 /*break*/, 4];
-                case 3:
-                    e_1 = _a.sent();
-                    console.log(e_1);
-                    return [3 /*break*/, 4];
-                case 4:
-                    e(sum(1, 2)).toBe(3);
+                    _a = _b.sent(), tree = _a.tree, docs = _a.docs, modules = _a.modules, content = _a.content, warnings = _a.warnings;
                     return [2 /*return*/];
             }
         });
