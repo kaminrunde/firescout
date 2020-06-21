@@ -17,6 +17,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "colors": "^1.4.0",
     "markdown-ast": "^0.2.1"
   },
   "repository": {

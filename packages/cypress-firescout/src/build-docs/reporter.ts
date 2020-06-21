@@ -3,6 +3,7 @@ import {RawItem as NodeRawItem} from './searchWithNode'
 import {Tree} from './createCommandTree'
 import {Docs} from './createDocs'
 import {ModuleTree} from './createModuleTree'
+import colors from 'colors/safe'
 
 type RawItem = GrepRawItem | NodeRawItem
 
@@ -35,7 +36,12 @@ export function report(code:'NO_CTX_REF', item:{name:string, file:string}):void
 export function report(code:'COLLECTION_HAS_NO_REF', item:{name:string, file:string}):void
 export function report(code:'COLLECTION_HAS_NO_DOCS', item:{name:string, file:string}):void
 export function report (code:keyof typeof codes, ctx:any) {
-  console.log(code, ...codes[code](ctx))
+  const [name,file] = codes[code](ctx)
+  console.log(
+    colors.yellow(code),
+    colors.green(name),
+    colors.grey(file.slice(1))
+  )
 }
 
 type Input = {
