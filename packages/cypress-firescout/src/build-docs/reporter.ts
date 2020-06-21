@@ -10,20 +10,32 @@ const codes = {
   // HANDLE_WITHOUT_PARENT: (item:RawItem) => `You declared a "data-cy-handle='${item.payload}'" `
   // + `in "${item.file}" but there was no parent found. You have define a "data-cy-ctx" in `
   // + `either the same file or `,
-  HANDLE_WITHOUT_PARENT: (item:RawItem) => item.file,
-  STATE_WITHOUT_PARENT: (item:RawItem) => item.file,
-  COLLECTION_WITHOUT_PARENT: (item:RawItem) => item.file,
-  HANDLE_HAS_NO_DOCS: (file:string) => file,
-  STATE_HAS_NO_DOCS: (file:string) => file,
+  HANDLE_WITHOUT_PARENT: (item:RawItem) => [item.payload, item.file],
+  STATE_WITHOUT_PARENT: (item:RawItem) => [item.payload, item.file],
+  COLLECTION_WITHOUT_PARENT: (item:RawItem) => [item.payload, item.file],
+  HANDLE_HAS_NO_DOCS: (item:{name:string, file:string}) => [item.name,item.file],
+  STATE_HAS_NO_DOCS: (item:{name:string, file:string}) => [item.name,item.file],
+  HANDLE_HAS_NO_REF: (item:{name:string, file:string}) => [item.name,item.file],
+  STATE_HAS_NO_REF: (item:{name:string, file:string}) => [item.name,item.file],
+  NO_DOCS: (item:{name:string,file:string}) => [item.name,item.file],
+  COLLECTION_HAS_NO_REF: (item:{name:string,file:string}) => [item.name,item.file],
+  COLLECTION_HAS_NO_DOCS: (item:{name:string,file:string}) => [item.name,item.file],
+  NO_CTX_REF: (item:{name:string,file:string}) => [item.name,item.file]
 }
 
 export function report(code:'HANDLE_WITHOUT_PARENT', item:RawItem):void
 export function report(code:'STATE_WITHOUT_PARENT', item:RawItem):void
 export function report(code:'COLLECTION_WITHOUT_PARENT', item:RawItem):void
-export function report(code:'HANDLE_HAS_NO_DOCS', item:RawItem):void
-export function report(code:'STATE_HAS_NO_DOCS', item:RawItem):void
+export function report(code:'HANDLE_HAS_NO_DOCS', item:{name:string, file:string}):void
+export function report(code:'STATE_HAS_NO_DOCS', item:{name:string, file:string}):void
+export function report(code:'HANDLE_HAS_NO_REF', item:{name:string, file:string}):void
+export function report(code:'STATE_HAS_NO_REF', item:{name:string, file:string}):void
+export function report(code:'NO_DOCS', item:{name:string, file:string}):void
+export function report(code:'NO_CTX_REF', item:{name:string, file:string}):void
+export function report(code:'COLLECTION_HAS_NO_REF', item:{name:string, file:string}):void
+export function report(code:'COLLECTION_HAS_NO_DOCS', item:{name:string, file:string}):void
 export function report (code:keyof typeof codes, ctx:any) {
-  console.log(code, codes[code](ctx))
+  console.log(code, ...codes[code](ctx))
 }
 
 type Input = {
@@ -45,33 +57,61 @@ export function validate (input:Input):Input {
   const docsCollections = new Map<string,string>()
   const docsHandles = new Map<string, string>()
   const docsStates = new Map<string, string>()
-  for(let tree of input.tree) {
-    treeCtx.set(tree.context, tree.file)
-    for(let handle of tree.handles) treeHandles.set(tree.context + '-' + handle.name, handle.file)
-    for(let state of tree.states) treeStates.set(tree.context + '-' + state.name, state.file)
+
+  ;(function callTree(trees:Tree[], prefix:string) {
+    for(let tree of trees) {
+      prefix === ''
+        ? treeCtx.set(prefix + tree.context, tree.file)
+        : treeCollections.set(prefix + tree.context, tree.file)
+      for(let handle of tree.handles) treeHandles.set(prefix + tree.context + '-' + handle.name, handle.file)
+      for(let state of tree.states) treeStates.set(prefix + tree.context + '-' + state.name, state.file)
+      callTree(tree.collections, prefix + tree.context + '-')
+    }
+
+  })(input.tree, '')
+
+  ;(function callDocs (docs:Docs, prefix:string) {
+    for(let ctx in docs) {
+      const doc = docs[ctx]
+      prefix === ''
+        ? docsCtx.set(prefix + doc.context,doc.file)
+        : docsCollections.set(prefix + doc.context,doc.file)
+      for(let handle of doc.handles.bullets) docsHandles.set(prefix + doc.context + '-' + handle.name, doc.file)
+      for(let state of doc.states.bullets) docsStates.set(prefix + doc.context + '-' + state.name, doc.file)
+      callDocs(doc.collections, prefix + doc.context + '-')
+    }
+  })(input.docs,'')
+
+  for(let [name,file] of Array.from(treeCtx)){
+    if(!docsCtx.has(name)) report('NO_DOCS', {name, file})
   }
 
-  for(let ctx in input.docs) {
-    const doc = input.docs[ctx]
-    docsCtx.set(doc.context,doc.file)
-    for(let handle of doc.handles.bullets) docsHandles.set(doc.context + '-' + handle.name, doc.file)
-    for(let state of doc.states.bullets) docsStates.set(doc.context + '-' + state.name, doc.file)
+  for(let [name,file] of Array.from(treeCollections)){
+    if(!docsCollections.has(name)) report('COLLECTION_HAS_NO_DOCS', {name, file})
   }
 
-  for(let handle in treeHandles) {
-    if(!docsHandles.has(handle)) {}
+  for(let [name,file] of Array.from(treeHandles)) {
+    if(!docsHandles.has(name)) report('HANDLE_HAS_NO_DOCS', {name,file})
+  }
+  
+  for(let [name,file] of Array.from(treeStates)) {
+    if(!docsStates.has(name)) report('STATE_HAS_NO_DOCS', {name,file})
   }
 
-  for(let state in treeStates) {
-    if(!docsStates.has(state)) {}
+  for(let [name,file] of Array.from(docsCtx)){
+    if(!treeCtx.has(name)) report('NO_CTX_REF', {name, file})
   }
 
-  for(let handle in docsHandles) {
-    if(!treeHandles.has(handle)) {}
+  for(let [name,file] of Array.from(docsCollections)){
+    if(!treeCollections.has(name)) report('COLLECTION_HAS_NO_REF', {name, file})
   }
 
-  for(let state in docsStates) {
-    if(!treeStates.has(state)) {}
+  for(let [name,file] of Array.from(docsHandles)) {
+    if(!treeHandles.has(name)) report('HANDLE_HAS_NO_REF', {name,file})
+  }
+
+  for(let [name,file] of Array.from(docsStates)) {
+    if(!treeStates.has(name)) report('STATE_HAS_NO_REF', {name,file})
   }
 
   return input
