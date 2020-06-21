@@ -16,15 +16,31 @@ describe('foo-bar', () => {
   
   test('foo', async () => {
     const files = {
-      'Component1/Component1.ts': `
+      'widgets/Component1/Component1.ts': `
         data-cy-ctx="c/Component1"
           data-cy-handle="handle-1"
       `,
-      'Component1/Inner1.ts': `
+      'widgets/Component1/Inner1.ts': `
         data-cy-state="state-1"
+      `,
+      'widgets/Component1/Component1.md': `
+        <!-- firescout-component -->
+        # c/Component1
+        
+        ## Handles
+        - **handle-1**: foo
+        
+        ## States
+        - **state-1**: foo
       `
     }
-    await createOutput(files)
+    try {
+      await createOutput(files)
+    }
+    catch(e){
+      console.log(e)
+    }
+    e(sum(1, 2)).toBe(3)
     // const {tree,docs,modules,file} = await createOutput(files)
   })
 })

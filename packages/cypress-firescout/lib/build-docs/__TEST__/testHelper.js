@@ -37,18 +37,75 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createOutput = exports.setup = void 0;
-// import {firescout} from '../index'
-// import fs from 'fs'
+var index_1 = require("../index");
 // let utils:any
 function setup() {
-    // const config = require('')
-    // utils = require('../utils')
-    // utils.readFile = (path:string) => Prom
+    // const config = require('../config')
+    // config.default = () => ({
+    //   widgetFolders: ['widgets'],
+    //   outPath: 'out',
+    //   extensions: 'ts',
+    //   useGrep: false,
+    //   fixturesFolder: 'fixtures',
+    // })
 }
 exports.setup = setup;
-function createOutput(files, configExt) {
+function createOutput(files, configExt, mdIndent) {
+    if (mdIndent === void 0) { mdIndent = 8; }
     return __awaiter(this, void 0, void 0, function () {
+        var tree, docs, modules, content, config, utils;
         return __generator(this, function (_a) {
+            config = require('../config');
+            config.default = function () { return ({
+                widgetFolders: ['widgets'],
+                outPath: 'out',
+                extensions: 'ts',
+                useGrep: false,
+                fixturesFolder: 'fixtures',
+            }); };
+            utils = require('../utils');
+            utils.readDir = function (path) {
+                var cwd = process.cwd();
+                path = path.replace(cwd, '');
+                var allFolders = new Map();
+                var allFiles = new Map();
+                var fileNames = Object.keys(files)
+                    .filter(function (s) { return s.startsWith(path); });
+                // .map(s => s.replace(path+'/', ''))
+                for (var _i = 0, fileNames_1 = fileNames; _i < fileNames_1.length; _i++) {
+                    var path_1 = fileNames_1[_i];
+                    var fullSection = '';
+                    for (var _a = 0, _b = path_1.split('/'); _a < _b.length; _a++) {
+                        var section = _b[_a];
+                        fullSection += '/' + section;
+                        if (section.includes('.'))
+                            allFiles.set(path_1, section);
+                        else
+                            allFolders.set(fullSection, section);
+                    }
+                }
+                utils.readFile = function (path) {
+                    var content = files[path];
+                    if (path.includes('.md')) {
+                        content = content
+                            .split('\n')
+                            .map(function (s) { return s.slice(mdIndent); })
+                            .join('\n');
+                    }
+                    return Promise.resolve(content);
+                };
+                var result = [];
+                for (var _c = 0, _d = Array.from(allFolders); _c < _d.length; _c++) {
+                    var _e = _d[_c], path_2 = _e[0], name_1 = _e[1];
+                    result.push({ name: name_1, path: path_2, isFile: false, isDir: true });
+                }
+                for (var _f = 0, _g = Array.from(allFiles); _f < _g.length; _f++) {
+                    var _h = _g[_f], path_3 = _h[0], name_2 = _h[1];
+                    result.push({ name: name_2, path: path_3, isFile: true, isDir: false });
+                }
+                return Promise.resolve(result);
+            };
+            index_1.firescout();
             return [2 /*return*/];
         });
     });

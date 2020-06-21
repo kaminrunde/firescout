@@ -47,19 +47,28 @@ function sum(a, b) {
 describe('foo-bar', function () {
     beforeEach(testHelper_1.setup);
     test('foo', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var files;
+        var files, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     files = {
-                        'Component1/Component1.ts': "\n        data-cy-ctx=\"c/Component1\"\n          data-cy-handle=\"handle-1\"\n      ",
-                        'Component1/Inner1.ts': "\n        data-cy-state=\"state-1\"\n      "
+                        'widgets/Component1/Component1.ts': "\n        data-cy-ctx=\"c/Component1\"\n          data-cy-handle=\"handle-1\"\n      ",
+                        'widgets/Component1/Inner1.ts': "\n        data-cy-state=\"state-1\"\n      ",
+                        'widgets/Component1/Component1.md': "\n        <!-- firescout-component -->\n        # c/Component1\n        \n        ## Handles\n        - **handle-1**: foo\n        \n        ## States\n        - **state-1**: foo\n      "
                     };
-                    return [4 /*yield*/, testHelper_1.createOutput(files)
-                        // const {tree,docs,modules,file} = await createOutput(files)
-                    ];
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, testHelper_1.createOutput(files)];
+                case 2:
                     _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_1 = _a.sent();
+                    console.log(e_1);
+                    return [3 /*break*/, 4];
+                case 4:
+                    e(sum(1, 2)).toBe(3);
                     return [2 /*return*/];
             }
         });
