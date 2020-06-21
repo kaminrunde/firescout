@@ -97,4 +97,58 @@ describe('tree', () => {
       file: 'widgets/Component1/Component3/Component3.ts'
     })
   })
+
+  test('handle is added to collection', async () => {
+    const files = {
+      'widgets/Component1/Component1.ts': `
+        data-cy-ctx="c/Component1"
+      `,
+      'widgets/Component1/Inner.ts': `
+        data-cy-collection="Inner"
+          data-cy-handle='handle-1'
+      `,
+    }
+
+    const {tree} = await createOutput(files)
+
+    e(tree[0].handles.length).toBe(0)
+    e(tree[0].collections[0]).toBeDefined()
+    e(tree[0].collections[0].handles[0]).toEqual({
+      name: 'handle-1', 
+      file: 'widgets/Component1/Inner.ts'
+    })
+  })
+
+  test('can have multiple nested collections', async () => {
+    const files = {
+      'widgets/Component1/Component1.ts': `
+        data-cy-ctx="c/Component1"
+      `,
+      'widgets/Component1/A/A.ts': `
+        data-cy-collection="A"
+          data-cy-state='state-1'
+      `,
+      'widgets/Component1/A/B/B.ts': `
+        data-cy-collection="B"
+          data-cy-state='state-2'
+      `,
+    }
+
+    const {tree} = await createOutput(files)
+
+    console.log(tree[0].collections)
+
+    e(tree[0].collections.length).toBe(1)
+    e(tree[0].collections[0].collections.length).toBe(1)
+    e(tree[0].collections[0].states.length).toBe(1)
+    e(tree[0].collections[0].collections[0].states.length).toBe(1)
+    e(tree[0].collections[0].states[0]).toEqual({
+      name: 'state-1', 
+      file: 'widgets/Component1/A/A.ts'
+    })
+    e(tree[0].collections[0].collections[0].states[0]).toEqual({
+      name: 'state-2', 
+      file: 'widgets/Component1/A/B/B.ts'
+    })
+  })
 })

@@ -128,4 +128,56 @@ describe('tree', function () {
             }
         });
     }); });
+    test('handle is added to collection', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var files, tree;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    files = {
+                        'widgets/Component1/Component1.ts': "\n        data-cy-ctx=\"c/Component1\"\n      ",
+                        'widgets/Component1/Inner.ts': "\n        data-cy-collection=\"Inner\"\n          data-cy-handle='handle-1'\n      ",
+                    };
+                    return [4 /*yield*/, testHelper_1.createOutput(files)];
+                case 1:
+                    tree = (_a.sent()).tree;
+                    e(tree[0].handles.length).toBe(0);
+                    e(tree[0].collections[0]).toBeDefined();
+                    e(tree[0].collections[0].handles[0]).toEqual({
+                        name: 'handle-1',
+                        file: 'widgets/Component1/Inner.ts'
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    test('can have multiple nested collections', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var files, tree;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    files = {
+                        'widgets/Component1/Component1.ts': "\n        data-cy-ctx=\"c/Component1\"\n      ",
+                        'widgets/Component1/A/A.ts': "\n        data-cy-collection=\"A\"\n          data-cy-state='state-1'\n      ",
+                        'widgets/Component1/A/B/B.ts': "\n        data-cy-collection=\"B\"\n          data-cy-state='state-2'\n      ",
+                    };
+                    return [4 /*yield*/, testHelper_1.createOutput(files)];
+                case 1:
+                    tree = (_a.sent()).tree;
+                    console.log(tree[0].collections);
+                    e(tree[0].collections.length).toBe(1);
+                    e(tree[0].collections[0].collections.length).toBe(1);
+                    e(tree[0].collections[0].states.length).toBe(1);
+                    e(tree[0].collections[0].collections[0].states.length).toBe(1);
+                    e(tree[0].collections[0].states[0]).toEqual({
+                        name: 'state-1',
+                        file: 'widgets/Component1/A/A.ts'
+                    });
+                    e(tree[0].collections[0].collections[0].states[0]).toEqual({
+                        name: 'state-2',
+                        file: 'widgets/Component1/A/B/B.ts'
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });
