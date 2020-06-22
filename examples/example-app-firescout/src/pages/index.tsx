@@ -15,7 +15,7 @@ export default function IndexPage () {
       <p>Now go build something great.</p>
       <p>
         <button data-cy-handle='modal' onClick={() => setOpen(!open)}>click me</button>
-        {open && <span>invisible text</span>}
+        {open && <span data-cy-state="modal-open">invisible text</span>}
       </p>
       <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
         <Image />

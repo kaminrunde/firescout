@@ -6,7 +6,11 @@ context('index-page', () => {
     cy.visit('http://localhost:8000')
 
     cy.context('pages/Index')
+      .shouldNotHaveState('modal-open')
       .handle('modal')
       .click()
+
+    cy.context('pages/Index')
+      .shouldHaveState('modal-open')
   })
 })
