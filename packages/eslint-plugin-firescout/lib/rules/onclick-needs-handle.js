@@ -31,7 +31,7 @@ module.exports = {
                 if(hasOnClick && !hasHandle) {
                     context.report({
                         node:node,
-                        message: 'clickable elements need a data-cy-handle attribute!'
+                        message: 'clickable elements need a data-cy-handle attribute'
                     })
                 }
             }
