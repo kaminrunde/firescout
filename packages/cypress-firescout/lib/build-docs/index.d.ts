@@ -1,1 +1,1 @@
-export declare function firescout(): Promise<string>;
+export declare function firescout(): Promise<void>;

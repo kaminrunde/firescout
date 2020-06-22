@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.firescout = void 0;
 var createCommandTree_1 = __importDefault(require("./createCommandTree"));
 var createFileContent_1 = __importDefault(require("./createFileContent"));
+var fs_1 = __importDefault(require("fs"));
 var config_1 = __importDefault(require("./config"));
 var searchWithNode_1 = __importDefault(require("./searchWithNode"));
 var searchWithGrep_1 = __importDefault(require("./searchWithGrep"));
@@ -30,9 +31,9 @@ function firescout() {
         .then(function (_a) {
         var tree = _a.tree, docs = _a.docs, modules = _a.modules;
         return createFileContent_1.default(tree, docs, modules);
-    });
-    // .then(file => fs.writeFileSync(config.outPath, file, 'utf8'))
-    // .catch(console.log)
+    })
+        .then(function (file) { return fs_1.default.writeFileSync(config.outPath, file, 'utf8'); })
+        .catch(console.log);
 }
 exports.firescout = firescout;
 if (process.env.NODE_ENV !== 'test') {

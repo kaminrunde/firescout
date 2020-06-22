@@ -24,8 +24,8 @@ export function firescout() {
     }))
     .then(validate)
     .then(({tree, docs, modules}) => createFileContent(tree, docs, modules))
-    // .then(file => fs.writeFileSync(config.outPath, file, 'utf8'))
-    // .catch(console.log)
+    .then(file => fs.writeFileSync(config.outPath, file, 'utf8'))
+    .catch(console.log)
 }
 
 if(process.env.NODE_ENV !== 'test') {
