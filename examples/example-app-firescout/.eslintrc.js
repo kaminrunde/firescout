@@ -31,6 +31,6 @@ module.exports = {
         "@kaminrunde/firescout"
     ],
     "rules": {
-        "@kaminrunde/firescout/onclick-needs-handle":2
+        "@kaminrunde/firescout/onclick-needs-handle":1
     }
 };

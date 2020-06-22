@@ -29,7 +29,7 @@ module.exports.processors = {
 module.exports.config = {
     recommended: {
         rules: {
-            'on-click-needs-handle': 2
+            'on-click-needs-handle': 1
         }
     }
 }
