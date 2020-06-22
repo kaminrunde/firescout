@@ -6,7 +6,7 @@ export default function Home () {
   return (
     <div data-cy-ctx='pages/Index'>
       <p>
-        <button data-cy-handle='modal' onClick={() => setOpen(!open)}>click me</button>
+        <button onClick={() => setOpen(!open)}>click me</button>
         {open && <span data-cy-state="modal-open">invisible text</span>}
       </p>
       <Inner/>
