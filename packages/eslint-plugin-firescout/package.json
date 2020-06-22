@@ -1,19 +1,26 @@
 {
-  "name": "@kaminrunde/eslint-plugin-firescout",
+  "name": "eslint-plugin-firescout",
   "version": "1.0.1-alpha.5",
-  "description": "",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kaminrunde/firescout.git"
-  },
+  "description": "Adds hints for usage with cypress-firescout",
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin"
+  ],
   "author": "Manuel Jung",
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha tests --recursive"
   },
-  "gitHead": "9ed1612cf6478a5095c1d5384844aff42b7a3e2a"
+  "dependencies": {
+    "requireindex": "~1.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.1.0",
+    "mocha": "^8.0.1"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "license": "ISC"
 }
