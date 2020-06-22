@@ -1,4 +1,4 @@
-/// <reference path="../support/firescout.d.ts" />
+import '../support/firescout'
 
 context('index-page', () => {
   

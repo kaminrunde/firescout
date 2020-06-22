@@ -1,7 +1,7 @@
 import * as React from "react"
 import Inner from './Inner'
 
-export default function Home () {
+export default function Home ():JSX.Element {
   const [open,setOpen] = React.useState(false)
   return (
     <div data-cy-ctx='pages/Index'>

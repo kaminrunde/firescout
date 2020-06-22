@@ -1,4 +1,10 @@
 module.exports = {
+    "ignorePatterns": [
+        ".eslintrc.js", 
+        "cypress/support/**/*", 
+        "gatsby-config.js",
+        "cypress/plugins/**/*"
+    ],
     "globals": {
         "__PATH_PREFIX__": true,
     },
@@ -22,7 +28,7 @@ module.exports = {
     "plugins": [
         "react",
         "@typescript-eslint",
-        "kaminrunde/eslint-plugin-firescout"
+        "@kaminrunde/firescout"
     ],
     "rules": {
     }

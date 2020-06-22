@@ -12,7 +12,12 @@ import { useStaticQuery, graphql } from "gatsby"
 import Header from "./header"
 import "./layout.css"
 
-const Layout = ({ children, ...rest }) => {
+type Props = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  children: any
+}
+
+const Layout = ({ children, ...rest }:Props):JSX.Element => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {

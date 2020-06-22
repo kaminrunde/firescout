@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-export default function Wishlist () {
-  let loggedIn = false
-  let hits = []
+export default function Wishlist (): JSX.Element {
+  const loggedIn = false
+  const hits = []
 
   if(!loggedIn) return (
     <div data-cy-ctx='organisms/Wishlist'>

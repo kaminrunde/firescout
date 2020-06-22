@@ -1,6 +1,6 @@
 import * as React from "react"
 
-export default function Inner () {
+export default function Inner ():JSX.Element {
   const [open,setOpen] = React.useState(false)
   return (
     <div data-cy-collection='inner'>
