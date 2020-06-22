@@ -2,11 +2,11 @@
   "name": "@kaminrunde/example-app-firescout",
   "private": true,
   "description": "",
-  "version": "1.0.1-alpha.6",
+  "version": "1.0.1-alpha.7",
   "author": "Manuel Jung",
   "dependencies": {
     "@kaminrunde/babel-plugin-remove-firescout": "^1.0.1-alpha.4",
-    "@kaminrunde/cypress-firescout": "^1.0.1-alpha.6",
+    "@kaminrunde/cypress-firescout": "^1.0.1-alpha.7",
     "@kaminrunde/eslint-plugin-firescout": "^1.0.1-alpha.4",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
