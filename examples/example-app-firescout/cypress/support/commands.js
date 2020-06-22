@@ -25,3 +25,4 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import '@kaminrunde/cypress-firescout/lib/commands'
+import '@kaminrunde/cypress-firescout/lib/playground'
