@@ -35,7 +35,8 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "firescout": "firescout-build"
   },
   "repository": {
     "type": "git",
