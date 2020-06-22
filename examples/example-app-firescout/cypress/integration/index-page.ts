@@ -12,5 +12,10 @@ context('index-page', () => {
 
     cy.context('pages/Index')
       .shouldHaveState('modal-open')
+
+    cy.context('pages/Index')
+      .collection('inner',1)
+      .handle('inner-modal')
+      .click()
   })
 })

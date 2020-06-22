@@ -4,19 +4,16 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
+import Home from '../components/Home'
 
 export default function IndexPage () {
-  const [open,setOpen] = React.useState(false)
   return (
-    <Layout data-cy-ctx='pages/Index'>
+    <Layout>
       <SEO title="Home" />
       <h1>Hi people</h1>
       <p>Welcome to your new Gatsby site.</p>
       <p>Now go build something great.</p>
-      <p>
-        <button data-cy-handle='modal' onClick={() => setOpen(!open)}>click me</button>
-        {open && <span data-cy-state="modal-open">invisible text</span>}
-      </p>
+      <Home/>
       <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
         <Image />
       </div>
