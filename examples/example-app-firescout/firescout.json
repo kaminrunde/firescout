@@ -1,7 +1,0 @@
-{
-  "widgetFolders": ["src"],
-  "extensions": "tsx|ts",
-  "outPath": "cypress/support/firescout.d.ts",
-  "useGrep": false,
-  "fixturesFolder": "cypress/fixtures/firescout"
-}
