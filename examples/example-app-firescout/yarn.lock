@@ -1633,11 +1633,6 @@
     core-js "^3.4.1"
     regenerator-runtime "^0.13.3"
 
-"@kaminrunde/eslint-plugin-firescout@^1.0.1-alpha.4":
-  version "1.0.1-alpha.4"
-  resolved "https://npm.pkg.github.com/download/@kaminrunde/eslint-plugin-firescout/1.0.1-alpha.4/5215ae807f9bf48537800ac594168a864bfbb760b46fdb71da2fab06a8b17e9a#d0f2d94e999e111eeea8fd24ec93c9356bf26426"
-  integrity sha512-2IgEu3n9St5qGh0d8fLTco63Fq4wPvz2SN/y88kk2a65mFF1ZQbAawhXmp0K8vXSYa7c3wHG/JDM1NER03rbUw==
-
 "@mdx-js/mdx@^1.6.5", "@mdx-js/mdx@^1.6.6":
   version "1.6.6"
   resolved "https://registry.yarnpkg.com/@mdx-js/mdx/-/mdx-1.6.6.tgz#6e235f0ca47c8652f4c744cf7bc46a1015bcaeaa"
