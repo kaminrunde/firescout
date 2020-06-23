@@ -159,7 +159,7 @@ function getSrcMatch(path) {
                             return [2 /*return*/, null];
                     }
                     allMatches = [];
-                    cRegex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')", 'g');
+                    cRegex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')[^(\"|')]*.", 'g');
                     moduleRegex = new RegExp("firescoutMockFn(<.*>)? *\\((\"|').*(\"|')", 'g');
                     cMatches = result.match(cRegex);
                     moduleMatches = result.match(moduleRegex);

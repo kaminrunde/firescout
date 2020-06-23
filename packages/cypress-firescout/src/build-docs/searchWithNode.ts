@@ -77,7 +77,7 @@ async function getSrcMatch(path:string):Promise<Match[]|null> {
   }
   let allMatches:Match[] = []
 
-  const cRegex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')", 'g')
+  const cRegex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')[^(\"|')]*.", 'g')
   const moduleRegex = new RegExp("firescoutMockFn(<.*>)? *\\((\"|').*(\"|')", 'g')
   let cMatches = result.match(cRegex)
   const moduleMatches = result.match(moduleRegex)

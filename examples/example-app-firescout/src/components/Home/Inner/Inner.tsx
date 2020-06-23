@@ -12,7 +12,7 @@ export default function Inner ():JSX.Element {
     <div data-cy-collection='inner'>
       <p>
         <button data-cy-handle='inner-modal' onClick={() => setOpen(!open)}>click me</button>
-        {open && <span data-cy-state="inner-modal-open">{data}</span>}
+        {open && <span data-cy-state="inner-modal-open">{data || '...'}</span>}
       </p>
     </div>
 
