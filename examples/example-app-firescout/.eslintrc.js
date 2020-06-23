@@ -3,6 +3,7 @@ module.exports = {
         ".eslintrc.js", 
         "cypress/support/**/*", 
         "gatsby-config.js",
+        "gatsby-node.js",
         "cypress/plugins/**/*"
     ],
     "globals": {
