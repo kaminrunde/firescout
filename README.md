@@ -7,7 +7,9 @@ Usage:
 
 ```bash
 # bootstrap
+# !!! NOTE comment out registry=... in .npmrc
 lerna bootstrap --force-local
+# !!! NOTE comment in registry=... in .npmrc
 ```
 
 Add `"private": true` to package's `package.json` for package to remain private.
