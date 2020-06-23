@@ -36,7 +36,7 @@ export default function createFileContent (
         interface ${node.typesaveContext+colNode.typesaveContext} extends Cypress.Chainable<Element> {
           ${colNode.handles.map(handle => `
             /** 
-             * ${docs[node.context]?.collections[colNode.context].handles.bullets.find(row => row.name === handle.name)?.value || ''}
+             * ${docs[node.context]?.collections[colNode.context]?.handles.bullets.find(row => row.name === handle.name)?.value || ''}
              * @name ${handle.name}
              * @file ${handle.file}
              */
@@ -45,14 +45,14 @@ export default function createFileContent (
 
           ${colNode.states.map(state => `
             /** 
-             * ${docs[node.context]?.collections[colNode.context].states.bullets.find(row => row.name === state.name)?.value || ''}
+             * ${docs[node.context]?.collections[colNode.context]?.states.bullets.find(row => row.name === state.name)?.value || ''}
              * @name ${state.name}
              * @file ${state.file}
              */
             shouldHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
 
             /** 
-             * ${docs[node.context]?.collections[colNode.context].states.bullets.find(row => row.name === state.name)?.value || ''}
+             * ${docs[node.context]?.collections[colNode.context]?.states.bullets.find(row => row.name === state.name)?.value || ''}
              * @name ${state.name}
              * @file ${state.file}
              */

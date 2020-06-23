@@ -9,10 +9,10 @@ export default function Inner ():JSX.Element {
     fetch().then(setData)
   }, [])
   return (
-    <div data-cy-collection='inner'>
+    <div data-cy-collection='Inner'>
       <p>
-        <button data-cy-handle='inner-modal' onClick={() => setOpen(!open)}>click me</button>
-        {open && <span data-cy-state="inner-modal-open">{data || '...'}</span>}
+        <button data-cy-handle='open-inner-secret' onClick={() => setOpen(!open)}>click me</button>
+        {open && <span data-cy-state="inner-secret-visible">{data || '...'}</span>}
       </p>
     </div>
 
