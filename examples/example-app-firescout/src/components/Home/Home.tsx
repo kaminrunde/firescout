@@ -6,7 +6,7 @@ export default function Home ():JSX.Element {
   return (
     <div data-cy-ctx='pages/Index'>
       <p>
-        <button onClick={() => setOpen(!open)}>click me</button>
+        <button data-cy-handle="handle" onClick={() => setOpen(!open)}>click me</button>
         {open && <span data-cy-state="modal-open">invisible text</span>}
       </p>
       <Inner/>

@@ -109,12 +109,12 @@ async function getFixtureMatch (path:string):Promise<Match[]|null> {
   let result = '/**\n * ...\n */'
   let match = content.match(/\/\*\*(.|\n)*/)
   if(match) result = match[0].split('*/')[0] + '*/'
-
+  
   const relPath = path.replace(config.fixturesFolder+'/', '')
   if(relPath.split('/').length !== 2) return null
   let [module, fileName] = relPath.split('/')
   let [name, variation] = fileName.split('.')
-  if(variation === '.ts') variation = 'default'
+  if(variation === 'ts') variation = 'default'
   
   result = result.replace('*/', `* @module ${module}\n * @name ${name}\n * @variation ${variation}\n */`)
   

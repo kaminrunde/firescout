@@ -206,7 +206,7 @@ function getFixtureMatch(path) {
                         return [2 /*return*/, null];
                     _a = relPath.split('/'), module = _a[0], fileName = _a[1];
                     _b = fileName.split('.'), name = _b[0], variation = _b[1];
-                    if (variation === '.ts')
+                    if (variation === 'ts')
                         variation = 'default';
                     result = result.replace('*/', "* @module " + module + "\n * @name " + name + "\n * @variation " + variation + "\n */");
                     return [2 /*return*/, [{

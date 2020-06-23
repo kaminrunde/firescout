@@ -1,13 +1,18 @@
-import '../support/firescout'
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../support/firescout.d.ts"/>
 
 context('index-page', () => {
   
   it('can open modal', () => {
     cy.visit('http://localhost:8000')
 
+    cy.module('cart')
+      .fn('fetch')
+      .mock('default')
+
     cy.context('pages/Index')
       .shouldNotHaveState('modal-open')
-      .handle('modal')
+      .handle('handle')
       .click()
 
     cy.context('pages/Index')
