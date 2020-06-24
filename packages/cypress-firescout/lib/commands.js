@@ -60,7 +60,7 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation) {
         ? "firescout/" + module + "/" + name + ".ts"
         : "firescout/" + module + "/" + name + "." + variation + ".ts";
     cy.fixture(path).then(function (file) {
-        var match = file.match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//);
+        var match = file.split('\n').join(' ').match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//);
         if (!match)
             throw new Error("firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/" + module + "/" + name + "." + variation + ".ts");
         var fn = new Function("return " + match[1]);
