@@ -1,5 +1,31 @@
 # firescout
+
 WIP
+
+## Install GitHub Private Package
+
+In order to use the currently (still) private packages from firescout's GitHub repo you wants to apply the following approach to the project to require any firescout artifact:
+
+Create or edit file  `.npmrc` in project root dir w/ following contents:
+
+```bash
+registry=https://registry.npmjs.org/
+@kaminrunde:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=ef23d5132868664608943b05063a6dd5d191d3f0
+```
+
+The trick here is to indicate the default registry (`registry.npmjs.org`) for all other public packages you want to use.
+
+NOTE: the `authToken` is limited to scope `read:packages` and will be deleted once will become public.
+
+With the above setup 
+
+```bash
+npm install --save \
+  @kaminrunde/babel-plugin-remove-firescout \
+  @kaminrunde/cypress-firescout \
+  @kaminrunde/eslint-plugin-firescout
+```
 
 ## Lerna
 
