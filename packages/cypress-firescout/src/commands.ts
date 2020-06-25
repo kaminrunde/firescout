@@ -44,7 +44,7 @@ Cypress.Commands.add("shouldHaveState", {prevSubject:'optional'}, (subject, name
     const html = Cypress.$('<div>').append($el.clone()).html()
       const ctx = $el.attr('data-cy-ctx')
 
-      expect(html).to.include('data-cy-state="filled"',
+      expect(html).to.include(`data-cy-state="${name}"`,
         `"${ctx}" should have state "${name}"`)
   })
   return cy.get(subject)
@@ -55,7 +55,7 @@ Cypress.Commands.add("shouldNotHaveState", {prevSubject:'optional'}, (subject, n
     const html = Cypress.$('<div>').append($el.clone()).html()
       const ctx = $el.attr('data-cy-ctx')
 
-      expect(html).not.to.include('data-cy-state="filled"',
+      expect(html).not.to.include(`data-cy-state="${name}"`,
         `"${ctx}" should not have state "${name}"`)
   })
   return cy.get(subject)
