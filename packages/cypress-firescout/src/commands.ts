@@ -40,11 +40,25 @@ Cypress.Commands.add("handle", {prevSubject:'optional'}, (subject, name, index) 
 })
 
 Cypress.Commands.add("shouldHaveState", {prevSubject:'optional'}, (subject, name) => {
-  return cy.get(subject).should('contain.html', `data-cy-state="${name}"`)
+  cy.get(subject).then($el => {
+    const html = Cypress.$('<div>').append($el.clone()).html()
+      const ctx = $el.attr('data-cy-ctx')
+
+      expect(html).to.include('data-cy-state="filled"',
+        `"${ctx}" should have state "${name}"`)
+  })
+  return cy.get(subject)
 })
 
 Cypress.Commands.add("shouldNotHaveState", {prevSubject:'optional'}, (subject, name) => {
-  return cy.get(subject).should('not.contain.html', `data-cy-state="${name}"`)
+  cy.get(subject).then($el => {
+    const html = Cypress.$('<div>').append($el.clone()).html()
+      const ctx = $el.attr('data-cy-ctx')
+
+      expect(html).not.to.include('data-cy-state="filled"',
+        `"${ctx}" should not have state "${name}"`)
+  })
+  return cy.get(subject)
 })
 
 Cypress.Commands.add('module', module => {

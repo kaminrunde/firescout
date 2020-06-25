@@ -18,7 +18,7 @@ export default function createFileContent (
             mock(name:'${f.variation}'):${node.typesaveContext}
           `)}
         }
-      `)}
+      `).join('\n')}
 
       interface ${node.typesaveContext} {
         ${node.commands.map(cmd => `
@@ -27,7 +27,7 @@ export default function createFileContent (
            * @file ${cmd.file}
            */
           fn(name:'${cmd.name}'):${cmd.typesaveId}
-        `)}
+        `).join('\n')}
       }
     `)}
 
@@ -59,7 +59,7 @@ export default function createFileContent (
             shouldNotHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
           `).join('\n')}
         }
-      `)}
+      `).join('\n')}
 
       interface ${node.typesaveContext} extends Cypress.Chainable<Element> {
         ${node.collections.map(colNode => `
@@ -111,7 +111,7 @@ export default function createFileContent (
 
       ${modules.map(node => `
         function module (name: '${node.context}'):${node.typesaveContext}
-      `)}
+      `).join('\n')}
     }
 
     declare namespace Cypress {
