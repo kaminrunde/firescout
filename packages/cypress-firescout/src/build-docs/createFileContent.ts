@@ -29,7 +29,7 @@ export default function createFileContent (
           fn(name:'${cmd.name}'):${cmd.typesaveId}
         `).join('\n')}
       }
-    `)}
+    `).join('\n')}
 
     ${tree.map(node => `
       ${node.collections.map(colNode => `
