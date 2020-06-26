@@ -40,7 +40,7 @@ Cypress.Commands.add("handle", {prevSubject:'optional'}, (subject, name, index) 
 })
 
 Cypress.Commands.add("shouldHaveState", {prevSubject:'optional'}, (subject, name) => {
-  cy.get(subject).then($el => {
+  cy.get(subject).should($el => {
     const html = Cypress.$('<div>').append($el.clone()).html()
       const ctx = $el.attr('data-cy-ctx')
 
@@ -51,7 +51,7 @@ Cypress.Commands.add("shouldHaveState", {prevSubject:'optional'}, (subject, name
 })
 
 Cypress.Commands.add("shouldNotHaveState", {prevSubject:'optional'}, (subject, name) => {
-  cy.get(subject).then($el => {
+  cy.get(subject).should($el => {
     const html = Cypress.$('<div>').append($el.clone()).html()
       const ctx = $el.attr('data-cy-ctx')
 

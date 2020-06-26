@@ -42,7 +42,7 @@ Cypress.Commands.add("handle", { prevSubject: 'optional' }, function (subject, n
     return cmd;
 });
 Cypress.Commands.add("shouldHaveState", { prevSubject: 'optional' }, function (subject, name) {
-    cy.get(subject).then(function ($el) {
+    cy.get(subject).should(function ($el) {
         var html = Cypress.$('<div>').append($el.clone()).html();
         var ctx = $el.attr('data-cy-ctx');
         expect(html).to.include("data-cy-state=\"" + name + "\"", "\"" + ctx + "\" should have state \"" + name + "\"");
@@ -50,7 +50,7 @@ Cypress.Commands.add("shouldHaveState", { prevSubject: 'optional' }, function (s
     return cy.get(subject);
 });
 Cypress.Commands.add("shouldNotHaveState", { prevSubject: 'optional' }, function (subject, name) {
-    cy.get(subject).then(function ($el) {
+    cy.get(subject).should(function ($el) {
         var html = Cypress.$('<div>').append($el.clone()).html();
         var ctx = $el.attr('data-cy-ctx');
         expect(html).not.to.include("data-cy-state=\"" + name + "\"", "\"" + ctx + "\" should not have state \"" + name + "\"");
