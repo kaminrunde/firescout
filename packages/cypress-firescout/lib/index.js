@@ -11,14 +11,13 @@ function firescoutMockFn(name, cb) {
         }
         if (typeof window !== 'undefined') {
             if (window.cymocks && window.cymocks[name]) {
-                return Promise.resolve((_a = window.cymocks)[name].apply(_a, args));
-                // const {type,cb} = window.cymocks[name]
-                // if(type === 'mock'){
-                //   return Promise.resolve(window.cymocks[name].cb(...args))
-                // }
-                // if(type === 'stub'){
-                //   cb(...args)
-                // }
+                var _b = window.cymocks[name], type = _b.type, cb_1 = _b.cb;
+                if (type === 'mock') {
+                    return Promise.resolve((_a = window.cymocks[name]).cb.apply(_a, args));
+                }
+                if (type === 'stub') {
+                    cb_1.apply(void 0, args);
+                }
             }
         }
         return cb.apply(void 0, args);

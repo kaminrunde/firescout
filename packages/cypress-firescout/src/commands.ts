@@ -74,36 +74,20 @@ Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation) => {
   let path = variation === 'default'
     ? `firescout/${module}/${name}.ts`
     : `firescout/${module}/${name}.${variation}.ts`
-  cy.fixture(path).then(file => {
-    const match = file.split('\n').join(' ').match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//)
-    if(!match) throw new Error(`firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/${module}/${name}.${variation}.ts`)
-    const fn = new Function(`return ${match[1]}`)
-    get = () => fn()
-  })
-  const cb = (win:any) => {
-    const id = `${module}.${name}`
-    if(!win.cymocks) win.cymocks = {}
-    // win.cymocks[id] = {
-    //   type: 'mock',
-    //   cb: cy.stub().as(id).resolves(get())
-    // }
-    win.cymocks[id] = cy.stub().as(id).resolves(get())
+  if(variation){
+    cy.fixture(path).then(file => {
+      const match = file.split('\n').join(' ').match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//)
+      if(!match) throw new Error(`firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/${module}/${name}.${variation}.ts`)
+      const fn = new Function(`return ${match[1]}`)
+      get = () => fn()
+    })
   }
-  cy.window({log:false}).then(cb)
-  Cypress.on('window:before:load', cb)
-  Cypress.on('test:after:run', () => {
-    Cypress.off('window:before:load', cb)
-  })
-  return cy.wrap([module,name], {log:false})
-})
-
-Cypress.Commands.add('stub', {prevSubject:true}, ([module,name]) => {
   const cb = (win:any) => {
     const id = `${module}.${name}`
     if(!win.cymocks) win.cymocks = {}
     win.cymocks[id] = {
-      type: 'stub',
-      cb: cy.stub().as(id).resolves(null)
+      type: variation ? 'mock' : 'stub',
+      cb: cy.stub().as(id).resolves(get())
     }
   }
   cy.window({log:false}).then(cb)
@@ -113,3 +97,4 @@ Cypress.Commands.add('stub', {prevSubject:true}, ([module,name]) => {
   })
   return cy.wrap([module,name], {log:false})
 })
+

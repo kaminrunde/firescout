@@ -35,14 +35,13 @@ export function firescoutMockFn <CB extends (...args: any) => any>(
   return (...args) => {
     if(typeof window !== 'undefined'){
       if(window.cymocks && window.cymocks[name]){
-        return Promise.resolve(window.cymocks[name](...args))
-        // const {type,cb} = window.cymocks[name]
-        // if(type === 'mock'){
-        //   return Promise.resolve(window.cymocks[name].cb(...args))
-        // }
-        // if(type === 'stub'){
-        //   cb(...args)
-        // }
+        const {type,cb} = window.cymocks[name]
+        if(type === 'mock'){
+          return Promise.resolve(window.cymocks[name].cb(...args))
+        }
+        if(type === 'stub'){
+          cb(...args)
+        }
       }
     }
     return cb(...args)

@@ -8,7 +8,7 @@ context('index-page', () => {
 
     cy.module('cart')
       .fn('fetch')
-      .mock('default')
+      .mock()
 
     cy.context('components/Home')
       .shouldNotHaveState('secret-visible')
@@ -22,5 +22,7 @@ context('index-page', () => {
       .collection('Inner',1)
       .handle('open-inner-secret')
       .click()
+
+    cy.get('@cart.fetch').should('be.called')
   })
 })

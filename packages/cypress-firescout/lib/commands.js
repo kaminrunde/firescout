@@ -69,39 +69,22 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation) {
     var path = variation === 'default'
         ? "firescout/" + module + "/" + name + ".ts"
         : "firescout/" + module + "/" + name + "." + variation + ".ts";
-    cy.fixture(path).then(function (file) {
-        var match = file.split('\n').join(' ').match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//);
-        if (!match)
-            throw new Error("firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/" + module + "/" + name + "." + variation + ".ts");
-        var fn = new Function("return " + match[1]);
-        get = function () { return fn(); };
-    });
-    var cb = function (win) {
-        var id = module + "." + name;
-        if (!win.cymocks)
-            win.cymocks = {};
-        // win.cymocks[id] = {
-        //   type: 'mock',
-        //   cb: cy.stub().as(id).resolves(get())
-        // }
-        win.cymocks[id] = cy.stub().as(id).resolves(get());
-    };
-    cy.window({ log: false }).then(cb);
-    Cypress.on('window:before:load', cb);
-    Cypress.on('test:after:run', function () {
-        Cypress.off('window:before:load', cb);
-    });
-    return cy.wrap([module, name], { log: false });
-});
-Cypress.Commands.add('stub', { prevSubject: true }, function (_a) {
-    var module = _a[0], name = _a[1];
+    if (variation) {
+        cy.fixture(path).then(function (file) {
+            var match = file.split('\n').join(' ').match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//);
+            if (!match)
+                throw new Error("firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/" + module + "/" + name + "." + variation + ".ts");
+            var fn = new Function("return " + match[1]);
+            get = function () { return fn(); };
+        });
+    }
     var cb = function (win) {
         var id = module + "." + name;
         if (!win.cymocks)
             win.cymocks = {};
         win.cymocks[id] = {
-            type: 'stub',
-            cb: cy.stub().as(id).resolves(null)
+            type: variation ? 'mock' : 'stub',
+            cb: cy.stub().as(id).resolves(get())
         };
     };
     cy.window({ log: false }).then(cb);

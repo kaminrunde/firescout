@@ -18,7 +18,7 @@ export default function createFileContent (
             mock(name:'${f.variation}'):${node.typesaveContext}
           `)}
 
-          stub():${node.typesaveContext}
+          mock():${node.typesaveContext}
         }
       `).join('\n')}
 
