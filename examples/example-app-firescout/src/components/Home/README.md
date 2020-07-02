@@ -19,3 +19,8 @@ This is a new line
 ## Collections
 
 - [Inner](./Inner/README.md)
+
+
+- **img-clickout**: Click on the image to trigger a clickout (same as btn-clickout). will navigate to pdp or merchant-pdp (based on state `affiliate` or `directbuy`)
+- **btn-clickout**: Click on the image to trigger a clickout (same as img-clickout). will navigate to pdp or merchant-pdp (based on state `affiliate` or `directbuy`)
+- **wishlist-heart**: Click on the heart to either add or remove product to/from wishlist, bases on state `wishlist-added`

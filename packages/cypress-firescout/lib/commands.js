@@ -80,7 +80,29 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation) {
         var id = module + "." + name;
         if (!win.cymocks)
             win.cymocks = {};
+        // win.cymocks[id] = {
+        //   type: 'mock',
+        //   cb: cy.stub().as(id).resolves(get())
+        // }
         win.cymocks[id] = cy.stub().as(id).resolves(get());
+    };
+    cy.window({ log: false }).then(cb);
+    Cypress.on('window:before:load', cb);
+    Cypress.on('test:after:run', function () {
+        Cypress.off('window:before:load', cb);
+    });
+    return cy.wrap([module, name], { log: false });
+});
+Cypress.Commands.add('stub', { prevSubject: true }, function (_a) {
+    var module = _a[0], name = _a[1];
+    var cb = function (win) {
+        var id = module + "." + name;
+        if (!win.cymocks)
+            win.cymocks = {};
+        win.cymocks[id] = {
+            type: 'stub',
+            cb: cy.stub().as(id).resolves(null)
+        };
     };
     cy.window({ log: false }).then(cb);
     Cypress.on('window:before:load', cb);

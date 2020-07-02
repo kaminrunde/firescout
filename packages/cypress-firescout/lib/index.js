@@ -10,10 +10,15 @@ function firescoutMockFn(name, cb) {
             args[_i] = arguments[_i];
         }
         if (typeof window !== 'undefined') {
-            // @ts-ignore
             if (window.cymocks && window.cymocks[name]) {
-                // @ts-ignore
                 return Promise.resolve((_a = window.cymocks)[name].apply(_a, args));
+                // const {type,cb} = window.cymocks[name]
+                // if(type === 'mock'){
+                //   return Promise.resolve(window.cymocks[name].cb(...args))
+                // }
+                // if(type === 'stub'){
+                //   cb(...args)
+                // }
             }
         }
         return cb.apply(void 0, args);
