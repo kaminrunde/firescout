@@ -5,6 +5,10 @@ declare global {
             [name: string]: {
                 type: 'stub' | 'mock';
                 cb: Function;
+                options?: {
+                    sync?: boolean;
+                    throws?: boolean;
+                };
             };
         };
     }

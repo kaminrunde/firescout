@@ -66,16 +66,21 @@ Cypress.Commands.add('fn', { prevSubject: true }, function (module, name) {
 Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation) {
     var module = _a[0], name = _a[1];
     var get = function () { return null; };
+    var getOptions = function () { return ({}); };
     var path = variation === 'default'
         ? "firescout/" + module + "/" + name + ".ts"
         : "firescout/" + module + "/" + name + "." + variation + ".ts";
     if (variation) {
         cy.fixture(path).then(function (file) {
-            var match = file.split('\n').join(' ').match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//);
+            var content = file.split('\n').join(' ');
+            var match = content.match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//);
+            var sync = !!content.match(/\* @sync/);
+            var throws = !!content.match(/\* @throws/);
             if (!match)
                 throw new Error("firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/" + module + "/" + name + "." + variation + ".ts");
             var fn = new Function("return " + match[1]);
             get = function () { return fn(); };
+            getOptions = function () { return ({ sync: sync, throws: throws }); };
         });
     }
     var cb = function (win) {
@@ -84,7 +89,8 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation) {
             win.cymocks = {};
         win.cymocks[id] = {
             type: variation ? 'mock' : 'stub',
-            cb: cy.stub().as(id).resolves(get())
+            cb: cy.stub().as(id).resolves(get()),
+            options: getOptions()
         };
     };
     cy.window({ log: false }).then(cb);

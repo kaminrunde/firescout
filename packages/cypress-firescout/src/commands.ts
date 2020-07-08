@@ -71,15 +71,20 @@ Cypress.Commands.add('fn', {prevSubject:true}, (module, name) => {
 
 Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation) => {
   let get:any = ()=>null
+  let getOptions = ()=>({})
   let path = variation === 'default'
     ? `firescout/${module}/${name}.ts`
     : `firescout/${module}/${name}.${variation}.ts`
   if(variation){
     cy.fixture(path).then(file => {
-      const match = file.split('\n').join(' ').match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//)
+      const content = file.split('\n').join(' ')
+      const match = content.match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//)
+      const sync = !!content.match(/\* @sync/)
+      const throws = !!content.match(/\* @throws/)
       if(!match) throw new Error(`firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/${module}/${name}.${variation}.ts`)
       const fn = new Function(`return ${match[1]}`)
       get = () => fn()
+      getOptions = () => ({sync, throws})
     })
   }
   const cb = (win:any) => {
@@ -87,7 +92,8 @@ Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation) => {
     if(!win.cymocks) win.cymocks = {}
     win.cymocks[id] = {
       type: variation ? 'mock' : 'stub',
-      cb: cy.stub().as(id).resolves(get())
+      cb: cy.stub().as(id).resolves(get()),
+      options: getOptions()
     }
   }
   cy.window({log:false}).then(cb)
