@@ -87,10 +87,15 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation) {
         var id = module + "." + name;
         if (!win.cymocks)
             win.cymocks = {};
+        var options = getOptions();
         win.cymocks[id] = {
             type: variation ? 'mock' : 'stub',
-            cb: cy.stub().as(id).resolves(get()),
-            options: getOptions()
+            cb: options.sync
+                ? cy.stub().as(id).returns(get())
+                : options.throws
+                    ? cy.stub().as(id).rejects(get())
+                    : cy.stub().as(id).resolves(get()),
+            options: options
         };
     };
     cy.window({ log: false }).then(cb);

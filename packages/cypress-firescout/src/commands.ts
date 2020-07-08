@@ -71,7 +71,7 @@ Cypress.Commands.add('fn', {prevSubject:true}, (module, name) => {
 
 Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation) => {
   let get:any = ()=>null
-  let getOptions = ()=>({})
+  let getOptions:any = ()=>({})
   let path = variation === 'default'
     ? `firescout/${module}/${name}.ts`
     : `firescout/${module}/${name}.${variation}.ts`
@@ -90,10 +90,15 @@ Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation) => {
   const cb = (win:any) => {
     const id = `${module}.${name}`
     if(!win.cymocks) win.cymocks = {}
+    const options = getOptions()
     win.cymocks[id] = {
       type: variation ? 'mock' : 'stub',
-      cb: cy.stub().as(id).resolves(get()),
-      options: getOptions()
+      cb: options.sync 
+        ? cy.stub().as(id).returns(get()) 
+        : options.throws
+          ? cy.stub().as(id).rejects(get())
+          : cy.stub().as(id).resolves(get()),
+      options
     }
   }
   cy.window({log:false}).then(cb)
