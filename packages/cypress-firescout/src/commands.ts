@@ -69,7 +69,7 @@ Cypress.Commands.add('fn', {prevSubject:true}, (module, name) => {
   return cy.wrap([module,name], {log:false})
 })
 
-Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, rootOpt) => {
+Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, rootOpt={}) => {
   let get:any = ()=>null
   let getOptions:any = ()=>({})
   let path = variation === 'default'

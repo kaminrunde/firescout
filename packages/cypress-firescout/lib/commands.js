@@ -65,6 +65,7 @@ Cypress.Commands.add('fn', { prevSubject: true }, function (module, name) {
 });
 Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation, rootOpt) {
     var module = _a[0], name = _a[1];
+    if (rootOpt === void 0) { rootOpt = {}; }
     var get = function () { return null; };
     var getOptions = function () { return ({}); };
     var path = variation === 'default'
