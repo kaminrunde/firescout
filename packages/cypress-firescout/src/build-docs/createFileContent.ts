@@ -10,12 +10,17 @@ export default function createFileContent (
   return `
     /// <reference types="cypress" />
 
+    type MockOptions = {
+      timeout?: number,
+      throws?:boolean
+    }
+
     ${modules.map(node => `
       ${node.commands.map(cmd => `
         interface ${cmd.typesaveId} {
           ${cmd.fixtures.map(f => `
             ${f.description}
-            mock(name:'${f.variation}'):${node.typesaveContext}
+            mock(name:'${f.variation}', opt?:MockOptions):${node.typesaveContext}
           `)}
 
           mock():${node.typesaveContext}

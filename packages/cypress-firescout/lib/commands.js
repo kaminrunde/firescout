@@ -63,7 +63,7 @@ Cypress.Commands.add('module', function (module) {
 Cypress.Commands.add('fn', { prevSubject: true }, function (module, name) {
     return cy.wrap([module, name], { log: false });
 });
-Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation) {
+Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation, rootOpt) {
     var module = _a[0], name = _a[1];
     var get = function () { return null; };
     var getOptions = function () { return ({}); };
@@ -79,7 +79,9 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation) {
             if (!match)
                 throw new Error("firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/" + module + "/" + name + "." + variation + ".ts");
             var fn = new Function("return " + match[1]);
-            get = function () { return fn(); };
+            get = rootOpt.timeout
+                ? function () { return new Promise(function (resolve) { return setTimeout(function () { return resolve(fn()); }, rootOpt.timeout); }); }
+                : function () { return fn(); };
             getOptions = function () { return ({ sync: sync, throws: throws }); };
         });
     }
@@ -92,7 +94,7 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation) {
             type: variation ? 'mock' : 'stub',
             cb: options.sync
                 ? cy.stub().as(id).returns(get())
-                : options.throws
+                : options.throws || rootOpt.throws
                     ? cy.stub().as(id).rejects(get())
                     : cy.stub().as(id).resolves(get()),
             options: options

@@ -69,7 +69,7 @@ Cypress.Commands.add('fn', {prevSubject:true}, (module, name) => {
   return cy.wrap([module,name], {log:false})
 })
 
-Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation) => {
+Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, rootOpt) => {
   let get:any = ()=>null
   let getOptions:any = ()=>({})
   let path = variation === 'default'
@@ -83,7 +83,9 @@ Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation) => {
       const throws = !!content.match(/\* @throws/)
       if(!match) throw new Error(`firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/${module}/${name}.${variation}.ts`)
       const fn = new Function(`return ${match[1]}`)
-      get = () => fn()
+      get = rootOpt.timeout 
+        ? () => new Promise(resolve => setTimeout(()=>resolve(fn()),rootOpt.timeout)) 
+        : () => fn()
       getOptions = () => ({sync, throws})
     })
   }
@@ -95,7 +97,7 @@ Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation) => {
       type: variation ? 'mock' : 'stub',
       cb: options.sync 
         ? cy.stub().as(id).returns(get()) 
-        : options.throws
+        : options.throws || rootOpt.throws
           ? cy.stub().as(id).rejects(get())
           : cy.stub().as(id).resolves(get()),
       options
