@@ -93,13 +93,15 @@ Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, root
     const id = `${module}.${name}`
     if(!win.cymocks) win.cymocks = {}
     const options = getOptions()
+    let result = get()
+    if(rootOpt.transform) result = rootOpt.transform(result)
     win.cymocks[id] = {
       type: variation ? 'mock' : 'stub',
       cb: options.sync 
-        ? cy.stub().as(id).returns(get()) 
+        ? cy.stub().as(id).returns(result) 
         : options.throws || rootOpt.throws
-          ? cy.stub().as(id).rejects(get())
-          : cy.stub().as(id).resolves(get()),
+          ? cy.stub().as(id).rejects(result)
+          : cy.stub().as(id).resolves(result),
       options
     }
   }

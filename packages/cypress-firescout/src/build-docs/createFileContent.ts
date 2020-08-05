@@ -12,7 +12,8 @@ export default function createFileContent (
 
     type MockOptions = {
       timeout?: number,
-      throws?:boolean
+      throws?:boolean,
+      transform?: <T=any>(val:T) => T
     }
 
     ${modules.map(node => `
