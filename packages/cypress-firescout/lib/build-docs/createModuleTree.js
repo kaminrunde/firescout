@@ -57,7 +57,7 @@ function createFixture(item) {
     var variationMatch = item.payload.match(/@variation (.*)/);
     return {
         description: item.payload
-            .replace('*/', "* @file " + item.file + "\n */"),
+            .replace('*/', "* @file [" + item.file + "](" + (process.cwd() + item.file) + ")\n */"),
         file: item.file,
         folder: item.folder,
         variation: variationMatch ? variationMatch[1] : '',

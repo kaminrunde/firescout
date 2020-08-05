@@ -32,7 +32,7 @@ export default function createFileContent (
         ${node.commands.map(cmd => `
           /**
            * @name ${cmd.name}
-           * @file ${cmd.file}
+           * @file [${cmd.file}](${process.cwd() + cmd.file})
            */
           fn(name:'${cmd.name}'):${cmd.typesaveId}
         `).join('\n')}
@@ -46,7 +46,7 @@ export default function createFileContent (
             /** 
              * ${docs[node.context]?.collections[colNode.context]?.handles.bullets.find(row => row.name === handle.name)?.value || ''}
              * @name ${handle.name}
-             * @file ${handle.file}
+             * @file [${handle.file}](${process.cwd() + handle.file})
              */
             handle(name:'${handle.name}', index?:number|string): Cypress.Chainable<Element>
           `).join('\n')}
@@ -55,14 +55,14 @@ export default function createFileContent (
             /** 
              * ${docs[node.context]?.collections[colNode.context]?.states.bullets.find(row => row.name === state.name)?.value || ''}
              * @name ${state.name}
-             * @file ${state.file}
+             * @file [${state.file}](${process.cwd() + state.file})
              */
             shouldHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
 
             /** 
              * ${docs[node.context]?.collections[colNode.context]?.states.bullets.find(row => row.name === state.name)?.value || ''}
              * @name ${state.name}
-             * @file ${state.file}
+             * @file [${state.file}](${process.cwd() + state.file})
              */
             shouldNotHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
           `).join('\n')}
@@ -74,7 +74,7 @@ export default function createFileContent (
           /**
            * ${docs[node.context]?.collections[colNode.context]?.description || '...'}
            * @name ${colNode.context}
-           * @file ${colNode.file}
+           * @file [${colNode.file}](${process.cwd() + colNode.file})
            * @docs_file ${docs[node.context]?.collections[colNode.context]?.file || '-'}
            */
           collection(name:'${colNode.context}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
@@ -83,7 +83,7 @@ export default function createFileContent (
           /** 
            * ${docs[node.context]?.handles.bullets.find(row => row.name === handle.name)?.value || ''}
            * @name ${handle.name}
-           * @file ${handle.file}
+           * @file [${handle.file}](${process.cwd() + handle.file})
            */
           handle(name:'${handle.name}', index?:number|string): Cypress.Chainable<Element>
         `).join('\n')}
@@ -92,14 +92,14 @@ export default function createFileContent (
           /** 
            * ${docs[node.context]?.states.bullets.find(row => row.name === state.name)?.value || ''}
            * @name ${state.name}
-           * @file ${state.file}
+           * @file [${state.file}](${process.cwd() + state.file})
            */
           shouldHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext}
 
           /** 
            * ${docs[node.context]?.states.bullets.find(row => row.name === state.name)?.value || ''}
            * @name ${state.name}
-           * @file ${state.file}
+           * @file [${state.file}](${process.cwd() + state.file})
            */
           shouldNotHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext}
         `).join('\n')}
@@ -111,8 +111,8 @@ export default function createFileContent (
         /**
          * ${docs[node.context]?.description || '...'} 
          * @name ${node.context}
-         * @file ${node.file}
-         * @docs_file ${docs[node.context]?.file || '-'}
+         * @file [${node.folder}](${process.cwd() + node.file})
+         * @docs_file ${docs[node.context] ? `[${docs[node.context]}](${process.cwd() + docs[node.context]})` : '-'}
          */
         function context (name:'${node.context}', index?:number|string):${node.typesaveContext}
       `).join('\n')}
