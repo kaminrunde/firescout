@@ -75,7 +75,7 @@ export default function createFileContent (
            * ${docs[node.context]?.collections[colNode.context]?.description || '...'}
            * @name ${colNode.context}
            * @file [${colNode.file}](${process.cwd() + colNode.file})
-           * @docs_file ${docs[node.context]?.collections[colNode.context]?.file || '-'}
+           * @docs_file ${docs[node.context] ? `[${docs[node.context].file}](${process.cwd() + docs[node.context].file})` : '-'}
            */
           collection(name:'${colNode.context}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
         `).join('\n')}
@@ -112,7 +112,7 @@ export default function createFileContent (
          * ${docs[node.context]?.description || '...'} 
          * @name ${node.context}
          * @file [${node.folder}](${process.cwd() + node.file})
-         * @docs_file ${docs[node.context] ? `[${docs[node.context]}](${process.cwd() + docs[node.context]})` : '-'}
+         * @docs_file ${docs[node.context] ? `[${docs[node.context].file}](${process.cwd() + docs[node.context].file})` : '-'}
          */
         function context (name:'${node.context}', index?:number|string):${node.typesaveContext}
       `).join('\n')}
