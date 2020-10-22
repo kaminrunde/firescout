@@ -26,7 +26,7 @@ module.exports = {
         return {
             JSXOpeningElement(node) {
                 const hasOnClick = node.attributes.find(node => node && node.name && node.name.name === 'onClick')
-                const hasHandle = node.attributes.find(node => node && node.name && node.name.name === 'data-cy-handle')
+                const hasHandle = node.attributes.find(node => node && node.name && node.name.name.includes('data-cy-handle'))
                 
                 if(hasOnClick && !hasHandle) {
                     context.report({

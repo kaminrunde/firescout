@@ -31,6 +31,9 @@ ruleTester.run("onclick-needs-handle", rule, {
     valid: [
         {
             code: "var foo = <button data-cy-handle='foo' onClick={console.log} />",
+        },
+        {
+            code: "var foo = <button data-cy-handle-foo='foo' onClick={console.log} />",
         }
     ],
 

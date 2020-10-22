@@ -5,10 +5,10 @@ module.exports = function removeFirescoutPlugin() {
     name: 'remove-firescout',
     visitor: {
       JSXOpeningElement({node}) {
-        const ctx = getProp(node.attributes, 'data-cy-ctx')
-        const handle = getProp(node.attributes, 'data-cy-handle')
-        const state = getProp(node.attributes, 'data-cy-state')
-        const collection = getProp(node.attributes, 'data-cy-collection')
+        const ctx = node.attributes.find(node => node && node.name && node.name.name.includes('data-cy-ctx'))
+        const handle = node.attributes.find(node => node && node.name && node.name.name.includes('data-cy-handle'))
+        const state = node.attributes.find(node => node && node.name && node.name.name.includes('data-cy-state'))
+        const collection = node.attributes.find(node => node && node.name && node.name.name.includes('data-cy-collection'))
 
         // remove data-cy attributes
         if(ctx || handle || state || collection) {

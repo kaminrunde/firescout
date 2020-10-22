@@ -77,13 +77,13 @@ async function getSrcMatch(path:string):Promise<Match[]|null> {
   }
   let allMatches:Match[] = []
 
-  const cRegex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')[^(\"|')]*.", 'g')
-  const moduleRegex = new RegExp("firescoutMockFn(<.*>)? *\\((\"|').*(\"|')", 'g')
+  const cRegex = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]*=(\"|')[^(\"|')]*.", 'g')
+  const moduleRegex = new RegExp("firescoutMockFn(<.*>)? *\\([ \r\n]*(\"|').*(\"|')", 'g')
   let cMatches = result.match(cRegex)
   const moduleMatches = result.match(moduleRegex)
   if(cMatches) {
     cMatches = Array.from(new Set(cMatches.filter(Boolean)))
-    const regex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')")
+    const regex = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]*=(\"|')(.*)(\"|')")
     let matches:any = cMatches.map(s => s.match(regex))
     allMatches.push(...matches.map((match:any) => ({
       type: match[1] as 'ctx' | 'handle' | 'state' | 'collection',
@@ -91,7 +91,7 @@ async function getSrcMatch(path:string):Promise<Match[]|null> {
     })))
   }
   if(moduleMatches) {
-    const regex = new RegExp("firescoutMockFn(<.*>)? *\\((\"|')(.*)(\"|')")
+    const regex = new RegExp("firescoutMockFn(<.*>)? *\\([ \r\n]*(\"|')(.*)(\"|')")
     let matches:any = moduleMatches.map(s => s.match(regex))
     allMatches.push(...matches.map((match:any) => ({
       type: 'module-fn',

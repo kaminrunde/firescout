@@ -159,13 +159,13 @@ function getSrcMatch(path) {
                             return [2 /*return*/, null];
                     }
                     allMatches = [];
-                    cRegex = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')[^(\"|')]*.", 'g');
-                    moduleRegex = new RegExp("firescoutMockFn(<.*>)? *\\((\"|').*(\"|')", 'g');
+                    cRegex = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]*=(\"|')[^(\"|')]*.", 'g');
+                    moduleRegex = new RegExp("firescoutMockFn(<.*>)? *\\([ \r\n]*(\"|').*(\"|')", 'g');
                     cMatches = result.match(cRegex);
                     moduleMatches = result.match(moduleRegex);
                     if (cMatches) {
                         cMatches = Array.from(new Set(cMatches.filter(Boolean)));
-                        regex_1 = new RegExp("data-cy-(state|ctx|handle|collection)=(\"|')(.*)(\"|')");
+                        regex_1 = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]*=(\"|')(.*)(\"|')");
                         matches = cMatches.map(function (s) { return s.match(regex_1); });
                         allMatches.push.apply(allMatches, matches.map(function (match) { return ({
                             type: match[1],
@@ -173,7 +173,7 @@ function getSrcMatch(path) {
                         }); }));
                     }
                     if (moduleMatches) {
-                        regex_2 = new RegExp("firescoutMockFn(<.*>)? *\\((\"|')(.*)(\"|')");
+                        regex_2 = new RegExp("firescoutMockFn(<.*>)? *\\([ \r\n]*(\"|')(.*)(\"|')");
                         matches = moduleMatches.map(function (s) { return s.match(regex_2); });
                         allMatches.push.apply(allMatches, matches.map(function (match) { return ({
                             type: 'module-fn',
