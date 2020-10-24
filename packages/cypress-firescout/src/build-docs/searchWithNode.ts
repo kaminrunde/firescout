@@ -77,14 +77,37 @@ async function getSrcMatch(path:string):Promise<Match[]|null> {
   }
   let allMatches:Match[] = []
 
-  const cRegex = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]*=(\"|')[^(\"|')]*.", 'g')
+  const cRegexString = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]* ?=(\"|')[^(\"|')]*.", 'g')
+  const cRegexCond = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]*= ?[^\"'][^}]*}", 'g')
   const moduleRegex = new RegExp("firescoutMockFn(<.*>)? *\\([ \r\n]*(\"|').*(\"|')", 'g')
-  let cMatches = result.match(cRegex)
+
+  let cMatchesString = result.match(cRegexString)
+  let cMatchesCond = result.match(cRegexCond)
   const moduleMatches = result.match(moduleRegex)
-  if(cMatches) {
-    cMatches = Array.from(new Set(cMatches.filter(Boolean)))
-    const regex = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]*=(\"|')(.*)(\"|')")
-    let matches:any = cMatches.map(s => s.match(regex))
+
+  if(cMatchesString) {
+    cMatchesString = Array.from(new Set(cMatchesString.filter(Boolean)))
+    const regex = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]* ?=(\"|')(.*)(\"|')")
+    let matches:any = cMatchesString.map(s => s.match(regex))
+    allMatches.push(...matches.map((match:any) => ({
+      type: match[1] as 'ctx' | 'handle' | 'state' | 'collection',
+      payload: match[3]
+    })))
+  }
+  if(cMatchesCond) {
+    cMatchesCond = Array.from(new Set(cMatchesCond.filter(Boolean)))
+    const sMatchesRegex = new RegExp("[\"'][^\"']*[\"']", "g") // matches static strings
+    for(let s of cMatchesCond) {
+      const type = (s.match(/data-cy-(state|ctx|handle|collection)/)||[])[1]
+      let matches = s.replace(/[\s]*/g, '').match(sMatchesRegex)
+      if(!matches) continue
+      for(let match of matches) allMatches.push({
+        type: type as 'ctx' | 'handle' | 'state' | 'collection',
+        payload: match.replace(/["']/g, '')
+      })
+    }
+    const regex = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]* ?=(\"|')(.*)(\"|')")
+    let matches:any = cMatchesCond.map(s => s.match(regex)).filter(a => a && a[0])
     allMatches.push(...matches.map((match:any) => ({
       type: match[1] as 'ctx' | 'handle' | 'state' | 'collection',
       payload: match[3]

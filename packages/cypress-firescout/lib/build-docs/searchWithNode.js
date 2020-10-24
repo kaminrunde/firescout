@@ -141,12 +141,12 @@ function findAllFiles(paths) {
 }
 function getSrcMatch(path) {
     return __awaiter(this, void 0, void 0, function () {
-        var result, regex, match, allMatches, cRegex, moduleRegex, cMatches, moduleMatches, regex_1, matches, regex_2, matches;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var result, regex, match, allMatches, cRegexString, cRegexCond, moduleRegex, cMatchesString, cMatchesCond, moduleMatches, regex_1, matches, sMatchesRegex, _i, cMatchesCond_1, s, type, matches_2, _a, matches_1, match, regex_2, matches, regex_3, matches;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0: return [4 /*yield*/, utils.readFile(path)];
                 case 1:
-                    result = _a.sent();
+                    result = _b.sent();
                     if (path.endsWith('.md')) {
                         regex = new RegExp("<!-- firescout-(component|collection) -->");
                         match = null;
@@ -159,22 +159,49 @@ function getSrcMatch(path) {
                             return [2 /*return*/, null];
                     }
                     allMatches = [];
-                    cRegex = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]*=(\"|')[^(\"|')]*.", 'g');
+                    cRegexString = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]* ?=(\"|')[^(\"|')]*.", 'g');
+                    cRegexCond = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]*= ?[^\"'][^}]*}", 'g');
                     moduleRegex = new RegExp("firescoutMockFn(<.*>)? *\\([ \r\n]*(\"|').*(\"|')", 'g');
-                    cMatches = result.match(cRegex);
+                    cMatchesString = result.match(cRegexString);
+                    cMatchesCond = result.match(cRegexCond);
                     moduleMatches = result.match(moduleRegex);
-                    if (cMatches) {
-                        cMatches = Array.from(new Set(cMatches.filter(Boolean)));
-                        regex_1 = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]*=(\"|')(.*)(\"|')");
-                        matches = cMatches.map(function (s) { return s.match(regex_1); });
+                    if (cMatchesString) {
+                        cMatchesString = Array.from(new Set(cMatchesString.filter(Boolean)));
+                        regex_1 = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]* ?=(\"|')(.*)(\"|')");
+                        matches = cMatchesString.map(function (s) { return s.match(regex_1); });
+                        allMatches.push.apply(allMatches, matches.map(function (match) { return ({
+                            type: match[1],
+                            payload: match[3]
+                        }); }));
+                    }
+                    if (cMatchesCond) {
+                        cMatchesCond = Array.from(new Set(cMatchesCond.filter(Boolean)));
+                        sMatchesRegex = new RegExp("[\"'][^\"']*[\"']", "g") // matches static strings
+                        ;
+                        for (_i = 0, cMatchesCond_1 = cMatchesCond; _i < cMatchesCond_1.length; _i++) {
+                            s = cMatchesCond_1[_i];
+                            type = (s.match(/data-cy-(state|ctx|handle|collection)/) || [])[1];
+                            matches_2 = s.replace(/[\s]*/g, '').match(sMatchesRegex);
+                            if (!matches_2)
+                                continue;
+                            for (_a = 0, matches_1 = matches_2; _a < matches_1.length; _a++) {
+                                match = matches_1[_a];
+                                allMatches.push({
+                                    type: type,
+                                    payload: match.replace(/["']/g, '')
+                                });
+                            }
+                        }
+                        regex_2 = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]* ?=(\"|')(.*)(\"|')");
+                        matches = cMatchesCond.map(function (s) { return s.match(regex_2); }).filter(function (a) { return a && a[0]; });
                         allMatches.push.apply(allMatches, matches.map(function (match) { return ({
                             type: match[1],
                             payload: match[3]
                         }); }));
                     }
                     if (moduleMatches) {
-                        regex_2 = new RegExp("firescoutMockFn(<.*>)? *\\([ \r\n]*(\"|')(.*)(\"|')");
-                        matches = moduleMatches.map(function (s) { return s.match(regex_2); });
+                        regex_3 = new RegExp("firescoutMockFn(<.*>)? *\\([ \r\n]*(\"|')(.*)(\"|')");
+                        matches = moduleMatches.map(function (s) { return s.match(regex_3); });
                         allMatches.push.apply(allMatches, matches.map(function (match) { return ({
                             type: 'module-fn',
                             payload: match[3]
