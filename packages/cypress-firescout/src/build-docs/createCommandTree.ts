@@ -4,7 +4,7 @@ import * as utils from './utils'
 
 type State = {
   name: string,
-  file: string,
+  file: string | null,
   hasRootRef: boolean,
   implementations: null | {
     name: string,
@@ -41,25 +41,29 @@ export default function createCommandTree (tree:HierarchieTree[]):Tree[] {
 }
 
 function getStates (tree:HierarchieTree):State[] {
-  let states:State[] = []
-  let lastState:string = ''
+  let stateDict:Record<string, State> = {}
+  // let states:State[] = []
+  // let lastState:string = ''
 
   for(let state of tree.states) {
     const [name, implementation] = state.payload.split(':')
-    if(lastState !== name) {
-      lastState = name
-      states.push({ name, hasRootRef: false, file: state.file, implementations: null})
+    if(!stateDict[name]) stateDict[name] = {
+      name: name,
+      hasRootRef: false,
+      file: null,
+      implementations: null
     }
     if(implementation) {
-      let target = states[states.length-1]
+      let target = stateDict[name]
       if(!target.implementations) target.implementations = []
       target.implementations.push({ name: implementation, file: state.file })
     }
     else {
-      let target = states[states.length-1]
+      let target = stateDict[name]
       target.hasRootRef = true
+      target.file = state.file
     }
   }
 
-  return states
+  return Object.values(stateDict)
 }

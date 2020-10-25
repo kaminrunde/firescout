@@ -36,25 +36,30 @@ function createCommandTree(tree) {
 }
 exports.default = createCommandTree;
 function getStates(tree) {
-    var states = [];
-    var lastState = '';
+    var stateDict = {};
+    // let states:State[] = []
+    // let lastState:string = ''
     for (var _i = 0, _a = tree.states; _i < _a.length; _i++) {
         var state = _a[_i];
         var _b = state.payload.split(':'), name_1 = _b[0], implementation = _b[1];
-        if (lastState !== name_1) {
-            lastState = name_1;
-            states.push({ name: name_1, hasRootRef: false, file: state.file, implementations: null });
-        }
+        if (!stateDict[name_1])
+            stateDict[name_1] = {
+                name: name_1,
+                hasRootRef: false,
+                file: null,
+                implementations: null
+            };
         if (implementation) {
-            var target = states[states.length - 1];
+            var target = stateDict[name_1];
             if (!target.implementations)
                 target.implementations = [];
             target.implementations.push({ name: implementation, file: state.file });
         }
         else {
-            var target = states[states.length - 1];
+            var target = stateDict[name_1];
             target.hasRootRef = true;
+            target.file = state.file;
         }
     }
-    return states;
+    return Object.values(stateDict);
 }

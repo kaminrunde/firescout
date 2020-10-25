@@ -1,7 +1,7 @@
 import { HierarchieTree } from './createCommandHierarchie';
 declare type State = {
     name: string;
-    file: string;
+    file: string | null;
     hasRootRef: boolean;
     implementations: null | {
         name: string;
