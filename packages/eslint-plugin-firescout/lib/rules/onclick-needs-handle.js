@@ -27,8 +27,9 @@ module.exports = {
             JSXOpeningElement(node) {
                 const hasOnClick = node.attributes.find(node => node && node.name && node.name.name === 'onClick')
                 const hasHandle = node.attributes.find(node => node && node.name && node.name.name.includes('data-cy-handle'))
+                const hasCtx = node.attributes.find(node => node && node.name && node.name.name.includes('data-cy-ctx'))
                 
-                if(hasOnClick && !hasHandle) {
+                if(hasOnClick && !hasHandle && !hasCtx) {
                     context.report({
                         node:node,
                         message: 'clickable elements need a data-cy-handle attribute'
