@@ -141,7 +141,7 @@ function findAllFiles(paths) {
 }
 function getSrcMatch(path) {
     return __awaiter(this, void 0, void 0, function () {
-        var result, regex, match, allMatches, cRegexString, cRegexCond, moduleRegex, cMatchesString, cMatchesCond, moduleMatches, regex_1, matches, sMatchesRegex, _i, cMatchesCond_1, s, type, matches_2, _a, matches_1, match, regex_2, matches, regex_3, matches;
+        var result, regex, match, allMatches, cRegexString, cRegexCond, moduleRegex, cMatchesString, cMatchesCond, moduleMatches, regex_1, matches, sMatchesRegex, _i, cMatchesCond_1, s, type, matches_2, _a, matches_1, match, payload, regex_2, matches, regex_3, matches;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0: return [4 /*yield*/, utils.readFile(path)];
@@ -186,9 +186,12 @@ function getSrcMatch(path) {
                                 continue;
                             for (_a = 0, matches_1 = matches_2; _a < matches_1.length; _a++) {
                                 match = matches_1[_a];
+                                payload = match.replace(/["']/g, '');
+                                if (payload.startsWith('data-cy-'))
+                                    continue;
                                 allMatches.push({
                                     type: type,
-                                    payload: match.replace(/["']/g, '')
+                                    payload: payload
                                 });
                             }
                         }

@@ -101,10 +101,14 @@ async function getSrcMatch(path:string):Promise<Match[]|null> {
       const type = (s.match(/data-cy-(state|ctx|handle|collection)/)||[])[1]
       let matches = s.replace(/[\s]*/g, '').match(sMatchesRegex)
       if(!matches) continue
-      for(let match of matches) allMatches.push({
-        type: type as 'ctx' | 'handle' | 'state' | 'collection',
-        payload: match.replace(/["']/g, '')
-      })
+      for(let match of matches) {
+        const payload = match.replace(/["']/g, '')
+        if(payload.startsWith('data-cy-')) continue
+        allMatches.push({
+          type: type as 'ctx' | 'handle' | 'state' | 'collection',
+          payload: payload
+        })
+      }
     }
     const regex = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]* ?=(\"|')(.*)(\"|')")
     let matches:any = cMatchesCond.map(s => s.match(regex)).filter(a => a && a[0])
