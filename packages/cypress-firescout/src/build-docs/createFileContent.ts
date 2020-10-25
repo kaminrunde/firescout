@@ -57,14 +57,16 @@ export default function createFileContent (
              * @name ${state.name}
              * @file [${state.file}](${process.cwd() + state.file})
              */
-            shouldHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
+            shouldHaveState( name:'${state.name}' ${state.implementations 
+              ? `, implementations: '${state.implementations.map(i => i.name).join(",")}'`
+              : ''}): ${node.typesaveContext+colNode.typesaveContext}
 
             /** 
              * ${docs[node.context]?.collections[colNode.context]?.states.bullets.find(row => row.name === state.name)?.value || ''}
              * @name ${state.name}
              * @file [${state.file}](${process.cwd() + state.file})
              */
-            shouldNotHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
+            shouldNotHaveState(name:'${state.name}'): ${node.typesaveContext+colNode.typesaveContext}
           `).join('\n')}
         }
       `).join('\n')}
@@ -79,6 +81,7 @@ export default function createFileContent (
            */
           collection(name:'${colNode.context}', index?:number|string): ${node.typesaveContext+colNode.typesaveContext}
         `).join('\n')}
+
         ${node.handles.map(handle => `
           /** 
            * ${docs[node.context]?.handles.bullets.find(row => row.name === handle.name)?.value || ''}
@@ -92,16 +95,20 @@ export default function createFileContent (
           /** 
            * ${docs[node.context]?.states.bullets.find(row => row.name === state.name)?.value || ''}
            * @name ${state.name}
-           * @file [${state.file}](${process.cwd() + state.file})
+           * @file [${state.file}](${process.cwd() + state.file}) ${!state.implementations ? '' : `
+           * @implementations ${state.implementations.map(imp => `
+           * - ${imp.name} [(${imp.file})](${process.cwd() + imp.file}): ${docs[node.context]?.states.bullets.find(row => row.name === state.name)?.bullets?.find(row => row.name === imp.name)?.value}`).join('\n')}`}
            */
-          shouldHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext}
+          shouldHaveState( name:'${state.name}' ${state.implementations 
+              ? `, implementations: '${state.implementations.map(i => i.name).join(",")}'`
+              : ''}): ${node.typesaveContext}
 
           /** 
            * ${docs[node.context]?.states.bullets.find(row => row.name === state.name)?.value || ''}
            * @name ${state.name}
            * @file [${state.file}](${process.cwd() + state.file})
            */
-          shouldNotHaveState(name:'${state.name}', index?:number|string): ${node.typesaveContext}
+          shouldNotHaveState(name:'${state.name}'): ${node.typesaveContext}
         `).join('\n')}
       }
     `).join('\n')}

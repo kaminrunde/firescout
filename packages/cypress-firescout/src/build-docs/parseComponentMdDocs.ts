@@ -21,6 +21,7 @@ export type Docs = {
 type Bullet = {
   name: string,
   value: string,
+  bullets: Bullet[] | null,
   _name: string,
   _value: string
 }
@@ -116,18 +117,26 @@ export default function parseComponentMdDocs (mdItem:RawItem, allCollections:Raw
     result.states = states.content
   }
 
-
   return result
 }
 
 function buildChapterContent (chapter:Chapter) {
   let descNodes = chapter.contentNodes.filter(node => node.type !== 'list')
   let bulletNodes = chapter.contentNodes.filter(node => node.type === 'list') as mdt.List[]
+  let bulletNodesFiltered = []
+  let subMap = new Map<mdt.List, mdt.List[]>()
+  for(let node of bulletNodes) {
+    if(node.indent === '') bulletNodesFiltered.push(node)
+    else {
+      const parent = bulletNodesFiltered[bulletNodesFiltered.length-1]
+      subMap.set(parent, [...(subMap.get(parent)||[]), node])
+    }
+  }
   
   // parse chapter description
   chapter.content.description = Visitor.getText(descNodes)
   chapter.content._description = Visitor.getMd(descNodes)
-  chapter.content.bullets = bulletNodes.map(node => parseBullet(node))
+  chapter.content.bullets = bulletNodesFiltered.map(node => parseBullet(node))
   
   function parseBullet (node:mdt.List):Bullet {
     const [title, ...rest] = node.block
@@ -135,8 +144,9 @@ function buildChapterContent (chapter:Chapter) {
     let value = Visitor.getText(rest)
     let _name = Visitor.getMd([title])
     let _value = Visitor.getMd(rest)
+    let bullets = subMap.get(node)?.map(parseBullet) || null
     if(value.startsWith(': ')) value = value.replace(': ', '')
-    return { name, value, _name, _value }
+    return { name, value, _name, _value, bullets }
   }
 }
 

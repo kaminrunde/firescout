@@ -13,6 +13,8 @@ This is a new line
 ## States
 
 - **secret-visible**: Oops! the secret is visible!
+  - **text-1**: text1 is visible
+  - **text-2**: text2 is visible
 
 
 

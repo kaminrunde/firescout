@@ -40,6 +40,18 @@ export declare const codes: {
         name: string;
         file: string;
     }) => string[];
+    STATE_IMPLEMENTATION_HAS_NO_REF: (item: {
+        name: string;
+        file: string;
+    }) => string[];
+    STATE_IMPLEMENTATION_HAS_NO_DOCS: (item: {
+        name: string;
+        file: string;
+    }) => string[];
+    MIXED_STATES_AND_IMPLEMENTATIONS: (item: {
+        name: string;
+        file: string;
+    }) => string[];
 };
 export declare function report(code: 'HANDLE_WITHOUT_PARENT', item: RawItem): void;
 export declare function report(code: 'STATE_WITHOUT_PARENT', item: RawItem): void;
@@ -73,6 +85,18 @@ export declare function report(code: 'COLLECTION_HAS_NO_REF', item: {
     file: string;
 }): void;
 export declare function report(code: 'COLLECTION_HAS_NO_DOCS', item: {
+    name: string;
+    file: string;
+}): void;
+export declare function report(code: 'STATE_IMPLEMENTATION_HAS_NO_REF', item: {
+    name: string;
+    file: string;
+}): void;
+export declare function report(code: 'STATE_IMPLEMENTATION_HAS_NO_DOCS', item: {
+    name: string;
+    file: string;
+}): void;
+export declare function report(code: 'MIXED_STATES_AND_IMPLEMENTATIONS', item: {
     name: string;
     file: string;
 }): void;

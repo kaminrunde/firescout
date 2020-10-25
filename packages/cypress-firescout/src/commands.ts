@@ -39,13 +39,18 @@ Cypress.Commands.add("handle", {prevSubject:'optional'}, (subject, name, index) 
   return cmd
 })
 
-Cypress.Commands.add("shouldHaveState", {prevSubject:'optional'}, (subject, name) => {
+Cypress.Commands.add("shouldHaveState", {prevSubject:'optional'}, (subject, name, implementations) => {
+  const imps = implementations ? implementations.split(',') : null
   cy.get(subject).should($el => {
-    const html = Cypress.$('<div>').append($el.clone()).html()
-      const ctx = $el.attr('data-cy-ctx')
+    const ctx = $el.attr('data-cy-ctx')
 
-      expect(html).to.include(`data-cy-state="${name}"`,
-        `"${ctx}" should have state "${name}"`)
+    if(imps) for(let imp of imps) {
+      expect($el, ctx).to.include.html(`data-cy-state="${name}:${imp}"`)
+    }
+    else {
+      expect($el, ctx).to.include.html(`data-cy-state="${name}"`)
+    }
+
   })
   return cy.get(subject)
 })
@@ -54,9 +59,15 @@ Cypress.Commands.add("shouldNotHaveState", {prevSubject:'optional'}, (subject, n
   cy.get(subject).should($el => {
     const html = Cypress.$('<div>').append($el.clone()).html()
       const ctx = $el.attr('data-cy-ctx')
+      const regex = new RegExp(`data-cy-state="${name}[^"]*"`, 'g')
+      const matches = html.match(regex)
 
-      expect(html).not.to.include(`data-cy-state="${name}"`,
-        `"${ctx}" should not have state "${name}"`)
+      if(!matches) {
+        expect($el, ctx).not.to.include.html(`data-cy-state="${name}"`)
+      }
+      else {
+        expect($el, ctx).not.to.include.html(matches[0])
+      }
   })
   return cy.get(subject)
 })

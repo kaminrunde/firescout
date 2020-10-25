@@ -41,11 +41,18 @@ Cypress.Commands.add("handle", { prevSubject: 'optional' }, function (subject, n
     }
     return cmd;
 });
-Cypress.Commands.add("shouldHaveState", { prevSubject: 'optional' }, function (subject, name) {
+Cypress.Commands.add("shouldHaveState", { prevSubject: 'optional' }, function (subject, name, implementations) {
+    var imps = implementations ? implementations.split(',') : null;
     cy.get(subject).should(function ($el) {
-        var html = Cypress.$('<div>').append($el.clone()).html();
         var ctx = $el.attr('data-cy-ctx');
-        expect(html).to.include("data-cy-state=\"" + name + "\"", "\"" + ctx + "\" should have state \"" + name + "\"");
+        if (imps)
+            for (var _i = 0, imps_1 = imps; _i < imps_1.length; _i++) {
+                var imp = imps_1[_i];
+                expect($el, ctx).to.include.html("data-cy-state=\"" + name + ":" + imp + "\"");
+            }
+        else {
+            expect($el, ctx).to.include.html("data-cy-state=\"" + name + "\"");
+        }
     });
     return cy.get(subject);
 });
@@ -53,7 +60,14 @@ Cypress.Commands.add("shouldNotHaveState", { prevSubject: 'optional' }, function
     cy.get(subject).should(function ($el) {
         var html = Cypress.$('<div>').append($el.clone()).html();
         var ctx = $el.attr('data-cy-ctx');
-        expect(html).not.to.include("data-cy-state=\"" + name + "\"", "\"" + ctx + "\" should not have state \"" + name + "\"");
+        var regex = new RegExp("data-cy-state=\"" + name + "[^\"]*\"", 'g');
+        var matches = html.match(regex);
+        if (!matches) {
+            expect($el, ctx).not.to.include.html("data-cy-state=\"" + name + "\"");
+        }
+        else {
+            expect($el, ctx).not.to.include.html(matches[0]);
+        }
     });
     return cy.get(subject);
 });

@@ -1,4 +1,11 @@
 "use strict";
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -86,19 +93,32 @@ exports.default = parseComponentMdDocs;
 function buildChapterContent(chapter) {
     var descNodes = chapter.contentNodes.filter(function (node) { return node.type !== 'list'; });
     var bulletNodes = chapter.contentNodes.filter(function (node) { return node.type === 'list'; });
+    var bulletNodesFiltered = [];
+    var subMap = new Map();
+    for (var _i = 0, bulletNodes_1 = bulletNodes; _i < bulletNodes_1.length; _i++) {
+        var node = bulletNodes_1[_i];
+        if (node.indent === '')
+            bulletNodesFiltered.push(node);
+        else {
+            var parent_1 = bulletNodesFiltered[bulletNodesFiltered.length - 1];
+            subMap.set(parent_1, __spreadArrays((subMap.get(parent_1) || []), [node]));
+        }
+    }
     // parse chapter description
     chapter.content.description = visitor_1.default.getText(descNodes);
     chapter.content._description = visitor_1.default.getMd(descNodes);
-    chapter.content.bullets = bulletNodes.map(function (node) { return parseBullet(node); });
+    chapter.content.bullets = bulletNodesFiltered.map(function (node) { return parseBullet(node); });
     function parseBullet(node) {
-        var _a = node.block, title = _a[0], rest = _a.slice(1);
+        var _a;
+        var _b = node.block, title = _b[0], rest = _b.slice(1);
         var name = visitor_1.default.getText([title]);
         var value = visitor_1.default.getText(rest);
         var _name = visitor_1.default.getMd([title]);
         var _value = visitor_1.default.getMd(rest);
+        var bullets = ((_a = subMap.get(node)) === null || _a === void 0 ? void 0 : _a.map(parseBullet)) || null;
         if (value.startsWith(': '))
             value = value.replace(': ', '');
-        return { name: name, value: value, _name: _name, _value: _value };
+        return { name: name, value: value, _name: _name, _value: _value, bullets: bullets };
     }
 }
 function getCollectionsContent(chapter, rootItem, allCollections) {

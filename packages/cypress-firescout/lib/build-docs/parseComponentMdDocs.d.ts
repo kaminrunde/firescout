@@ -14,6 +14,7 @@ export declare type Docs = {
 declare type Bullet = {
     name: string;
     value: string;
+    bullets: Bullet[] | null;
     _name: string;
     _value: string;
 };

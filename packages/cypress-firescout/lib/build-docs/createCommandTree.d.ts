@@ -1,4 +1,13 @@
 import { HierarchieTree } from './createCommandHierarchie';
+declare type State = {
+    name: string;
+    file: string;
+    hasRootRef: boolean;
+    implementations: null | {
+        name: string;
+        file: string;
+    }[];
+};
 export declare type Tree = {
     context: string;
     typesaveContext: string;
@@ -8,10 +17,8 @@ export declare type Tree = {
         name: string;
         file: string;
     }[];
-    states: {
-        name: string;
-        file: string;
-    }[];
+    states: State[];
     collections: Tree[];
 };
 export default function createCommandTree(tree: HierarchieTree[]): Tree[];
+export {};

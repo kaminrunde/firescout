@@ -16,7 +16,7 @@ context('index-page', () => {
       .click()
 
     cy.context('components/Home')
-      .shouldHaveState('secret-visible')
+      .shouldHaveState('secret-visible', 'text-1,text-2')
 
     cy.context('components/Home')
       .collection('Inner',1)
