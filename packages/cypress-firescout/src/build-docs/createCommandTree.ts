@@ -4,7 +4,7 @@ import * as utils from './utils'
 
 type State = {
   name: string,
-  file: string | null,
+  file: string,
   hasRootRef: boolean,
   implementations: null | {
     name: string,
@@ -50,7 +50,7 @@ function getStates (tree:HierarchieTree):State[] {
     if(!stateDict[name]) stateDict[name] = {
       name: name,
       hasRootRef: false,
-      file: null,
+      file: 'null',
       implementations: null
     }
     if(implementation) {
