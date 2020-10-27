@@ -42,13 +42,23 @@ Cypress.Commands.add("handle", {prevSubject:'optional'}, (subject, name, index) 
 Cypress.Commands.add("shouldHaveState", {prevSubject:'optional'}, (subject, name, implementations) => {
   const imps = implementations ? implementations.split(',') : null
   cy.get(subject).should($el => {
-    const ctx = $el.attr('data-cy-ctx')
+    const ctx = $el.attr('data-cy-ctx') || $el.attr('data-cy-collection')
 
     if(imps) for(let imp of imps) {
-      expect($el, ctx).to.include.html(`data-cy-state="${name}:${imp}"`)
+      if($el.attr('data-cy-state') === `${name}:${imp}`){
+        expect($el, ctx).to.have.attr('data-cy-state', `${name}:${imp}`)
+      }
+      else {
+        expect($el, ctx).to.include.html(`data-cy-state="${name}:${imp}"`)
+      }
     }
     else {
-      expect($el, ctx).to.include.html(`data-cy-state="${name}"`)
+      if($el.attr('data-cy-state') === name){
+        expect($el, ctx).to.have.attr('data-cy-state', name)
+      }
+      else {
+        expect($el, ctx).to.include.html(`data-cy-state="${name}"`)
+      }
     }
 
   })
@@ -58,15 +68,25 @@ Cypress.Commands.add("shouldHaveState", {prevSubject:'optional'}, (subject, name
 Cypress.Commands.add("shouldNotHaveState", {prevSubject:'optional'}, (subject, name) => {
   cy.get(subject).should($el => {
     const html = Cypress.$('<div>').append($el.clone()).html()
-      const ctx = $el.attr('data-cy-ctx')
+      const ctx = $el.attr('data-cy-ctx') || $el.attr('data-cy-collection')
       const regex = new RegExp(`data-cy-state="${name}[^"]*"`, 'g')
       const matches = html.match(regex)
 
       if(!matches) {
-        expect($el, ctx).not.to.include.html(`data-cy-state="${name}"`)
+        if($el.attr('data-cy-state') === name) {
+          expect($el, ctx).not.to.have.attr('data-cy-state', name)
+        }
+        else {
+          expect($el, ctx).not.to.include.html(`data-cy-state="${name}"`)
+        }
       }
       else {
-        expect($el, ctx).not.to.include.html(matches[0])
+        if($el.attr('data-cy-state') === matches[0]) {
+          expect($el, ctx).not.to.have.attr('data-cy-state', matches[0])
+        }
+        else {
+          expect($el, ctx).not.to.include.html(matches[0])
+        }
       }
   })
   return cy.get(subject)

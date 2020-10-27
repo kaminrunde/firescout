@@ -88,9 +88,9 @@ export default function parseComponentMdDocs (mdItem:RawItem, allCollections:Raw
 
   // find sections by title
   const main = chapters.find(c => c.rank === 1)
-  const handles = chapters.find(c => c.title.toLowerCase() === 'handles')
-  const states = chapters.find(c => c.title.toLowerCase() === 'states')
-  const collections = chapters.find(c => c.title.toLowerCase() === 'collections')
+  const handles = chapters.find(c => c.title.toLowerCase() === 'handles' && c.rank === 2)
+  const states = chapters.find(c => c.title.toLowerCase() === 'states'  && c.rank === 2)
+  const collections = chapters.find(c => c.title.toLowerCase() === 'collections'  && c.rank === 2)
 
   // chapter content is initially empty
   if(main) buildChapterContent(main)

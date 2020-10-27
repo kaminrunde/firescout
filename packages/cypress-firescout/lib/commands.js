@@ -44,14 +44,24 @@ Cypress.Commands.add("handle", { prevSubject: 'optional' }, function (subject, n
 Cypress.Commands.add("shouldHaveState", { prevSubject: 'optional' }, function (subject, name, implementations) {
     var imps = implementations ? implementations.split(',') : null;
     cy.get(subject).should(function ($el) {
-        var ctx = $el.attr('data-cy-ctx');
+        var ctx = $el.attr('data-cy-ctx') || $el.attr('data-cy-collection');
         if (imps)
             for (var _i = 0, imps_1 = imps; _i < imps_1.length; _i++) {
                 var imp = imps_1[_i];
-                expect($el, ctx).to.include.html("data-cy-state=\"" + name + ":" + imp + "\"");
+                if ($el.attr('data-cy-state') === name + ":" + imp) {
+                    expect($el, ctx).to.have.attr('data-cy-state', name + ":" + imp);
+                }
+                else {
+                    expect($el, ctx).to.include.html("data-cy-state=\"" + name + ":" + imp + "\"");
+                }
             }
         else {
-            expect($el, ctx).to.include.html("data-cy-state=\"" + name + "\"");
+            if ($el.attr('data-cy-state') === name) {
+                expect($el, ctx).to.have.attr('data-cy-state', name);
+            }
+            else {
+                expect($el, ctx).to.include.html("data-cy-state=\"" + name + "\"");
+            }
         }
     });
     return cy.get(subject);
@@ -59,14 +69,24 @@ Cypress.Commands.add("shouldHaveState", { prevSubject: 'optional' }, function (s
 Cypress.Commands.add("shouldNotHaveState", { prevSubject: 'optional' }, function (subject, name) {
     cy.get(subject).should(function ($el) {
         var html = Cypress.$('<div>').append($el.clone()).html();
-        var ctx = $el.attr('data-cy-ctx');
+        var ctx = $el.attr('data-cy-ctx') || $el.attr('data-cy-collection');
         var regex = new RegExp("data-cy-state=\"" + name + "[^\"]*\"", 'g');
         var matches = html.match(regex);
         if (!matches) {
-            expect($el, ctx).not.to.include.html("data-cy-state=\"" + name + "\"");
+            if ($el.attr('data-cy-state') === name) {
+                expect($el, ctx).not.to.have.attr('data-cy-state', name);
+            }
+            else {
+                expect($el, ctx).not.to.include.html("data-cy-state=\"" + name + "\"");
+            }
         }
         else {
-            expect($el, ctx).not.to.include.html(matches[0]);
+            if ($el.attr('data-cy-state') === matches[0]) {
+                expect($el, ctx).not.to.have.attr('data-cy-state', matches[0]);
+            }
+            else {
+                expect($el, ctx).not.to.include.html(matches[0]);
+            }
         }
     });
     return cy.get(subject);

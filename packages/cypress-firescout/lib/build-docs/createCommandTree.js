@@ -46,7 +46,7 @@ function getStates(tree) {
             stateDict[name_1] = {
                 name: name_1,
                 hasRootRef: false,
-                file: null,
+                file: 'null',
                 implementations: null
             };
         if (implementation) {

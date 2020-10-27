@@ -61,9 +61,9 @@ function parseComponentMdDocs(mdItem, allCollections) {
     }
     // find sections by title
     var main = chapters.find(function (c) { return c.rank === 1; });
-    var handles = chapters.find(function (c) { return c.title.toLowerCase() === 'handles'; });
-    var states = chapters.find(function (c) { return c.title.toLowerCase() === 'states'; });
-    var collections = chapters.find(function (c) { return c.title.toLowerCase() === 'collections'; });
+    var handles = chapters.find(function (c) { return c.title.toLowerCase() === 'handles' && c.rank === 2; });
+    var states = chapters.find(function (c) { return c.title.toLowerCase() === 'states' && c.rank === 2; });
+    var collections = chapters.find(function (c) { return c.title.toLowerCase() === 'collections' && c.rank === 2; });
     // chapter content is initially empty
     if (main)
         buildChapterContent(main);
