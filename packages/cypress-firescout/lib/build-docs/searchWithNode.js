@@ -213,7 +213,7 @@ function getSrcMatch(path) {
                         }); }));
                     }
                     if (moduleCommentMatches) {
-                        regex_4 = new RegExp("@firescoutMock ([^ ]*)");
+                        regex_4 = new RegExp("@firescoutMockFn ([^ ]*)");
                         matches = moduleCommentMatches.map(function (s) { return s.match(regex_4); });
                         allMatches.push.apply(allMatches, matches.map(function (match) { return ({
                             type: 'module-fn',

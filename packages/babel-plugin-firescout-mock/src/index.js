@@ -10,7 +10,7 @@ module.exports = function firescoutMock ({ types: t }) {
         if(path.parentPath.type === 'ExportDefaultDeclaration') {
           targetPath = path.parentPath
           comment = targetPath.node.leadingComments && targetPath.node.leadingComments.find(node => 
-            node.value.includes('@firescoutMock')
+            node.value.includes('@firescoutMockFn')
           )
         }
         else if(path.parentPath.type === 'VariableDeclarator') {
@@ -18,19 +18,19 @@ module.exports = function firescoutMock ({ types: t }) {
           if(targetPath.parentPath.type === 'VariableDeclaration'){
             targetPath = targetPath.parentPath
             comment = targetPath.node.leadingComments && targetPath.node.leadingComments.find(node => 
-              node.value.includes('@firescoutMock')
+              node.value.includes('@firescoutMockFn')
             )
             if(!comment && targetPath.parentPath.type === 'ExportNamedDeclaration') {
               targetPath = targetPath.parentPath
               comment = targetPath.node.leadingComments && targetPath.node.leadingComments.find(node => 
-                node.value.includes('@firescoutMock')
+                node.value.includes('@firescoutMockFn')
               )
             }
           }
         }
 
         if(!comment) return
-        const match = comment.value.match(/@firescoutMock ([^ *]+)/)
+        const match = comment.value.match(/@firescoutMockFn ([^ *]+)/)
         if (!match) return
         const name = match[1].replace(/[\n\r]/g, '')
         targetPath.node.leadingComments = targetPath.node.leadingComments && targetPath.node.leadingComments.filter(
@@ -38,7 +38,7 @@ module.exports = function firescoutMock ({ types: t }) {
         )
 
         const fn = t.FunctionExpression(
-          t.Identifier(path.node.id ? path.node.id.name : 'foo'),
+          t.Identifier(path.node.id ? path.node.id.name : 'fn'),
           path.node.params,
           path.node.body,
         )
@@ -64,7 +64,7 @@ module.exports = function firescoutMock ({ types: t }) {
         let isDefaultExported = false
         if (path.node.leadingComments) {
           comment = path.node.leadingComments && path.node.leadingComments.find(node =>
-            node.value.includes('@firescoutMock')
+            node.value.includes('@firescoutMockFn')
           )
         } else {
           const targets = [
@@ -74,7 +74,7 @@ module.exports = function firescoutMock ({ types: t }) {
           ]
           if (targets.includes(path.parentPath.type)) {
             comment = path.parentPath.node.leadingComments && path.parentPath.node.leadingComments.find(node =>
-              node.value.includes('@firescoutMock')
+              node.value.includes('@firescoutMockFn')
             )
             isDefaultExported = path.parentPath.type === 'ExportDefaultDeclaration'
             targetPath = path.parentPath
@@ -84,7 +84,7 @@ module.exports = function firescoutMock ({ types: t }) {
           }
         }
         if(!comment) return
-        const match = comment.value.match(/@firescoutMock ([^ *]+)/)
+        const match = comment.value.match(/@firescoutMockFn ([^ *]+)/)
         if (!match) return
         const name = match[1].replace(/[\n\r]/g, '')
         targetPath.node.leadingComments = targetPath.node.leadingComments && targetPath.node.leadingComments.filter(
@@ -92,7 +92,7 @@ module.exports = function firescoutMock ({ types: t }) {
         )
 
         const fn = t.FunctionExpression(
-          t.Identifier(path.node.id.name),
+          t.Identifier(path.node.id ? path.node.id.name : 'fn'),
           path.node.params,
           path.node.body
         )
@@ -129,6 +129,60 @@ module.exports = function firescoutMock ({ types: t }) {
             ])
           )
         }
+      },
+      FunctionExpression (path) {
+        let comment
+        let targetPath = path
+
+        if(path.parentPath.type === 'ExportDefaultDeclaration') {
+          targetPath = path.parentPath
+          comment = targetPath.node.leadingComments && targetPath.node.leadingComments.find(node => 
+            node.value.includes('@firescoutMockFn')
+          )
+        }
+        else if(path.parentPath.type === 'VariableDeclarator') {
+          let targetPath = path.parentPath
+          if(targetPath.parentPath.type === 'VariableDeclaration'){
+            targetPath = targetPath.parentPath
+            comment = targetPath.node.leadingComments && targetPath.node.leadingComments.find(node => 
+              node.value.includes('@firescoutMockFn')
+            )
+            if(!comment && targetPath.parentPath.type === 'ExportNamedDeclaration') {
+              targetPath = targetPath.parentPath
+              comment = targetPath.node.leadingComments && targetPath.node.leadingComments.find(node => 
+                node.value.includes('@firescoutMockFn')
+              )
+            }
+          }
+        }
+
+        if(!comment) return
+        const match = comment.value.match(/@firescoutMockFn ([^ *]+)/)
+        if (!match) return
+        const name = match[1].replace(/[\n\r]/g, '')
+        targetPath.node.leadingComments = targetPath.node.leadingComments && targetPath.node.leadingComments.filter(
+          c => c !== comment
+        )
+
+        const fn = t.FunctionExpression(
+          t.Identifier(path.node.id ? path.node.id.name : 'fn'),
+          path.node.params,
+          path.node.body,
+        )
+
+        if(path.node.async) fn.async = true
+
+        path.replaceWith(
+          t.callExpression(
+            t.memberExpression(
+              t.callExpression(t.identifier('require'), [
+                t.stringLiteral('@kaminrunde/cypress-firescout')
+              ]),
+              t.identifier('firescoutMockFn')
+            ),
+            [t.stringLiteral(name), fn]
+          )
+        )
       }
     }
   }

@@ -128,7 +128,7 @@ async function getSrcMatch(path:string):Promise<Match[]|null> {
     })))
   }
   if(moduleCommentMatches) {
-    const regex = new RegExp("@firescoutMock ([^ ]*)")
+    const regex = new RegExp("@firescoutMockFn ([^ ]*)")
     let matches:any = moduleCommentMatches.map(s => s.match(regex))
     allMatches.push(...matches.map((match:any) => ({
       type: 'module-fn',
