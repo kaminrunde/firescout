@@ -1,12 +1,10 @@
-import {firescoutMockFn} from '@kaminrunde/cypress-firescout'
+
 
 export type Fetch = string
 
-/**
- * fetch new cart
- */
-export const fetch = firescoutMockFn(
-  'cart.fetch', 
-async ():Promise<Fetch> => {
-  return 'foo'
-})
+/** @firescoutMock cart.fetch */
+export const fetch = async ():Promise<Fetch> => {
+  return Promise.resolve('foo')
+}
+
+  

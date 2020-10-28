@@ -15,4 +15,10 @@ exports.onCreateBabelConfig = ({ stage, actions }) => {
       stage,
     })
   }
+  else {
+    actions.setBabelPlugin({
+      name: `@kaminrunde/babel-plugin-firescout-mock`,
+      stage,
+    })
+  }
 }

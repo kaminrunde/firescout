@@ -1,0 +1,27 @@
+{
+  "name": "@kaminrunde/babel-plugin-firescout-mock",
+  "version": "1.0.1",
+  "description": "transforms firescoutMock comments to firescout mocks",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "test": "jest --watch"
+  },
+  "author": "Manuel Jung",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.10.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaminrunde/firescout.git"
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.10.1",
+    "jest": "^26.6.1",
+    "jsx-ast-utils": "^2.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
