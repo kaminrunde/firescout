@@ -3,14 +3,14 @@ import * as utils from './utils'
 
 
 export type RawItem = {
-  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection' | 'module-fn' | 'fixture',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection' | 'module-fn' | 'fixture' | 'module-var',
   payload: string,
   file: string,
   folder: string
 }
 
 type Match = {
-  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection' | 'module-fn' | 'fixture',
+  type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection' | 'module-fn' | 'fixture' | 'module-var',
   payload: string,
 }
 
@@ -79,13 +79,15 @@ async function getSrcMatch(path:string):Promise<Match[]|null> {
 
   const cRegexString = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]* ?=(\"|')[^(\"|')]*.", 'g')
   const cRegexCond = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]*= ?[^\"'][^}]*}", 'g')
-  const moduleRegex = new RegExp("firescoutMockFn(<.*>)? *\\([ \r\n]*(\"|').*(\"|')", 'g')
-  const moduleCommentRegex = new RegExp("@firescoutMock ([^ ]*)", 'g')
+  const moduleRegex = new RegExp("firescoutMockFn ?(<.*>)? *\\([ \r\n]*(\"|').*(\"|')", 'g')
+  const moduleCommentRegex = new RegExp("@firescoutMockFn ([^ ]*)", 'g')
+  const variableRegex = new RegExp("firescoutMockVar *:? *(<.*>)? *\\([ \r\n]*(\"|').*(\"|')", 'g')
 
   let cMatchesString = result.match(cRegexString)
   let cMatchesCond = result.match(cRegexCond)
   const moduleMatches = result.match(moduleRegex)
   const moduleCommentMatches = result.match(moduleCommentRegex)
+  const variableMatches = result.match(variableRegex)
 
   if(cMatchesString) {
     cMatchesString = Array.from(new Set(cMatchesString.filter(Boolean)))
@@ -120,10 +122,10 @@ async function getSrcMatch(path:string):Promise<Match[]|null> {
     })))
   }
   if(moduleMatches) {
-    const regex = new RegExp("firescoutMockFn(<.*>)? *\\([ \r\n]*(\"|')(.*)(\"|')")
+    const regex = new RegExp("firescoutMockFn ?(<.*>)? *\\([ \r\n]*(\"|')(.*)(\"|')")
     let matches:any = moduleMatches.map(s => s.match(regex))
     allMatches.push(...matches.map((match:any) => ({
-      type: 'module-fn',
+      type: 'module-fn' as 'module-fn',
       payload: match[3]
     })))
   }
@@ -131,8 +133,16 @@ async function getSrcMatch(path:string):Promise<Match[]|null> {
     const regex = new RegExp("@firescoutMockFn ([^ ]*)")
     let matches:any = moduleCommentMatches.map(s => s.match(regex))
     allMatches.push(...matches.map((match:any) => ({
-      type: 'module-fn',
+      type: 'module-fn' as 'module-fn',
       payload: match[1]
+    })))
+  }
+  if(variableMatches) {
+    const regex = new RegExp("firescoutMockVar *:? *(<.*>)? *\\([ \r\n]*(\"|')([^'\"]*)(\"|')")
+    let matches:any = variableMatches.map(s => s.match(regex))
+    allMatches.push(...matches.map((match:any) => ({
+      type: 'module-var' as 'module-var',
+      payload: match[3]
     })))
   }
   

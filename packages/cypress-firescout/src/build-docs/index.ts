@@ -17,10 +17,10 @@ export function firescout() {
 
   return search()
     .then(createCommandHierarchie)
-    .then(({tree, mdItems, moduleItems, fixtureItems}) => ({
+    .then(({tree, mdItems, moduleItems, fixtureItems, variableItems}) => ({
       tree: createCommandTree(tree),
       docs: createDocs(mdItems),
-      modules: createModuleTree(moduleItems, fixtureItems)
+      modules: createModuleTree(moduleItems, fixtureItems, variableItems)
     }))
     .then(validate)
     .then(({tree, docs, modules}) => createFileContent(tree, docs, modules))

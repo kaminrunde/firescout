@@ -20,11 +20,11 @@ function firescout() {
     return search()
         .then(createCommandHierarchie_1.default)
         .then(function (_a) {
-        var tree = _a.tree, mdItems = _a.mdItems, moduleItems = _a.moduleItems, fixtureItems = _a.fixtureItems;
+        var tree = _a.tree, mdItems = _a.mdItems, moduleItems = _a.moduleItems, fixtureItems = _a.fixtureItems, variableItems = _a.variableItems;
         return ({
             tree: createCommandTree_1.default(tree),
             docs: createDocs_1.default(mdItems),
-            modules: createModuleTree_1.default(moduleItems, fixtureItems)
+            modules: createModuleTree_1.default(moduleItems, fixtureItems, variableItems)
         });
     })
         .then(reporter_1.validate)

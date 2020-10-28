@@ -14,6 +14,13 @@ export type ModuleTree = {
     folder: string,
     typesaveId: string,
     fixtures: Fixture[]
+  }[],
+  variables: {
+    name: string,
+    file: string,
+    folder: string,
+    typesaveId: string,
+    fixtures: Fixture[]
   }[]
 }
 
@@ -26,7 +33,11 @@ type Fixture = {
   folder: string
 }
 
-export default function createModuleTree (items:ModuleItem[], fixtureItems:ModuleItem[]):ModuleTree[] {
+export default function createModuleTree (
+  moduleItems:ModuleItem[], 
+  fixtureItems:ModuleItem[],
+  variableItems:ModuleItem[]
+):ModuleTree[] {
   let dict:Record<string,ModuleTree> = {}
   const fixtures = fixtureItems.map(item => createFixture(item))
   let fixtureDict:Record<string,Fixture[]> = {}
@@ -36,11 +47,12 @@ export default function createModuleTree (items:ModuleItem[], fixtureItems:Modul
     fixtureDict[id].push(f)
   }
 
-  for(let item of items) {
+  for(let item of moduleItems) {
     let [context, name] = item.payload.split('.')
     if(!dict[context]) dict[context] = {
       context, 
       commands:[],
+      variables: [],
       typesaveContext: utils.getTypesaveId(context)
     }
     dict[context].commands.push({
@@ -51,6 +63,25 @@ export default function createModuleTree (items:ModuleItem[], fixtureItems:Modul
       fixtures: fixtureDict[item.payload] || []
     })
   }
+
+  for(let item of variableItems) {
+    let [context, name] = item.payload.split('.')
+    if(!dict[context]) dict[context] = {
+      context, 
+      commands:[],
+      variables: [],
+      typesaveContext: utils.getTypesaveId(context)
+    }
+    dict[context].variables.push({
+      name: name,
+      file: item.file,
+      folder: item.folder,
+      typesaveId: utils.getTypesaveId(context+name),
+      fixtures: fixtureDict[item.payload] || []
+    })
+  }
+
+
 
   return Object.values(dict)
 }

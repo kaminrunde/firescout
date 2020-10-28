@@ -1,7 +1,6 @@
 "use strict";
-// foo
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.firescoutMockFn = void 0;
+exports.firescoutMockVar = exports.firescoutMockFn = void 0;
 function firescoutMockFn(name, cb) {
     return function () {
         var _a;
@@ -24,3 +23,12 @@ function firescoutMockFn(name, cb) {
     };
 }
 exports.firescoutMockFn = firescoutMockFn;
+function firescoutMockVar(name, val) {
+    if (typeof window !== 'undefined') {
+        if (window.firescoutVars && window.firescoutVars[name]) {
+            return window.firescoutVars[name];
+        }
+    }
+    return val;
+}
+exports.firescoutMockVar = firescoutMockVar;

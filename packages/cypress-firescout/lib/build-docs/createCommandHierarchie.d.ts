@@ -16,6 +16,7 @@ export declare type HierarchieTree = {
 export default function createCommandHierarchie(rawItems: RawItem[]): {
     tree: HierarchieTree[];
     mdItems: RawItem[];
+    variableItems: RawItem[];
     moduleItems: RawItem[];
     fixtureItems: RawItem[];
 };

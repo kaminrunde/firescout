@@ -11,6 +11,13 @@ export declare type ModuleTree = {
         typesaveId: string;
         fixtures: Fixture[];
     }[];
+    variables: {
+        name: string;
+        file: string;
+        folder: string;
+        typesaveId: string;
+        fixtures: Fixture[];
+    }[];
 };
 declare type Fixture = {
     module: string;
@@ -20,5 +27,5 @@ declare type Fixture = {
     file: string;
     folder: string;
 };
-export default function createModuleTree(items: ModuleItem[], fixtureItems: ModuleItem[]): ModuleTree[];
+export default function createModuleTree(moduleItems: ModuleItem[], fixtureItems: ModuleItem[], variableItems: ModuleItem[]): ModuleTree[];
 export {};

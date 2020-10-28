@@ -10,9 +10,13 @@ export default function createFileContent (
   return `
     /// <reference types="cypress" />
 
-    type MockOptions = {
+    type MockFnOptions = {
       timeout?: number,
       throws?:boolean,
+      transform?: (val:any) => any
+    }
+    
+    type MockVarOptions = {
       transform?: (val:any) => any
     }
 
@@ -21,10 +25,21 @@ export default function createFileContent (
         interface ${cmd.typesaveId} {
           ${cmd.fixtures.map(f => `
             ${f.description}
-            mock(name:'${f.variation}', opt?:MockOptions):${node.typesaveContext}
+            mock(name:'${f.variation}', opt?:MockFnOptions):${node.typesaveContext}
           `)}
 
-          mock():${node.typesaveContext}
+          mock():void
+        }
+      `).join('\n')}
+
+      ${node.variables.map(cmd => `
+        interface ${cmd.typesaveId} {
+          ${cmd.fixtures.map(f => `
+            ${f.description}
+            set(name:'${f.variation}', opt?:MockVarOptions):${node.typesaveContext}
+          `)}
+
+          set(val:any):void
         }
       `).join('\n')}
 
@@ -35,6 +50,16 @@ export default function createFileContent (
            * @file [${cmd.file}](${process.cwd() + cmd.file})
            */
           fn(name:'${cmd.name}'):${cmd.typesaveId}
+        `).join('\n')}
+      }
+
+      interface ${node.typesaveContext} {
+        ${node.variables.map(cmd => `
+          /**
+           * @name ${cmd.name}
+           * @file [${cmd.file}](${process.cwd() + cmd.file})
+           */
+          variable(name:'${cmd.name}'):${cmd.typesaveId}
         `).join('\n')}
       }
     `).join('\n')}

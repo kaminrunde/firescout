@@ -20,7 +20,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils = __importStar(require("./utils"));
-function createModuleTree(items, fixtureItems) {
+function createModuleTree(moduleItems, fixtureItems, variableItems) {
     var dict = {};
     var fixtures = fixtureItems.map(function (item) { return createFixture(item); });
     var fixtureDict = {};
@@ -31,13 +31,14 @@ function createModuleTree(items, fixtureItems) {
             fixtureDict[id] = [];
         fixtureDict[id].push(f);
     }
-    for (var _a = 0, items_1 = items; _a < items_1.length; _a++) {
-        var item = items_1[_a];
+    for (var _a = 0, moduleItems_1 = moduleItems; _a < moduleItems_1.length; _a++) {
+        var item = moduleItems_1[_a];
         var _b = item.payload.split('.'), context_1 = _b[0], name_1 = _b[1];
         if (!dict[context_1])
             dict[context_1] = {
                 context: context_1,
                 commands: [],
+                variables: [],
                 typesaveContext: utils.getTypesaveId(context_1)
             };
         dict[context_1].commands.push({
@@ -45,6 +46,24 @@ function createModuleTree(items, fixtureItems) {
             file: item.file,
             folder: item.folder,
             typesaveId: utils.getTypesaveId(context_1 + name_1),
+            fixtures: fixtureDict[item.payload] || []
+        });
+    }
+    for (var _c = 0, variableItems_1 = variableItems; _c < variableItems_1.length; _c++) {
+        var item = variableItems_1[_c];
+        var _d = item.payload.split('.'), context_2 = _d[0], name_2 = _d[1];
+        if (!dict[context_2])
+            dict[context_2] = {
+                context: context_2,
+                commands: [],
+                variables: [],
+                typesaveContext: utils.getTypesaveId(context_2)
+            };
+        dict[context_2].variables.push({
+            name: name_2,
+            file: item.file,
+            folder: item.folder,
+            typesaveId: utils.getTypesaveId(context_2 + name_2),
             fixtures: fixtureDict[item.payload] || []
         });
     }

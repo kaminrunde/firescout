@@ -26,6 +26,7 @@ type EnhancedCollection = RawItem & {
 export default function createCommandHierarchie(rawItems:RawItem[]):{
   tree:HierarchieTree[],
   mdItems:RawItem[],
+  variableItems:RawItem[],
   moduleItems:RawItem[],
   fixtureItems:RawItem[]
 } {
@@ -36,6 +37,7 @@ export default function createCommandHierarchie(rawItems:RawItem[]):{
   let ctxItems:RawItem[] = []
   let mdItems:RawItem[] = []
   let moduleItems:RawItem[] = []
+  let variableItems:RawItem[] = []
   let fixtureItems:RawItem[] = []
   for(let item of rawItems) {
     switch(item.type){
@@ -47,6 +49,7 @@ export default function createCommandHierarchie(rawItems:RawItem[]):{
       case 'collection': collectionItems.push(item); break;
       case 'module-fn': moduleItems.push(item); break;
       case 'fixture': fixtureItems.push(item); break;
+      case 'module-var': variableItems.push(item); break;
     }
   }
 
@@ -92,7 +95,7 @@ export default function createCommandHierarchie(rawItems:RawItem[]):{
   if(stateItems.length) for(let item of stateItems) report('STATE_WITHOUT_PARENT', item)
   if(enhancedCollections.length) for(let item of enhancedCollections) report('COLLECTION_WITHOUT_PARENT', item)
 
-  return {tree, mdItems, moduleItems, fixtureItems}
+  return {tree, mdItems, moduleItems, fixtureItems, variableItems}
 }
 
 /**
