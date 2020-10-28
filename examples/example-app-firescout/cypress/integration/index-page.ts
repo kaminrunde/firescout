@@ -25,4 +25,9 @@ context('index-page', () => {
 
     cy.get('@cart.fetch').should('be.called')
   })
+
+  it.only('can manipulate variables', () => {
+    cy.module('Home').variable('test').set('TADA!!!!!')
+    cy.visit('http://localhost:8000')
+  })
 })

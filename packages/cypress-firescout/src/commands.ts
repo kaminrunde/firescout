@@ -100,6 +100,24 @@ Cypress.Commands.add('fn', {prevSubject:true}, (module, name) => {
   return cy.wrap([module,name], {log:false})
 })
 
+Cypress.Commands.add('variable', {prevSubject:true}, (module, name) => {
+  return cy.wrap([module,name], {log:false})
+})
+
+Cypress.Commands.add('set', {prevSubject:true}, ([module, name], data) => {
+  const cb = (win:any) => {
+    const id = `${module}.${name}`
+    if(!win.firescoutVars) win.firescoutVars = {}
+    win.firescoutVars[id] = data
+  }
+  cy.window({log:false}).then(cb)
+  Cypress.on('window:before:load', cb)
+  Cypress.on('test:after:run', () => {
+    Cypress.off('window:before:load', cb)
+  })
+  return cy.wrap([module,name], {log:false})
+})
+
 Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, rootOpt={}) => {
   let get:any = ()=>null
   let getOptions:any = ()=>({})

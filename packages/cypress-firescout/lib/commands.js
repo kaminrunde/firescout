@@ -97,6 +97,24 @@ Cypress.Commands.add('module', function (module) {
 Cypress.Commands.add('fn', { prevSubject: true }, function (module, name) {
     return cy.wrap([module, name], { log: false });
 });
+Cypress.Commands.add('variable', { prevSubject: true }, function (module, name) {
+    return cy.wrap([module, name], { log: false });
+});
+Cypress.Commands.add('set', { prevSubject: true }, function (_a, data) {
+    var module = _a[0], name = _a[1];
+    var cb = function (win) {
+        var id = module + "." + name;
+        if (!win.firescoutVars)
+            win.firescoutVars = {};
+        win.firescoutVars[id] = data;
+    };
+    cy.window({ log: false }).then(cb);
+    Cypress.on('window:before:load', cb);
+    Cypress.on('test:after:run', function () {
+        Cypress.off('window:before:load', cb);
+    });
+    return cy.wrap([module, name], { log: false });
+});
 Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation, rootOpt) {
     var module = _a[0], name = _a[1];
     if (rootOpt === void 0) { rootOpt = {}; }

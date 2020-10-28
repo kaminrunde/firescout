@@ -35,6 +35,7 @@ export function firescoutMockFn <CB extends (...args: any) => any>(
 
 export function firescoutMockVar <Val>(name:string, val:Val):Val {
   if(typeof window !== 'undefined') {
+    console.log(name, window.firescoutVars)
     if(window.firescoutVars && window.firescoutVars[name]) {
       return window.firescoutVars[name]
     }

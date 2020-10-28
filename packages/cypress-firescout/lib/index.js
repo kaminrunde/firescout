@@ -25,6 +25,7 @@ function firescoutMockFn(name, cb) {
 exports.firescoutMockFn = firescoutMockFn;
 function firescoutMockVar(name, val) {
     if (typeof window !== 'undefined') {
+        console.log(name, window.firescoutVars);
         if (window.firescoutVars && window.firescoutVars[name]) {
             return window.firescoutVars[name];
         }
