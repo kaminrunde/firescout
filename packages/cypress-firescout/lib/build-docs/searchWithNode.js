@@ -141,7 +141,7 @@ function findAllFiles(paths) {
 }
 function getSrcMatch(path) {
     return __awaiter(this, void 0, void 0, function () {
-        var result, regex, match, allMatches, cRegexString, cRegexCond, moduleRegex, cMatchesString, cMatchesCond, moduleMatches, regex_1, matches, sMatchesRegex, _i, cMatchesCond_1, s, type, matches_2, _a, matches_1, match, payload, regex_2, matches, regex_3, matches;
+        var result, regex, match, allMatches, cRegexString, cRegexCond, moduleRegex, moduleCommentRegex, cMatchesString, cMatchesCond, moduleMatches, moduleCommentMatches, regex_1, matches, sMatchesRegex, _i, cMatchesCond_1, s, type, matches_2, _a, matches_1, match, payload, regex_2, matches, regex_3, matches, regex_4, matches;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0: return [4 /*yield*/, utils.readFile(path)];
@@ -162,9 +162,11 @@ function getSrcMatch(path) {
                     cRegexString = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]* ?=(\"|')[^(\"|')]*.", 'g');
                     cRegexCond = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]*= ?[^\"'][^}]*}", 'g');
                     moduleRegex = new RegExp("firescoutMockFn(<.*>)? *\\([ \r\n]*(\"|').*(\"|')", 'g');
+                    moduleCommentRegex = new RegExp("@firescoutMock ([^ ]*)", 'g');
                     cMatchesString = result.match(cRegexString);
                     cMatchesCond = result.match(cRegexCond);
                     moduleMatches = result.match(moduleRegex);
+                    moduleCommentMatches = result.match(moduleCommentRegex);
                     if (cMatchesString) {
                         cMatchesString = Array.from(new Set(cMatchesString.filter(Boolean)));
                         regex_1 = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]* ?=(\"|')(.*)(\"|')");
@@ -208,6 +210,14 @@ function getSrcMatch(path) {
                         allMatches.push.apply(allMatches, matches.map(function (match) { return ({
                             type: 'module-fn',
                             payload: match[3]
+                        }); }));
+                    }
+                    if (moduleCommentMatches) {
+                        regex_4 = new RegExp("@firescoutMock ([^ ]*)");
+                        matches = moduleCommentMatches.map(function (s) { return s.match(regex_4); });
+                        allMatches.push.apply(allMatches, matches.map(function (match) { return ({
+                            type: 'module-fn',
+                            payload: match[1]
                         }); }));
                     }
                     return [2 /*return*/, allMatches.length ? allMatches : null];
