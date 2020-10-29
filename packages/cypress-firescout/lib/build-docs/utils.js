@@ -65,7 +65,6 @@ function getFileFolder(file) {
 }
 exports.getFileFolder = getFileFolder;
 function getTypesaveId(id) {
-    return Buffer.from(id).toString('base64') + id.replace(/[^A-Za-z0-9]/g, '');
-    // return (id.charAt(0).toUpperCase() + id.slice(1)).replace(/[^A-Za-z]/g, '')
+    return 'Id' + id.replace(/[^a-zA-Z0-9]/g, '');
 }
 exports.getTypesaveId = getTypesaveId;
