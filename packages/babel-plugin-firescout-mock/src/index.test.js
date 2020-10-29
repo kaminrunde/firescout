@@ -57,6 +57,19 @@ const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.conf
   )
 });
 
+test.only('transforms arrow functions with non-block body', () => {
+  const output = transform(
+`/** @firescoutMockFn Config.config */
+const xy = async test => 'foo'`)
+  
+  expect(output).toEqual(
+`/** @firescoutMockFn Config.config */
+const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", async function fn(test) {
+  return 'foo';
+});`
+  )
+});
+
 test('transforms functions', () => {
   const output = transform(
 `/** @firescoutMockFn Config.config */
@@ -161,3 +174,11 @@ export const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Conf
   return test;
 });`)
 });
+
+// test('transforms variables', () => {
+//   const output = transform(
+// `/** @firescoutMockVar Config.config */
+// const xy = 'hello world'`)
+  
+//     console.log(output)
+// });

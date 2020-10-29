@@ -40,7 +40,9 @@ module.exports = function firescoutMock ({ types: t }) {
         const fn = t.FunctionExpression(
           t.Identifier(path.node.id ? path.node.id.name : 'fn'),
           path.node.params,
-          path.node.body,
+          path.node.body.type === 'BlockStatement' ? path.node.body : t.blockStatement([
+            t.returnStatement(path.node.body)
+          ]),
         )
 
         if(path.node.async) fn.async = true
@@ -181,6 +183,28 @@ module.exports = function firescoutMock ({ types: t }) {
               t.identifier('firescoutMockFn')
             ),
             [t.stringLiteral(name), fn]
+          )
+        )
+      },
+      VariableDeclaration (path) {
+        if(!path.node.leadingComments) return
+        const comment = path.node.leadingComments.find(node => 
+          node.value.includes('@firescoutMockVar')
+        )
+        if(!comment) return
+        const match = comment.value.match(/@firescoutMockVar ([^ *]+)/)
+        if (!match) return
+        const name = match[1].replace(/[\n\r]/g, '')
+
+        path.replaceWith(
+          t.callExpression(
+            t.memberExpression(
+              t.callExpression(t.identifier('require'), [
+                t.stringLiteral('@kaminrunde/cypress-firescout')
+              ]),
+              t.identifier('firescoutMockVar')
+            ),
+            [t.stringLiteral(name), path.node]
           )
         )
       }
