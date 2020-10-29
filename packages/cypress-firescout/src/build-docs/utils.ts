@@ -60,6 +60,6 @@ export function getFileFolder (file:string):string {
 }
 
 export function getTypesaveId (id:string):string {
-  return Buffer.from(id).toString('base64') + id.replace(/[^a-Za-z0-9]/g, '')
+  return Buffer.from(id).toString('base64') + id.replace(/[^A-Za-z0-9]/g, '')
   // return (id.charAt(0).toUpperCase() + id.slice(1)).replace(/[^A-Za-z]/g, '')
 }
