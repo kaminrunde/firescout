@@ -178,6 +178,32 @@ module.exports = function firescoutMock ({ types: t }) {
             )
           ])
         )
+      },
+      ObjectProperty (path) {
+        if(!path.node.leadingComments) return
+
+        const varComment = extractAndRemoveComment(path, '@firescoutMockVar')
+        const fnComment = extractAndRemoveComment(path, '@firescoutMockFn')
+        const comment = varComment || fnComment
+        const query = varComment ? 'firescoutMockVar' : 'firescoutMockFn'
+
+        
+        const name = getName(comment, '@' + query)
+        if(!name) return
+        
+        const valPath = path.get('value')
+
+        valPath.replaceWith(
+          t.callExpression(
+            t.memberExpression(
+              t.callExpression(t.identifier('require'), [
+                t.stringLiteral('@kaminrunde/cypress-firescout')
+              ]),
+              t.identifier(query)
+            ),
+            [t.stringLiteral(name), valPath.node]
+          )
+        )
       }
     }
   }

@@ -6,175 +6,155 @@ const transform = code => transformSync(code, {
   plugins: [plugin],
 }).code
 
-
-
-test('transforms declared arrow functions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-const xy = test => { return test }`)
+describe('firescoutMockFn', () => {
+  test('transforms declared arrow functions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      const xy = test => { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
   
-  expect(output).toEqual(
-`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
-  return test;
-});`
-  )
-});
-
-test('transforms declared exported arrow functions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-export const xy = test => { return test }`)
+  test('transforms declared exported arrow functions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      export const xy = test => { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
   
-  expect(output).toEqual(
-`export const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
-  return test;
-});`
-  )
-});
-
-test('transforms default exported arrow functions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-export default test => { return test }`)
+  test('transforms default exported arrow functions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      export default test => { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
   
-  expect(output).toEqual(
-`export default require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
-  return test;
-});`
-  )
-});
-
-test('transforms declared async arrow functions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-const xy = async test => { return test }`)
+  test('transforms declared async arrow functions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      const xy = async test => { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
   
-  expect(output).toEqual(
-`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", async function fn(test) {
-  return test;
-});`
-  )
-});
-
-test('transforms arrow functions with non-block body', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-const xy = async test => 'foo'`)
+  test('transforms arrow functions with non-block body', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      const xy = async test => 'foo'
+    `)
+    expect(output).toMatchSnapshot()
+  });
   
-  expect(output).toEqual(
-`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", async function fn(test) {
-  return 'foo';
-});`
-  )
-});
-
-test('transforms functions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-function xy (test) { return test }`)
-  expect(output).toEqual(
-`var xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function xy(test) {
-  return test;
-});`)
-});
-
-test('transforms exported functions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-export function xy (test) { return test }`)
-  expect(output).toEqual(
-`export var xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function xy(test) {
-  return test;
-});`)
-});
-
-test('transforms default exported functions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-export default function xy (test) { return test }`)
-  expect(output).toEqual(
-`export default require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function xy(test) {
-  return test;
-});`)
-});
-
-test('transforms default exported anonym functions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-export default function (test) { return test }`)
-  expect(output).toEqual(
-`export default require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
-  return test;
-});`)
-});
-
-test('transforms async functions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-async function xy (test) { return test }`)
-  expect(output).toEqual(
-`var xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", async function xy(test) {
-  return test;
-});`)
-});
-
-test('transforms function expressions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-const xy = function xy (test) { return test }`)
-  expect(output).toEqual(
-`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function xy(test) {
-  return test;
-});`)
-});
-
-test('transforms function expressions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-const xy = function (test) { return test }`)
-  expect(output).toEqual(
-`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
-  return test;
-});`)
-});
-
-test('transforms named function expressions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-const xy = function xy (test) { return test }`)
-  expect(output).toEqual(
-`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function xy(test) {
-  return test;
-});`)
-});
-
-test('transforms async function expressions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-const xy = async function (test) { return test }`)
-  expect(output).toEqual(
-`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", async function fn(test) {
-  return test;
-});`)
-});
-
-test('transforms named exported function expressions', () => {
-  const output = transform(
-`/** @firescoutMockFn Config.config */
-export const xy = function (test) { return test }`)
-  expect(output).toEqual(
-`export const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
-  return test;
-});`)
-});
-
-test('transforms variables', () => {
-  const output = transform(
-`/** @firescoutMockVar Config.config */
-const xy = {foo:'bar'}`)
+  test('transforms functions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      function xy (test) { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
   
-  expect(output).toEqual(
-`const xy = require("@kaminrunde/cypress-firescout").firescoutMockVar("Config.config", {
-  foo: 'bar'
-});`)
-});
+  test('transforms exported functions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      export function xy (test) { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
+  
+  test('transforms default exported functions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      export default function xy (test) { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
+  
+  test('transforms default exported anonym functions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      export default function (test) { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
+  
+  test('transforms async functions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      async function xy (test) { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
+  
+  test('transforms function expressions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      const xy = function xy (test) { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
+  
+  test('transforms function expressions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      const xy = function (test) { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
+  
+  test('transforms named function expressions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      const xy = function xy (test) { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
+  
+  test('transforms async function expressions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      const xy = async function (test) { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
+  
+  test('transforms named exported function expressions', () => {
+    const output = transform(`
+      /** @firescoutMockFn Config.config */
+      export const xy = function (test) { return test }
+    `)
+    expect(output).toMatchSnapshot()
+  });
+
+  test('transforms object properties', () => {
+    const output = transform(`
+      const xy = {
+        /** @firescoutMockFn Config.config */
+        fn: function () {return 'foo'}
+      }
+    `)
+    console.log(output)
+  })
+})
+
+describe('firescoutMockVar', () => {
+  test('transforms declared variables', () => {
+    const output = transform(`
+      /** @firescoutMockVar Config.config */
+      const xy = {foo:'bar'}
+    `)
+    expect(output).toMatchSnapshot()
+  });
+
+  test('tranforms object properties', () => {
+    const output = transform(`
+      const xy = {
+        /** @firescoutMockVar Config.config */
+        foo: 'bar'
+      }
+    `)
+    expect(output).toMatchSnapshot()
+  })
+})
+
