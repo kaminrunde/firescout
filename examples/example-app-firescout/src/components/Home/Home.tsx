@@ -1,10 +1,12 @@
 import * as React from "react"
 import Inner from './Inner'
-import {firescoutMockVar} from '@kaminrunde/cypress-firescout'
 
 export default function Home ():JSX.Element {
   const [open,setOpen] = React.useState(false)
-  const headline = firescoutMockVar('Home.test', 'Default Headline')
+  
+  /** @firescoutMockVar Home.test */
+  const headline = 'Default Headline'
+
   return (
     <div data-cy-ctx={
       'components/Home'}>

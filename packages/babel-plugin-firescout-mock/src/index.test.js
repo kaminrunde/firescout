@@ -6,14 +6,15 @@ const transform = code => transformSync(code, {
   plugins: [plugin],
 }).code
 
+
+
 test('transforms declared arrow functions', () => {
   const output = transform(
 `/** @firescoutMockFn Config.config */
 const xy = test => { return test }`)
   
   expect(output).toEqual(
-`/** @firescoutMockFn Config.config */
-const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
+`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
   return test;
 });`
   )
@@ -25,8 +26,7 @@ test('transforms declared exported arrow functions', () => {
 export const xy = test => { return test }`)
   
   expect(output).toEqual(
-`/** @firescoutMockFn Config.config */
-export const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
+`export const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
   return test;
 });`
   )
@@ -50,21 +50,19 @@ test('transforms declared async arrow functions', () => {
 const xy = async test => { return test }`)
   
   expect(output).toEqual(
-`/** @firescoutMockFn Config.config */
-const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", async function fn(test) {
+`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", async function fn(test) {
   return test;
 });`
   )
 });
 
-test.only('transforms arrow functions with non-block body', () => {
+test('transforms arrow functions with non-block body', () => {
   const output = transform(
 `/** @firescoutMockFn Config.config */
 const xy = async test => 'foo'`)
   
   expect(output).toEqual(
-`/** @firescoutMockFn Config.config */
-const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", async function fn(test) {
+`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", async function fn(test) {
   return 'foo';
 });`
   )
@@ -125,8 +123,7 @@ test('transforms function expressions', () => {
 `/** @firescoutMockFn Config.config */
 const xy = function xy (test) { return test }`)
   expect(output).toEqual(
-`/** @firescoutMockFn Config.config */
-const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function xy(test) {
+`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function xy(test) {
   return test;
 });`)
 });
@@ -136,8 +133,7 @@ test('transforms function expressions', () => {
 `/** @firescoutMockFn Config.config */
 const xy = function (test) { return test }`)
   expect(output).toEqual(
-`/** @firescoutMockFn Config.config */
-const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
+`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
   return test;
 });`)
 });
@@ -147,8 +143,7 @@ test('transforms named function expressions', () => {
 `/** @firescoutMockFn Config.config */
 const xy = function xy (test) { return test }`)
   expect(output).toEqual(
-`/** @firescoutMockFn Config.config */
-const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function xy(test) {
+`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function xy(test) {
   return test;
 });`)
 });
@@ -158,8 +153,7 @@ test('transforms async function expressions', () => {
 `/** @firescoutMockFn Config.config */
 const xy = async function (test) { return test }`)
   expect(output).toEqual(
-`/** @firescoutMockFn Config.config */
-const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", async function fn(test) {
+`const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", async function fn(test) {
   return test;
 });`)
 });
@@ -169,16 +163,18 @@ test('transforms named exported function expressions', () => {
 `/** @firescoutMockFn Config.config */
 export const xy = function (test) { return test }`)
   expect(output).toEqual(
-`/** @firescoutMockFn Config.config */
-export const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
+`export const xy = require("@kaminrunde/cypress-firescout").firescoutMockFn("Config.config", function fn(test) {
   return test;
 });`)
 });
 
-// test('transforms variables', () => {
-//   const output = transform(
-// `/** @firescoutMockVar Config.config */
-// const xy = 'hello world'`)
+test('transforms variables', () => {
+  const output = transform(
+`/** @firescoutMockVar Config.config */
+const xy = {foo:'bar'}`)
   
-//     console.log(output)
-// });
+  expect(output).toEqual(
+`const xy = require("@kaminrunde/cypress-firescout").firescoutMockVar("Config.config", {
+  foo: 'bar'
+});`)
+});

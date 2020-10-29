@@ -9,33 +9,22 @@ module.exports = function firescoutMock ({ types: t }) {
 
         if(path.parentPath.type === 'ExportDefaultDeclaration') {
           targetPath = path.parentPath
-          comment = targetPath.node.leadingComments && targetPath.node.leadingComments.find(node => 
-            node.value.includes('@firescoutMockFn')
-          )
+          comment = extractAndRemoveComment(targetPath, '@firescoutMockFn')
         }
         else if(path.parentPath.type === 'VariableDeclarator') {
-          let targetPath = path.parentPath
+          targetPath = path.parentPath
           if(targetPath.parentPath.type === 'VariableDeclaration'){
             targetPath = targetPath.parentPath
-            comment = targetPath.node.leadingComments && targetPath.node.leadingComments.find(node => 
-              node.value.includes('@firescoutMockFn')
-            )
+            comment = extractAndRemoveComment(targetPath, '@firescoutMockFn')
             if(!comment && targetPath.parentPath.type === 'ExportNamedDeclaration') {
               targetPath = targetPath.parentPath
-              comment = targetPath.node.leadingComments && targetPath.node.leadingComments.find(node => 
-                node.value.includes('@firescoutMockFn')
-              )
+              comment = extractAndRemoveComment(targetPath, '@firescoutMockFn')
             }
           }
         }
 
-        if(!comment) return
-        const match = comment.value.match(/@firescoutMockFn ([^ *]+)/)
-        if (!match) return
-        const name = match[1].replace(/[\n\r]/g, '')
-        targetPath.node.leadingComments = targetPath.node.leadingComments && targetPath.node.leadingComments.filter(
-          c => c !== comment
-        )
+        const name = getName(comment, '@firescoutMockFn')
+        if(!name) return
 
         const fn = t.FunctionExpression(
           t.Identifier(path.node.id ? path.node.id.name : 'fn'),
@@ -62,36 +51,23 @@ module.exports = function firescoutMock ({ types: t }) {
       },
       FunctionDeclaration (path) {
         let comment
-        let targetPath = path
         let isDefaultExported = false
-        if (path.node.leadingComments) {
-          comment = path.node.leadingComments && path.node.leadingComments.find(node =>
-            node.value.includes('@firescoutMockFn')
-          )
-        } else {
+        
+        comment = extractAndRemoveComment(path, '@firescoutMockFn')
+        if(!comment) {
           const targets = [
             'ExportDefaultDeclaration',
             'ExportDeclaration',
             'ExportNamedDeclaration'
           ]
           if (targets.includes(path.parentPath.type)) {
-            comment = path.parentPath.node.leadingComments && path.parentPath.node.leadingComments.find(node =>
-              node.value.includes('@firescoutMockFn')
-            )
+            comment = extractAndRemoveComment(path.parentPath, '@firescoutMockFn')
             isDefaultExported = path.parentPath.type === 'ExportDefaultDeclaration'
-            targetPath = path.parentPath
-            if (!comment) return
-          } else {
-            return
           }
         }
-        if(!comment) return
-        const match = comment.value.match(/@firescoutMockFn ([^ *]+)/)
-        if (!match) return
-        const name = match[1].replace(/[\n\r]/g, '')
-        targetPath.node.leadingComments = targetPath.node.leadingComments && targetPath.node.leadingComments.filter(
-          c => c !== comment
-        )
+
+        const name = getName(comment, '@firescoutMockFn')
+        if(!name) return
 
         const fn = t.FunctionExpression(
           t.Identifier(path.node.id ? path.node.id.name : 'fn'),
@@ -125,7 +101,7 @@ module.exports = function firescoutMock ({ types: t }) {
                     ]),
                     t.identifier('firescoutMockFn')
                   ),
-                  [t.stringLiteral(match[1]), fn]
+                  [t.stringLiteral(name), fn]
                 )
               )
             ])
@@ -138,33 +114,22 @@ module.exports = function firescoutMock ({ types: t }) {
 
         if(path.parentPath.type === 'ExportDefaultDeclaration') {
           targetPath = path.parentPath
-          comment = targetPath.node.leadingComments && targetPath.node.leadingComments.find(node => 
-            node.value.includes('@firescoutMockFn')
-          )
+          comment = extractAndRemoveComment(targetPath, '@firescoutMockFn')
         }
         else if(path.parentPath.type === 'VariableDeclarator') {
           let targetPath = path.parentPath
           if(targetPath.parentPath.type === 'VariableDeclaration'){
             targetPath = targetPath.parentPath
-            comment = targetPath.node.leadingComments && targetPath.node.leadingComments.find(node => 
-              node.value.includes('@firescoutMockFn')
-            )
+            comment = extractAndRemoveComment(targetPath, '@firescoutMockFn')
             if(!comment && targetPath.parentPath.type === 'ExportNamedDeclaration') {
               targetPath = targetPath.parentPath
-              comment = targetPath.node.leadingComments && targetPath.node.leadingComments.find(node => 
-                node.value.includes('@firescoutMockFn')
-              )
+              comment = extractAndRemoveComment(targetPath, '@firescoutMockFn')
             }
           }
         }
 
-        if(!comment) return
-        const match = comment.value.match(/@firescoutMockFn ([^ *]+)/)
-        if (!match) return
-        const name = match[1].replace(/[\n\r]/g, '')
-        targetPath.node.leadingComments = targetPath.node.leadingComments && targetPath.node.leadingComments.filter(
-          c => c !== comment
-        )
+        const name = getName(comment, '@firescoutMockFn')
+        if(!name) return
 
         const fn = t.FunctionExpression(
           t.Identifier(path.node.id ? path.node.id.name : 'fn'),
@@ -188,26 +153,54 @@ module.exports = function firescoutMock ({ types: t }) {
       },
       VariableDeclaration (path) {
         if(!path.node.leadingComments) return
-        const comment = path.node.leadingComments.find(node => 
-          node.value.includes('@firescoutMockVar')
-        )
-        if(!comment) return
-        const match = comment.value.match(/@firescoutMockVar ([^ *]+)/)
-        if (!match) return
-        const name = match[1].replace(/[\n\r]/g, '')
+        const comment = extractAndRemoveComment(path, '@firescoutMockVar')
+        
+        const name = getName(comment, '@firescoutMockVar')
+        if(!name) return
+
+        const declarators = path.get('declarations')
+        if(declarators.length > 1) return
+        const lastDeclarator = declarators[declarators.length-1]
 
         path.replaceWith(
-          t.callExpression(
-            t.memberExpression(
-              t.callExpression(t.identifier('require'), [
-                t.stringLiteral('@kaminrunde/cypress-firescout')
-              ]),
-              t.identifier('firescoutMockVar')
-            ),
-            [t.stringLiteral(name), path.node]
-          )
+          t.variableDeclaration(path.node.kind, [
+            t.VariableDeclarator(
+              t.identifier(lastDeclarator.node.id.name), 
+              t.callExpression(
+                t.memberExpression(
+                  t.callExpression(t.identifier('require'), [
+                    t.stringLiteral('@kaminrunde/cypress-firescout')
+                  ]),
+                  t.identifier('firescoutMockVar')
+                ),
+                [t.stringLiteral(name), lastDeclarator.node.init]
+              )
+            )
+          ])
         )
       }
     }
   }
+}
+
+
+function extractAndRemoveComment (path, query) {
+  if(!path.node.leadingComments) return null
+  const comment = path.node.leadingComments.find(node => 
+    node.value.includes(query)
+  )
+  if(!comment) return null
+  path.node.leadingComments = path.node.leadingComments.filter(
+    node => node !== comment
+  )
+  return comment
+}
+
+function getName (commentNode, query) {
+  const regex = new RegExp(`${query} ([^ *]+)`)
+  if(!commentNode) return null
+  const match = commentNode.value.match(regex)
+  if (!match) return null
+  const name = match[1].replace(/[\n\r]/g, '')
+  return name
 }

@@ -141,7 +141,7 @@ function findAllFiles(paths) {
 }
 function getSrcMatch(path) {
     return __awaiter(this, void 0, void 0, function () {
-        var result, regex, match, allMatches, cRegexString, cRegexCond, moduleRegex, moduleCommentRegex, variableRegex, cMatchesString, cMatchesCond, moduleMatches, moduleCommentMatches, variableMatches, regex_1, matches, sMatchesRegex, _i, cMatchesCond_1, s, type, matches_2, _a, matches_1, match, payload, regex_2, matches, regex_3, matches, regex_4, matches, regex_5, matches;
+        var result, regex, match, allMatches, cRegexString, cRegexCond, moduleRegex, moduleCommentRegex, variableRegex, variableCommentRegex, cMatchesString, cMatchesCond, moduleMatches, moduleCommentMatches, variableMatches, variableCommentMatches, regex_1, matches, sMatchesRegex, _i, cMatchesCond_1, s, type, matches_2, _a, matches_1, match, payload, regex_2, matches, regex_3, matches, regex_4, matches, regex_5, matches, regex_6, matches;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0: return [4 /*yield*/, utils.readFile(path)];
@@ -164,11 +164,13 @@ function getSrcMatch(path) {
                     moduleRegex = new RegExp("firescoutMockFn ?(<.*>)? *\\([ \r\n]*(\"|').*(\"|')", 'g');
                     moduleCommentRegex = new RegExp("@firescoutMockFn ([^ ]*)", 'g');
                     variableRegex = new RegExp("firescoutMockVar *:? *(<.*>)? *\\([ \r\n]*(\"|').*(\"|')", 'g');
+                    variableCommentRegex = new RegExp("@firescoutMockVar ([^ ]*)", 'g');
                     cMatchesString = result.match(cRegexString);
                     cMatchesCond = result.match(cRegexCond);
                     moduleMatches = result.match(moduleRegex);
                     moduleCommentMatches = result.match(moduleCommentRegex);
                     variableMatches = result.match(variableRegex);
+                    variableCommentMatches = result.match(variableCommentRegex);
                     if (cMatchesString) {
                         cMatchesString = Array.from(new Set(cMatchesString.filter(Boolean)));
                         regex_1 = new RegExp("data-cy-(state|ctx|handle|collection)[^=\"' ]* ?=(\"|')(.*)(\"|')");
@@ -222,9 +224,17 @@ function getSrcMatch(path) {
                             payload: match[1]
                         }); }));
                     }
+                    if (variableCommentMatches) {
+                        regex_5 = new RegExp("@firescoutMockVar ([^ ]*)");
+                        matches = variableCommentMatches.map(function (s) { return s.match(regex_5); });
+                        allMatches.push.apply(allMatches, matches.map(function (match) { return ({
+                            type: 'module-var',
+                            payload: match[1]
+                        }); }));
+                    }
                     if (variableMatches) {
-                        regex_5 = new RegExp("firescoutMockVar *:? *(<.*>)? *\\([ \r\n]*(\"|')([^'\"]*)(\"|')");
-                        matches = variableMatches.map(function (s) { return s.match(regex_5); });
+                        regex_6 = new RegExp("firescoutMockVar *:? *(<.*>)? *\\([ \r\n]*(\"|')([^'\"]*)(\"|')");
+                        matches = variableMatches.map(function (s) { return s.match(regex_6); });
                         allMatches.push.apply(allMatches, matches.map(function (match) { return ({
                             type: 'module-var',
                             payload: match[3]
