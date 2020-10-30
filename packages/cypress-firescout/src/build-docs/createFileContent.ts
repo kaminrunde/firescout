@@ -13,7 +13,9 @@ export default function createFileContent (
     type MockFnOptions = {
       timeout?: number,
       throws?:boolean,
-      transform?: (val:any) => any
+      transform?: (val:any) => any,
+      ts?: boolean,
+      sync?: boolean
     }
     
     type MockVarOptions = {
@@ -25,10 +27,12 @@ export default function createFileContent (
         interface ${cmd.typesaveId} {
           ${cmd.fixtures.map(f => `
             ${f.description}
-            mock(name:'${f.variation}', opt?:MockFnOptions):${node.typesaveContext}
+            mock(name:'${f.variation}', opt?:Omit<MockFnOptions,'sync'>):${node.typesaveContext}
           `)}
 
-          mock():void
+          createStub():void
+
+          doesReturn(val:any, opt?:Omit<MockFnOptions,'transform'|'ts'>):void
         }
       `).join('\n')}
 
@@ -36,7 +40,7 @@ export default function createFileContent (
         interface ${cmd.typesaveId} {
           ${cmd.fixtures.map(f => `
             ${f.description}
-            set(name:'${f.variation}', opt?:MockVarOptions):${node.typesaveContext}
+            load(name:'${f.variation}', opt?:MockVarOptions):${node.typesaveContext}
           `)}
 
           set(val:any):void

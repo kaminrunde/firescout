@@ -118,6 +118,10 @@ Cypress.Commands.add('set', {prevSubject:true}, ([module, name], data) => {
   return cy.wrap([module,name], {log:false})
 })
 
+Cypress.Commands.add('load', {prevSubject:true}, ([module, name], data) => {
+  throw new Error('"load" is not implemmented yet')
+})
+
 Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, rootOpt={}) => {
   let get:any = ()=>null
   let getOptions:any = ()=>({})
@@ -145,7 +149,7 @@ Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, root
     let result = get()
     if(rootOpt.transform) result = rootOpt.transform(result)
     win.cymocks[id] = {
-      type: variation ? 'mock' : 'stub',
+      type: 'mock',
       cb: options.sync 
         ? cy.stub().as(id).returns(result) 
         : options.throws || rootOpt.throws
@@ -162,3 +166,46 @@ Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, root
   return cy.wrap([module,name], {log:false})
 })
 
+Cypress.Commands.add('doesReturn', {prevSubject:true}, ([module, name], data, opt={}) => {
+  const get = opt.timeout 
+    ? () => new Promise(resolve => setTimeout(()=>resolve(data),opt.timeout)) 
+    : () => data
+  const cb = (win:any) => {
+    const id = `${module}.${name}`
+    if(!win.cymocks) win.cymocks = {}
+    const result = get()
+    win.cymocks[id] = {
+      type: 'mock',
+      cb: opt.sync 
+        ? cy.stub().as(id).returns(result) 
+        : opt.throws
+          ? cy.stub().as(id).rejects(result)
+          : cy.stub().as(id).resolves(result),
+      options: {}
+    }
+  }
+  cy.window({log:false}).then(cb)
+  Cypress.on('window:before:load', cb)
+  Cypress.on('test:after:run', () => {
+    Cypress.off('window:before:load', cb)
+  })
+  return cy.wrap([module,name], {log:false})
+})
+
+Cypress.Commands.add('createStub', {prevSubject:true}, ([module, name]) => {
+  const cb = (win:any) => {
+    const id = `${module}.${name}`
+    if(!win.cymocks) win.cymocks = {}
+    win.cymocks[id] = {
+      type: 'stub',
+      cb: cy.stub().as(id),
+      options: {}
+    }
+  }
+  cy.window({log:false}).then(cb)
+  Cypress.on('window:before:load', cb)
+  Cypress.on('test:after:run', () => {
+    Cypress.off('window:before:load', cb)
+  })
+  return cy.wrap([module,name], {log:false})
+})

@@ -115,6 +115,10 @@ Cypress.Commands.add('set', { prevSubject: true }, function (_a, data) {
     });
     return cy.wrap([module, name], { log: false });
 });
+Cypress.Commands.add('load', { prevSubject: true }, function (_a, data) {
+    var module = _a[0], name = _a[1];
+    throw new Error('"load" is not implemmented yet');
+});
 Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation, rootOpt) {
     var module = _a[0], name = _a[1];
     if (rootOpt === void 0) { rootOpt = {}; }
@@ -147,13 +151,60 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation, roo
         if (rootOpt.transform)
             result = rootOpt.transform(result);
         win.cymocks[id] = {
-            type: variation ? 'mock' : 'stub',
+            type: 'mock',
             cb: options.sync
                 ? cy.stub().as(id).returns(result)
                 : options.throws || rootOpt.throws
                     ? cy.stub().as(id).rejects(result)
                     : cy.stub().as(id).resolves(result),
             options: options
+        };
+    };
+    cy.window({ log: false }).then(cb);
+    Cypress.on('window:before:load', cb);
+    Cypress.on('test:after:run', function () {
+        Cypress.off('window:before:load', cb);
+    });
+    return cy.wrap([module, name], { log: false });
+});
+Cypress.Commands.add('doesReturn', { prevSubject: true }, function (_a, data, opt) {
+    var module = _a[0], name = _a[1];
+    if (opt === void 0) { opt = {}; }
+    var get = opt.timeout
+        ? function () { return new Promise(function (resolve) { return setTimeout(function () { return resolve(data); }, opt.timeout); }); }
+        : function () { return data; };
+    var cb = function (win) {
+        var id = module + "." + name;
+        if (!win.cymocks)
+            win.cymocks = {};
+        var result = get();
+        win.cymocks[id] = {
+            type: 'mock',
+            cb: opt.sync
+                ? cy.stub().as(id).returns(result)
+                : opt.throws
+                    ? cy.stub().as(id).rejects(result)
+                    : cy.stub().as(id).resolves(result),
+            options: {}
+        };
+    };
+    cy.window({ log: false }).then(cb);
+    Cypress.on('window:before:load', cb);
+    Cypress.on('test:after:run', function () {
+        Cypress.off('window:before:load', cb);
+    });
+    return cy.wrap([module, name], { log: false });
+});
+Cypress.Commands.add('createStub', { prevSubject: true }, function (_a) {
+    var module = _a[0], name = _a[1];
+    var cb = function (win) {
+        var id = module + "." + name;
+        if (!win.cymocks)
+            win.cymocks = {};
+        win.cymocks[id] = {
+            type: 'stub',
+            cb: cy.stub().as(id),
+            options: {}
         };
     };
     cy.window({ log: false }).then(cb);

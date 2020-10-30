@@ -3,12 +3,12 @@
 
 context('index-page', () => {
   
-  it('can open modal', () => {
+  it.only('can open modal', () => {
     cy.visit('http://localhost:8000')
 
     cy.module('cart')
       .fn('fetch')
-      .mock()
+      .mock('default', {ts:true})
 
     cy.context('components/Home')
       .shouldNotHaveState('secret-visible')
@@ -26,7 +26,7 @@ context('index-page', () => {
     cy.get('@cart.fetch').should('be.called')
   })
 
-  it.only('can manipulate variables', () => {
+  it('can manipulate variables', () => {
     cy.module('Home').variable('test').set('TADA!!!!!')
     cy.visit('http://localhost:8000')
   })
