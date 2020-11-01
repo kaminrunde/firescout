@@ -1,6 +1,6 @@
 import {RawItem as GrepRawItem} from './searchWithGrep'
 import {RawItem as NodeRawItem} from './searchWithNode'
-import parseMdDocs, {Docs as MdDocs} from './parseComponentMdDocs'
+import parseMdDocs, {Docs as MdDocs} from './parseMdDocs'
 
 type MdItem = GrepRawItem | NodeRawItem
 
@@ -11,6 +11,6 @@ export default function createDocs (mdItems:MdItem[]):Docs {
   const collectionDocs = mdItems.filter(item => item.type === 'collection-doc')
   const docs = componentDocs.map(item => parseMdDocs(item, collectionDocs))
   let result:Docs = {}
-  for(let doc of docs) result[doc.context] = doc
+  for(let doc of docs) if (doc) result[doc.context] = doc
   return result
 }

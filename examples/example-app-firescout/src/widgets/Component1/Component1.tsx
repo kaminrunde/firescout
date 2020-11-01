@@ -6,6 +6,6 @@ export default function Component1 (): JSX.Element {
     // api.fetch().then(console.log)
   })
   return (
-    <div data-cy-ctx='Component1'>Component1</div>
+    <div>Component1</div>
   )
 }
