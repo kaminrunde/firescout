@@ -124,23 +124,45 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation, roo
     if (rootOpt === void 0) { rootOpt = {}; }
     var get = function () { return null; };
     var getOptions = function () { return ({}); };
-    var path = variation === 'default'
-        ? "firescout/" + module + "/" + name + ".ts"
-        : "firescout/" + module + "/" + name + "." + variation + ".ts";
-    if (variation) {
-        cy.fixture(path).then(function (file) {
-            var content = file.split('\n').join(' ');
-            var match = content.match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//);
-            var sync = !!content.match(/\* @sync/);
-            var throws = !!content.match(/\* @throws/);
-            if (!match)
-                throw new Error("firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/" + module + "/" + name + "." + variation + ".ts");
-            var fn = new Function("return " + match[1]);
-            get = rootOpt.timeout
-                ? function () { return new Promise(function (resolve) { return setTimeout(function () { return resolve(fn()); }, rootOpt.timeout); }); }
-                : function () { return fn(); };
-            getOptions = function () { return ({ sync: sync, throws: throws }); };
-        });
+    if (Cypress.env('firescoutTsFixtures')) {
+        var path = variation === 'default'
+            ? "firescout/" + module + "/" + name + ".ts"
+            : "firescout/" + module + "/" + name + "." + variation + ".ts";
+        if (variation) {
+            cy.fixture(path).then(function (file) {
+                var content = file.split('\n').join(' ');
+                var match = content.match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//);
+                var sync = !!content.match(/\* @sync/);
+                var throws = !!content.match(/\* @throws/);
+                if (!match)
+                    throw new Error("firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/" + module + "/" + name + "." + variation + ".ts");
+                var fn = new Function("return " + match[1]);
+                get = rootOpt.timeout
+                    ? function () { return new Promise(function (resolve) { return setTimeout(function () { return resolve(fn()); }, rootOpt.timeout); }); }
+                    : function () { return fn(); };
+                getOptions = function () { return ({ sync: sync, throws: throws }); };
+            });
+        }
+    }
+    else {
+        var path = variation === 'default'
+            ? "firescout/" + module + "/" + name
+            : "firescout/" + module + "/" + name + "." + variation;
+        if (variation) {
+            cy.fixture(path).then(function (file) {
+                var hasOptions = typeof file === 'object' && Boolean(file.__firescoutOptions);
+                var result = hasOptions ? file.value : file;
+                if (hasOptions) {
+                    getOptions = function () { return ({
+                        sync: Boolean(file.__firescoutOptions.sync),
+                        throws: Boolean(file.__firescoutOptions.throws)
+                    }); };
+                }
+                get = rootOpt.timeout
+                    ? function () { return new Promise(function (resolve) { return setTimeout(function () { return resolve(result); }, rootOpt.timeout); }); }
+                    : function () { return result; };
+            });
+        }
     }
     var cb = function (win) {
         var id = module + "." + name;

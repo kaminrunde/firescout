@@ -3,5 +3,6 @@ export declare type Config = {
     outPath: string;
     extensions: string;
     fixturesFolder: string;
+    tsFixtures: boolean;
 };
 export default function getConfig(): Config;

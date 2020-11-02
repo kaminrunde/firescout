@@ -125,22 +125,44 @@ Cypress.Commands.add('load', {prevSubject:true}, ([module, name], data) => {
 Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, rootOpt={}) => {
   let get:any = ()=>null
   let getOptions:any = ()=>({})
-  let path = variation === 'default'
-    ? `firescout/${module}/${name}.ts`
-    : `firescout/${module}/${name}.${variation}.ts`
-  if(variation){
-    cy.fixture(path).then(file => {
-      const content = file.split('\n').join(' ')
-      const match = content.match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//)
-      const sync = !!content.match(/\* @sync/)
-      const throws = !!content.match(/\* @throws/)
-      if(!match) throw new Error(`firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/${module}/${name}.${variation}.ts`)
-      const fn = new Function(`return ${match[1]}`)
-      get = rootOpt.timeout 
-        ? () => new Promise(resolve => setTimeout(()=>resolve(fn()),rootOpt.timeout)) 
-        : () => fn()
-      getOptions = () => ({sync, throws})
-    })
+  if(Cypress.env('firescoutTsFixtures')) {
+    let path = variation === 'default'
+      ? `firescout/${module}/${name}.ts`
+      : `firescout/${module}/${name}.${variation}.ts`
+    if(variation){
+      cy.fixture(path).then(file => {
+        const content = file.split('\n').join(' ')
+        const match = content.match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//)
+        const sync = !!content.match(/\* @sync/)
+        const throws = !!content.match(/\* @throws/)
+        if(!match) throw new Error(`firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/${module}/${name}.${variation}.ts`)
+        const fn = new Function(`return ${match[1]}`)
+        get = rootOpt.timeout 
+          ? () => new Promise(resolve => setTimeout(()=>resolve(fn()),rootOpt.timeout)) 
+          : () => fn()
+        getOptions = () => ({sync, throws})
+      })
+    }
+  }
+  else {
+    let path = variation === 'default'
+      ? `firescout/${module}/${name}`
+      : `firescout/${module}/${name}.${variation}`
+    if(variation){
+      cy.fixture(path).then(file => {
+        const hasOptions = typeof file === 'object' && Boolean(file.__firescoutOptions)
+        const result = hasOptions ? file.value : file
+        if(hasOptions) {
+          getOptions = () => ({
+            sync: Boolean(file.__firescoutOptions.sync), 
+            throws: Boolean(file.__firescoutOptions.throws)
+          })
+        }
+        get = rootOpt.timeout 
+          ? () => new Promise(resolve => setTimeout(()=>resolve(result),rootOpt.timeout)) 
+          : () => result
+      })
+    }
   }
   const cb = (win:any) => {
     const id = `${module}.${name}`

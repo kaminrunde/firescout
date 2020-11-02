@@ -4,7 +4,8 @@ export type Config = {
   widgetFolders: string[],
   outPath: string,
   extensions: string,
-  fixturesFolder: string
+  fixturesFolder: string,
+  tsFixtures: boolean
 }
 let config:Config|null = null
 
