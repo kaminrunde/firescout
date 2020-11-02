@@ -1,11 +1,8 @@
-import {RawItem as GrepRawItem} from './searchWithGrep'
-import {RawItem as NodeRawItem} from './searchWithNode'
+import {RawItem} from './searchWithNode'
 import {Tree} from './createCommandTree'
 import {Docs} from './createDocs'
 import {ModuleTree} from './createModuleTree'
 import colors from 'colors/safe'
-
-type RawItem = GrepRawItem | NodeRawItem
 
 export const codes = {
   // HANDLE_WITHOUT_PARENT: (item:RawItem) => `You declared a "data-cy-handle='${item.payload}'" `

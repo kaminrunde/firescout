@@ -1,8 +1,5 @@
-import {RawItem as GrepRawItem} from './searchWithGrep'
-import {RawItem as NodeRawItem} from './searchWithNode'
+import {RawItem} from './searchWithNode'
 import {report} from './reporter'
-
-type RawItem = GrepRawItem | NodeRawItem
 
 export type HierarchieTree = {
   payload: string,

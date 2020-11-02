@@ -1,8 +1,5 @@
-import {RawItem as GrepRawItem} from './searchWithGrep'
-import {RawItem as NodeRawItem} from './searchWithNode'
+import {RawItem as MdItem} from './searchWithNode'
 import parseMdDocs, {Docs as MdDocs} from './parseMdDocs'
-
-type MdItem = GrepRawItem | NodeRawItem
 
 export type Docs = Record<string,MdDocs>
 

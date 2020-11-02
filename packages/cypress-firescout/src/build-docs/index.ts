@@ -3,7 +3,6 @@ import createFileContent from './createFileContent'
 import fs from 'fs'
 import getConfig from './config'
 import searchWithNode from './searchWithNode'
-import searchWithGrep from './searchWithGrep'
 import createCommandHierarchie from './createCommandHierarchie'
 import createDocs from './createDocs'
 import createModuleTree from './createModuleTree'
@@ -13,9 +12,8 @@ import {validate} from './reporter'
 
 export function firescout() {
   const config = getConfig()
-  const search = config.useGrep ? searchWithGrep : searchWithNode
 
-  return search()
+  return searchWithNode()
     .then(createCommandHierarchie)
     .then(({tree, mdItems, moduleItems, fixtureItems, variableItems}) => ({
       tree: createCommandTree(tree),

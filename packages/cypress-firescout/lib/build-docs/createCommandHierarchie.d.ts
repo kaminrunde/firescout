@@ -1,6 +1,4 @@
-import { RawItem as GrepRawItem } from './searchWithGrep';
-import { RawItem as NodeRawItem } from './searchWithNode';
-declare type RawItem = GrepRawItem | NodeRawItem;
+import { RawItem } from './searchWithNode';
 export declare type HierarchieTree = {
     payload: string;
     file: string;
@@ -20,4 +18,3 @@ export default function createCommandHierarchie(rawItems: RawItem[]): {
     moduleItems: RawItem[];
     fixtureItems: RawItem[];
 };
-export {};

@@ -1,5 +1,4 @@
 import {RawItem} from './searchWithNode'
-import {readFile} from './utils'
 import Visitor from './visitor'
 import md from 'markdown-ast'
 import * as mdt from 'markdown-ast'

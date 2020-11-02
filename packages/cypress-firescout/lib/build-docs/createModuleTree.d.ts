@@ -1,6 +1,4 @@
-import { RawItem as GrepRawItem } from './searchWithGrep';
-import { RawItem as NodeRawItem } from './searchWithNode';
-declare type ModuleItem = GrepRawItem | NodeRawItem;
+import { RawItem as ModuleItem } from './searchWithNode';
 export declare type ModuleTree = {
     context: string;
     typesaveContext: string;

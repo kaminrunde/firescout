@@ -1,9 +1,6 @@
-import {RawItem as GrepRawItem} from './searchWithGrep'
-import {RawItem as NodeRawItem} from './searchWithNode'
+import {RawItem as ModuleItem} from './searchWithNode'
 import * as utils from './utils'
 
-
-type ModuleItem = GrepRawItem | NodeRawItem
 
 export type ModuleTree = {
   context: string,

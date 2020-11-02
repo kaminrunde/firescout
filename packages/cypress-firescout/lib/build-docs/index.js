@@ -9,15 +9,13 @@ var createFileContent_1 = __importDefault(require("./createFileContent"));
 var fs_1 = __importDefault(require("fs"));
 var config_1 = __importDefault(require("./config"));
 var searchWithNode_1 = __importDefault(require("./searchWithNode"));
-var searchWithGrep_1 = __importDefault(require("./searchWithGrep"));
 var createCommandHierarchie_1 = __importDefault(require("./createCommandHierarchie"));
 var createDocs_1 = __importDefault(require("./createDocs"));
 var createModuleTree_1 = __importDefault(require("./createModuleTree"));
 var reporter_1 = require("./reporter");
 function firescout() {
     var config = config_1.default();
-    var search = config.useGrep ? searchWithGrep_1.default : searchWithNode_1.default;
-    return search()
+    return searchWithNode_1.default()
         .then(createCommandHierarchie_1.default)
         .then(function (_a) {
         var tree = _a.tree, mdItems = _a.mdItems, moduleItems = _a.moduleItems, fixtureItems = _a.fixtureItems, variableItems = _a.variableItems;
