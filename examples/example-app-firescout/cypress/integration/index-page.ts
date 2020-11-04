@@ -3,7 +3,7 @@
 
 context('index-page', () => {
   
-  it.only('can open modal', () => {
+  it('can open modal', () => {
     cy.visit('http://localhost:8000')
 
     cy.module('cart')
@@ -27,7 +27,7 @@ context('index-page', () => {
   })
 
   it('can manipulate variables', () => {
-    cy.module('Home').variable('test').set('TADA!!!!!')
+    cy.module('Home').variable('test').load('default')
     cy.visit('http://localhost:8000')
   })
 })

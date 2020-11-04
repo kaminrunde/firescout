@@ -118,8 +118,44 @@ Cypress.Commands.add('set', {prevSubject:true}, ([module, name], data) => {
   return cy.wrap([module,name], {log:false})
 })
 
-Cypress.Commands.add('load', {prevSubject:true}, ([module, name], data) => {
-  throw new Error('"load" is not implemmented yet')
+Cypress.Commands.add('load', {prevSubject:true}, ([module, name], variation) => {
+  let get:any = ()=>null
+  if(Cypress.env('firescoutTsFixtures')) {
+    let path = variation === 'default'
+      ? `firescout/${module}/${name}.ts`
+      : `firescout/${module}/${name}.${variation}.ts`
+    if(variation){
+      cy.fixture(path).then(file => {
+        const content = file.split('\n').join(' ')
+        const match = content.match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//)
+        if(!match) throw new Error(`firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/${module}/${name}.${variation}.ts`)
+        const fn = new Function(`return ${match[1]}`)
+        const json = fn()
+        get = () => json
+      })
+    }
+  }
+  else {
+    let path = variation === 'default'
+      ? `firescout/${module}/${name}`
+      : `firescout/${module}/${name}.${variation}`
+    if(variation){
+      cy.fixture(path).then(file => {
+        get = () => file
+      })
+    }
+  }
+  const cb = (win:any) => {
+    const id = `${module}.${name}`
+    if(!win.firescoutVars) win.firescoutVars = {}
+    win.firescoutVars[id] = get()
+  }
+  cy.window({log:false}).then(cb)
+  Cypress.on('window:before:load', cb)
+  Cypress.on('test:after:run', () => {
+    Cypress.off('window:before:load', cb)
+  })
+  return cy.wrap([module,name], {log:false})
 })
 
 Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, rootOpt={}) => {
@@ -137,10 +173,19 @@ Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, root
         const throws = !!content.match(/\* @throws/)
         if(!match) throw new Error(`firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/${module}/${name}.${variation}.ts`)
         const fn = new Function(`return ${match[1]}`)
+        const json = fn()
+        const hasOptions = typeof json === 'object' && Boolean(json.__firescoutOptions)
+        let options = {sync, throws}
+        if(hasOptions) {
+          options = {
+            sync: Boolean(json.__firescoutOptions.sync), 
+            throws: Boolean(json.__firescoutOptions.throws)
+          }
+        }
         get = rootOpt.timeout 
-          ? () => new Promise(resolve => setTimeout(()=>resolve(fn()),rootOpt.timeout)) 
-          : () => fn()
-        getOptions = () => ({sync, throws})
+          ? () => new Promise(resolve => setTimeout(()=>resolve(json),rootOpt.timeout)) 
+          : () => json
+        getOptions = () => options
       })
     }
   }

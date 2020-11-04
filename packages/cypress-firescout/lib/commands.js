@@ -115,9 +115,47 @@ Cypress.Commands.add('set', { prevSubject: true }, function (_a, data) {
     });
     return cy.wrap([module, name], { log: false });
 });
-Cypress.Commands.add('load', { prevSubject: true }, function (_a, data) {
+Cypress.Commands.add('load', { prevSubject: true }, function (_a, variation) {
     var module = _a[0], name = _a[1];
-    throw new Error('"load" is not implemmented yet');
+    var get = function () { return null; };
+    if (Cypress.env('firescoutTsFixtures')) {
+        var path = variation === 'default'
+            ? "firescout/" + module + "/" + name + ".ts"
+            : "firescout/" + module + "/" + name + "." + variation + ".ts";
+        if (variation) {
+            cy.fixture(path).then(function (file) {
+                var content = file.split('\n').join(' ');
+                var match = content.match(/\/\*fs-start\*\/(.*)\/\*fs-end\*\//);
+                if (!match)
+                    throw new Error("firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/" + module + "/" + name + "." + variation + ".ts");
+                var fn = new Function("return " + match[1]);
+                var json = fn();
+                get = function () { return json; };
+            });
+        }
+    }
+    else {
+        var path = variation === 'default'
+            ? "firescout/" + module + "/" + name
+            : "firescout/" + module + "/" + name + "." + variation;
+        if (variation) {
+            cy.fixture(path).then(function (file) {
+                get = function () { return file; };
+            });
+        }
+    }
+    var cb = function (win) {
+        var id = module + "." + name;
+        if (!win.firescoutVars)
+            win.firescoutVars = {};
+        win.firescoutVars[id] = get();
+    };
+    cy.window({ log: false }).then(cb);
+    Cypress.on('window:before:load', cb);
+    Cypress.on('test:after:run', function () {
+        Cypress.off('window:before:load', cb);
+    });
+    return cy.wrap([module, name], { log: false });
 });
 Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation, rootOpt) {
     var module = _a[0], name = _a[1];
@@ -137,10 +175,19 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation, roo
                 if (!match)
                     throw new Error("firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/" + module + "/" + name + "." + variation + ".ts");
                 var fn = new Function("return " + match[1]);
+                var json = fn();
+                var hasOptions = typeof json === 'object' && Boolean(json.__firescoutOptions);
+                var options = { sync: sync, throws: throws };
+                if (hasOptions) {
+                    options = {
+                        sync: Boolean(json.__firescoutOptions.sync),
+                        throws: Boolean(json.__firescoutOptions.throws)
+                    };
+                }
                 get = rootOpt.timeout
-                    ? function () { return new Promise(function (resolve) { return setTimeout(function () { return resolve(fn()); }, rootOpt.timeout); }); }
-                    : function () { return fn(); };
-                getOptions = function () { return ({ sync: sync, throws: throws }); };
+                    ? function () { return new Promise(function (resolve) { return setTimeout(function () { return resolve(json); }, rootOpt.timeout); }); }
+                    : function () { return json; };
+                getOptions = function () { return options; };
             });
         }
     }
