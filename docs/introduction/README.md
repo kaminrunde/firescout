@@ -4,7 +4,7 @@ Firescout is a technique that allows you to create a living documentation for yo
 
 Firescout does a lot of things. You do not have to use every feature but they work really well together. These features can be seperated by three groups:
 
-**Component-Documentation**: With lint rules firescout checks which parts of your component needs to be documented and enforces you to write down the documentation in a README.md. It also checks if the documentation is up to date. Learn more about this the the [component documentation](../component-docs/README.md) section
+**Component-Documentation**: With lint rules firescout checks which parts of your component needs to be documented and enforces you to write down the documentation in a `README.md`. It also checks if the documentation is up to date. Learn more about this the the [component documentation](../component-docs/README.md) section
 
 **Component-Testing-API**: Thanks to the `component-documentation` a typescript typesave (!!!) api to your component will be created. No more unsave css selectors to handle with. If you update your component you can see in your IDE if the way you want to interact with your component still works. That way your test will only fail when it should fail. No more errors because a css selector path changed.
 
