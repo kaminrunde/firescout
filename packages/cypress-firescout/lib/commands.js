@@ -176,7 +176,7 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation, roo
                     throw new Error("firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/" + module + "/" + name + "." + variation + ".ts");
                 var fn = new Function("return " + match[1]);
                 var json = fn();
-                var hasOptions = typeof json === 'object' && Boolean(json.__firescoutOptions);
+                var hasOptions = typeof json === 'object' && json && Boolean(json.__firescoutOptions);
                 var options = { sync: sync, throws: throws };
                 if (hasOptions) {
                     options = {
@@ -197,7 +197,7 @@ Cypress.Commands.add('mock', { prevSubject: true }, function (_a, variation, roo
             : "firescout/" + module + "/" + name + "." + variation;
         if (variation) {
             cy.fixture(path).then(function (file) {
-                var hasOptions = typeof file === 'object' && Boolean(file.__firescoutOptions);
+                var hasOptions = typeof file === 'object' && file && Boolean(file.__firescoutOptions);
                 var result = hasOptions ? file.value : file;
                 if (hasOptions) {
                     getOptions = function () { return ({

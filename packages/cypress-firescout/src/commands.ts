@@ -174,7 +174,7 @@ Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, root
         if(!match) throw new Error(`firescout mocks need to have content /*fs-start*/.../*fs-end*/. Please check fixtures/firescout/${module}/${name}.${variation}.ts`)
         const fn = new Function(`return ${match[1]}`)
         const json = fn()
-        const hasOptions = typeof json === 'object' && Boolean(json.__firescoutOptions)
+        const hasOptions = typeof json === 'object' && json && Boolean(json.__firescoutOptions)
         let options = {sync, throws}
         if(hasOptions) {
           options = {
@@ -195,7 +195,7 @@ Cypress.Commands.add('mock', {prevSubject:true}, ([module,name], variation, root
       : `firescout/${module}/${name}.${variation}`
     if(variation){
       cy.fixture(path).then(file => {
-        const hasOptions = typeof file === 'object' && Boolean(file.__firescoutOptions)
+        const hasOptions = typeof file === 'object' && file && Boolean(file.__firescoutOptions)
         const result = hasOptions ? file.value : file
         if(hasOptions) {
           getOptions = () => ({
