@@ -118,7 +118,7 @@ function extractItems(target, rawItems) {
     var include = [];
     for (var _i = 0, rawItems_2 = rawItems; _i < rawItems_2.length; _i++) {
         var item = rawItems_2[_i];
-        if (item.folder.includes(target.folder))
+        if (item.folder === target.folder || item.folder.includes(target.folder + '/'))
             include.push(item);
         else
             exclude.push(item);

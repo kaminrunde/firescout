@@ -103,7 +103,7 @@ function extractItems(target:RawItem, rawItems:any[]):[any[], any[]] {
   let exclude:RawItem[] = []
   let include:RawItem[] = []
   for(let item of rawItems) {
-    if(item.folder.includes(target.folder)) include.push(item)
+    if(item.folder === target.folder || item.folder.includes(target.folder+'/')) include.push(item)
     else exclude.push(item)
   }
   return [include, exclude]
