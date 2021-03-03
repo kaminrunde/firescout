@@ -30,37 +30,51 @@ module.exports = {
         if (node.expression.type === 'LogicalExpression') {
           if (node.expression.right.type !== 'JSXElement') return
           const el = node.expression.right.openingElement
-          const state = el.attributes.find(attr =>
-            attr.name.name.startsWith('data-cy-state')
-          )
-
-          if (!state)
+          if(!hasDataCyState(el)) {
             context.report({
               node: el,
               message: 'jsx logical expression needs data-cy-state'
             })
+          }
         }
-        // const isConditional =
-        //   node.expression.type === 'LogicalExpression' ||
-        //   node.expression.type === 'ConditionalExpression'
 
-        // if (!isCondition) return
-        // if (node.expression.right.type !== 'JSXElement') return
+        if(node.expression.type === 'ConditionalExpression') {
+          const left = node.expression.consequent
+          const right = node.expression.alternate
 
-        // const el =
+          let leftHasState = false
+          let rightHasState = false
+          let leftIsEl = true
+          let rightIsEl = true
 
-        // if (isConditional) {
+          if(left.type === 'JSXElement') {
+            if(hasDataCyState(left.openingElement)) leftHasState = true
+          }
+          else { leftIsEl = false }
 
-        // let stateFound = false
-        // traverse(context, node, path => {
-        //     if(path.node.type === 'JSXOpeningElement')
-        // })
-        // context.report({
-        //     node:node,
-        //     message: 'clickable elements need a data-cy-handle attribute'
-        // })
-        // }
+          if(right.type === 'JSXElement') {
+            if(hasDataCyState(right.openingElement)) rightHasState = true
+          }
+          else { rightIsEl = false }
+
+          if(leftIsEl || rightIsEl) {
+            if(!leftHasState && !rightHasState) {
+              context.report({
+                node: left.openingElement,
+                message: 'jsx conditional expression needs data-cy-state'
+              })
+            }
+          }
+        }
       }
     }
   }
+}
+
+
+function hasDataCyState (openingElement) {
+  const state = openingElement.attributes.find(attr =>
+    attr && attr.name && attr.name.name.startsWith('data-cy-state')
+  )
+  return Boolean(state)
 }

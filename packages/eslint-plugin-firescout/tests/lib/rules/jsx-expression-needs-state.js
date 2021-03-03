@@ -31,6 +31,25 @@ ruleTester.run('jsx-expression-needs-state', rule, {
     },
     {
       code: "var foo = <div>{foo && <div data-cy-state-foo='foo'/>}</div>"
+    },
+    {
+      code: "var foo = <div>{foo && <div {...p} data-cy-state-foo='foo'/>}</div>"
+    },
+    {
+      code: `var foo = (
+          <div>
+            {foo ? <div data-cy-state='visible'/> : <div/>}
+          </div>
+        )
+      `
+    },
+    {
+      code: `var foo = (
+          <div>
+            {foo ? <div/> : <div data-cy-state='visible'/>}
+          </div>
+        )
+      `
     }
   ],
 
@@ -40,6 +59,22 @@ ruleTester.run('jsx-expression-needs-state', rule, {
       errors: [
         {
           message: 'jsx logical expression needs data-cy-state',
+          type: 'JSXOpeningElement'
+        }
+      ]
+    },{
+      code: 'var foo = <div>{foo && <div/>}</div>',
+      errors: [
+        {
+          message: 'jsx logical expression needs data-cy-state',
+          type: 'JSXOpeningElement'
+        }
+      ]
+    },{
+      code: 'var foo = <div>{foo ? <div/> : <div/>}</div>',
+      errors: [
+        {
+          message: 'jsx conditional expression needs data-cy-state',
           type: 'JSXOpeningElement'
         }
       ]
