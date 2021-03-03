@@ -1,6 +1,6 @@
 {
   "name": "@kaminrunde/cypress-firescout",
-  "version": "1.0.1-alpha.40",
+  "version": "1.0.1-alpha.41",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
