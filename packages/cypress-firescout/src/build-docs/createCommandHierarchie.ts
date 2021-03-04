@@ -51,9 +51,11 @@ export default function createCommandHierarchie(rawItems:RawItem[]):{
   }
 
   // sort collection items to ensure that deeper collections are parsed first
-  collectionItems = collectionItems.sort((a,b) => {
-    if(a.folder.includes(b.folder)) return 1
-    if(b.folder.includes(a.folder)) return -1
+  collectionItems = collectionItems
+  .sort((a,b) => a.file.localeCompare(b.file))
+  .sort((a,b) => {
+    if(a.folder.includes(b.folder)) return -1
+    if(b.folder.includes(a.folder)) return 1
     return 0
   })
 

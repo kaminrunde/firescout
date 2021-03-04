@@ -59,11 +59,13 @@ function createCommandHierarchie(rawItems) {
         }
     }
     // sort collection items to ensure that deeper collections are parsed first
-    collectionItems = collectionItems.sort(function (a, b) {
+    collectionItems = collectionItems
+        .sort(function (a, b) { return a.file.localeCompare(b.file); })
+        .sort(function (a, b) {
         if (a.folder.includes(b.folder))
-            return 1;
-        if (b.folder.includes(a.folder))
             return -1;
+        if (b.folder.includes(a.folder))
+            return 1;
         return 0;
     });
     var enhancedCollections = [];
