@@ -87,3 +87,20 @@ Changes:
 
 ? Are you sure you want to publish these packages? (ynH)
 ```
+
+
+## Dev Setup
+
+- Install lerna global: `npm i -g lerna`
+- Install all packages and create symlinks for local packages: `lerna bootstrap`
+
+### Test-Setup
+
+You need to reopen vs-code directly in the specific package. outherise the vs-code test-debug extension does not work
+
+### create new example app
+
+- go to examples `cd examples`
+- install your project. eg. `npx create-react-app my-app --template typescript`
+- install your packages.
+- `lerna bootstrap` after each install to symlink

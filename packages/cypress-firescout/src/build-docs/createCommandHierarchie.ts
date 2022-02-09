@@ -61,6 +61,10 @@ export default function createCommandHierarchie(rawItems:RawItem[]):{
 
   let enhancedCollections:EnhancedCollection[] = []
 
+  /**
+   * On each iteration we remove the matched handes/states/colls from the buffer. Otherwise 
+   * they would be accidentally added to the parent
+   */
   for (let collectionItem of collectionItems) {
     const [includeHandles, excludeHandles] = extractItems(collectionItem, handleItems)
     const [includeStates, excludeStates] = extractItems(collectionItem, stateItems)
