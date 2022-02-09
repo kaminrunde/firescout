@@ -7,14 +7,14 @@ No matter what your component does and how complex it is. We can reduce it to th
 
 - **Handles**: Interactable DOM-Elements like buttons, inputs and anything that has a `on*` (e.g onClick) method are handles. 
 
-- **States**: The data-variation of your component. If a button is under some condition visible and under another not it is a state. Each possible DOM-Structure should be considered a state
+- **States**: The data-variation of your component. If a button is under some condition visible and under another not, it is a state. Each possible DOM-Structure should be considered a state
 
 - **Events**: Our component can communicate with the outside word. It can fetch data, update your state... In fireside we call this an event. We won't explain events in this section. Read more about events in the section [Mocking](.../cypress/mocking.md)
 
 
 ## firescout in 5 minutes
 
-### add refs to the ccomponent
+### add refs to the component
 
 Each `handle` and `state` needs a reference in the DOM:
 
@@ -31,9 +31,9 @@ const MyComponent = ({ showSecret, onClick }) => (
 )
 ```
 
-Our button gets the attribute `data-cy-handle="toggle-secret"`. That tells firescout that this is a interactable element with the name `toggle-secret`.
+Our button gets the attribute `data-cy-handle="toggle-secret"`. That tells firescout that this is an interactable element with the name `toggle-secret`.
 
-If the secret is visible or not depends on the prop `showSecret`. This is a variation of our component what means, that we need a state here. With `data-cy-state="secret-visible"` we define out `secret-visible` state
+If the secret is visible or not depends on the prop `showSecret`. This is a variation of our component, what means that we need a state here. With `data-cy-state="secret-visible"` we define out `secret-visible` state
 
 You may also have noticed the attribute `data-cy-ctx="Component"`. Every state and handle needs a context. Think about this as a namespace for your states and handles. More about this in the following section.
 
@@ -60,7 +60,7 @@ Can show a super magic secret if you click the button
 
 ```
 
-The first comment line `<!-- firescout-component -->` gives firescout the hint that this file has a firescout-valid documentation. This is needed so the firescout command can find this file. The headline (h1) has to be the same name as the `data-cy-ctx` in your component. That way firescout can connect both files. If there is a `data-cy-ctx` without a matching docs file, firescout will throw an error. Same for the other way round.
+The first comment line `<!-- firescout-component -->` gives firescout the hint that this file has a firescout-valid documentation. This is needed so the firescout script can find this file. The headline (h1) has to be the same name as the `data-cy-ctx` in your component. That way firescout can connect both files. If there is a `data-cy-ctx` without a matching docs file, firescout will throw an error. Same for the other way around.
 
 Each handle and state needs also to be documented. firescout will throw an error if there is a handle or state either in the component or the docs that has no counterpart. Handles need to be documented in the h2 `Handles`. States in the h2 `States`. 
 
@@ -102,8 +102,28 @@ If you remove the `data-cy-state` from your component and re-add the state secti
 
 `STATE_HAS_NO_REF MyComponent -> secret-visible src/components/MyComponent/README.md`
 
-### Conclusion
+### Testing
+
+Now it's time to create the cypress tests:
+
+```javascript
+describe('MyComponent', () => {
+  it('shows secret when button was clicked', () => {
+    visit('/my-route')
+
+    cy.context('MyComponent').shouldNotHaveState('secret-visible')
+
+    cy.context('MyComponent').handle('toggle-secret').click()
+
+    cy.context('MyComponent').shouldHaveState('secret-visible')
+  })
+})
+```
+
+firescout provides methods to interact with the dom. The best part here that these methods are type-save. when you run the firescout-script a typescript declaration file is generated. That means whenever you remove or change a `data-cy-*` attribute your test-files will throw an error, before you even execute your tests (when you declaer them as .ts files). No more flaky css-selectors!
+
+## Conclusion
 
 Firescout is a technique that can document your DOM-Structure (or JSX). You will add `data-cy-*` attributes and firescout forces you to create a documentation for them. We have a eslint-plugin that will tell you what part of your code needs documentation (JSX-only). 
 
-Since dom-refs and documentation are two-way binded you cannot change one side without being forced to change the other side. In practive this works extremly well and is one part of the living-documentation technique. Whenever you update your component and add/remove/change a behaviour (what firescout considers a state) you will be forced to invalidate your documentation. That is a bit complex to understand now, but I will explain it in a later section.
+Since dom-refs and documentation are two-way binded you cannot change one side without being forced to change the other side. In practive this works extremly well and is one part of the living-documentation technique. Whenever you update your component and add/remove/change a behaviour (what firescout considers a state) you will be forced to invalidate your documentation. That is a bit complex to understand now, but I will explain it in a later section. Futhermore firescout offers a really nice cypress-api to access these states and handles, which are type-save. 

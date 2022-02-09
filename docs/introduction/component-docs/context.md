@@ -1,6 +1,6 @@
 # Context
 
-Firescout works really well extremly large apps. Here are a lot of components you want to document. The `Context` acts like a namespace for your component. But what is a component?
+Firescout works really well with extremly large apps. Here are a lot of components you want to document. The `Context` acts like a namespace for your component. But what is a component?
 
 ## What is a Firescout-Component
 
@@ -40,3 +40,17 @@ For the upper structure I would define three Firescout Contexts (Components):
 - ProductWidget
 - MyComponent
 
+```javascript
+// src/components/ProductList/ProductList.tsx
+import * as React from 'react'
+
+export default function ProductList () {
+  return (
+    <div className='ProductList' data-cy-ctx='ProductList'>
+      {/** ... */}
+    </div>
+  )
+}
+```
+
+The `data-cy-ctx` attribute should always be attached to the root node. 

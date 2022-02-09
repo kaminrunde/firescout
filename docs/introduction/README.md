@@ -11,4 +11,4 @@ Firescout does a lot of things. You do not have to use every feature but they wo
 **Mocking**: Firescout gives you the abillity to mock ANY function or variable regardless where it is or if it is exported or not. Of course the mocking is typesave too. 
 
 
-Firescout is not opinionated about your setup and can be used in any modern frontend stack. But it works best in a setup with JSX and typescript (in your test-code).
+Firescout is not opinionated about your setup and can be used in any modern frontend stack. But it works best in a setup with JSX (React) and Typescript (in your test-code).
