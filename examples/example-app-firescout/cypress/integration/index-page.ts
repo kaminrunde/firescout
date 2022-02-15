@@ -6,6 +6,8 @@ context('index-page', () => {
   it('can open modal', () => {
     cy.visit('http://localhost:8000')
 
+    cy.module('cart').fn('fetch').mock('default')
+
     cy.module('cart')
       .fn('fetch')
       .mock('default', {ts:true})
