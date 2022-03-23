@@ -24,5 +24,5 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import '@kaminrunde/cypress-firescout/lib/commands'
-import '@kaminrunde/cypress-firescout/lib/playground'
+import "../../../../packages/cypress-firescout/src/commands.ts"
+import "../../../../packages/cypress-firescout/src/playground.ts"
