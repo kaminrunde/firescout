@@ -32,10 +32,6 @@
     "access": "public"
   },
   "gitHead": "9ed1612cf6478a5095c1d5384844aff42b7a3e2a",
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.4"
-  },
   "peerDependencies": {
     "@testing-library/user-event": "*",
     "react": "*",

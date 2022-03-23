@@ -2,10 +2,10 @@ import React from 'react';
 // import { render, screen, fireEvent, act } from '@testing-library/react';
 import App from './App';
 import {mount} from '@kaminrunde/react-firescout'
-import { render, fireEvent, act } from '@testing-library/react';
+import * as rtl from '@testing-library/react';
 
 test('renders learn react link', async () => {
-  const f = mount(<App />, {render, fireEvent, act})
+  const f = mount(<App />, rtl)
   const ctx = () => f.context('App')
 
   ctx().shouldNotHaveState('on')
