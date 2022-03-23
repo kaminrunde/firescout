@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
+    "@kaminrunde/react-firescout": "^1.0.1-alpha.42",
     "@types/jest": "^27.4.1",
     "@types/node": "^16.11.26",
     "@types/react": "^17.0.41",
@@ -39,5 +40,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.10.11",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
+    "@types/object-inspect": "^1.8.1",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "object-inspect": "^1.12.0"
   }
 }

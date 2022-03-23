@@ -1,25 +1,38 @@
-import React from 'react';
+import * as React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const [on, setOn] = React.useState(false)
+  const [tOn, setTOn] = React.useState(false)
+  const [t2On, setT2On] = React.useState(false)
+  const [t3On, setT3On] = React.useState(false)
+
+  React.useEffect(() => {
+    if(on) setTOn(true)
+    else setTOn(false)
+  }, [on])
+
+
+  React.useEffect(() => {
+    if(tOn) setT2On(true)
+    else setT2On(false)
+  }, [tOn])
+
+  React.useEffect(() => {
+    if(tOn) Promise.resolve().then(() => setT3On(true))
+    else Promise.resolve().then(() => setT3On(false))
+  }, [t2On])
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <article data-cy-ctx='App'>
+      <button data-cy-handle='btn' onClick={()=>setOn(!on)}>switch</button>
+      <span data-cy-state={on && 'on'}>{on ? 'on' : 'off'}</span>
+      <div data-cy-state={tOn && 'ton'}>{tOn ? 'ton' : 'toff'}</div>
+      <h1 data-cy-state={t2On && 't2on'}>{t2On ? 't2on' : 't2off'}</h1>
+      <h1 data-cy-state={t3On && 't3on'}>{t2On ? 't3on' : 't3off'}</h1>
+    </article>
   );
 }
 

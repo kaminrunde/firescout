@@ -69,6 +69,10 @@ function createCommandHierarchie(rawItems) {
         return 0;
     });
     var enhancedCollections = [];
+    /**
+     * On each iteration we remove the matched handes/states/colls from the buffer. Otherwise
+     * they would be accidentally added to the parent
+     */
     for (var _a = 0, collectionItems_1 = collectionItems; _a < collectionItems_1.length; _a++) {
         var collectionItem = collectionItems_1[_a];
         var _b = extractItems(collectionItem, handleItems), includeHandles = _b[0], excludeHandles = _b[1];
