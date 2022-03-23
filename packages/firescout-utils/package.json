@@ -1,0 +1,42 @@
+{
+  "name": "@kaminrunde/firescout-utils",
+  "version": "1.0.1-alpha.42",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "test": "jest --watch",
+    "watch": "npm run build -- --watch",
+    "type-check": "tsc --noEmit",
+    "build": "tsc --declaration",
+    "build:types": "tsc --emitDeclarationOnly"
+  },
+  "bin": {
+    "firescout-build": "./scripts/firescout-build.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "markdown-ast": "^0.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaminrunde/firescout.git"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-typescript": "^7.10.1",
+    "@types/node": "^14.0.5",
+    "babel-jest": "^26.0.1",
+    "jest": "^26.0.1",
+    "ts-node": "^8.10.1",
+    "tsc": "^1.20150623.0",
+    "typescript": "^3.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "9ed1612cf6478a5095c1d5384844aff42b7a3e2a"
+}
