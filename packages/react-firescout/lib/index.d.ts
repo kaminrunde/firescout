@@ -21,6 +21,7 @@ export declare function mount(El: any, ctx: any): {
     wait: (ms: number) => any;
     unwrap: () => Element;
     click: (w?: number | undefined) => Promise<any>;
+    type: (value: string, w?: number | undefined) => Promise<any>;
     simulate: (cb: (el: Element) => void | Promise<void>) => Promise<any>;
 };
 declare type MockConfig = {

@@ -190,6 +190,19 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
       return wrap(elements, ctx)
     },
 
+    type: async (value:string, w?:number) => {
+      if(elements.length > 1) {
+        utils.bubbleError(2, `found multiple elements to click. Please use nth() to select one`)
+      }
+      ctx.fireEvent.change(elements[0].container, {target: {value}})
+
+      if(typeof w !== 'undefined') {
+        if(typeof w === 'number') return ctx.act(() => new Promise(r => setTimeout(r, w)))
+      }
+
+      return wrap(elements, ctx)
+    },
+
     simulate: async (cb:(el:Element) => Promise<void> | void) => {
       if(elements.length > 1) {
         utils.bubbleError(2, `found multiple elements to simulate event. Please use nth(n) to select one`)
