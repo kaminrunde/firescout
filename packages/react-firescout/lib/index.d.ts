@@ -11,19 +11,7 @@ declare global {
         };
     }
 }
-export declare function mount(El: any, ctx: any): {
-    context: (name: string) => any;
-    handle: (name: string) => any;
-    collection: (name: string) => any;
-    shouldHaveState: (name: string, implementations?: string | undefined) => void;
-    shouldNotHaveState: (name: string) => void;
-    nth(n: number): any;
-    wait: (ms: number) => any;
-    unwrap: () => Element;
-    click: (w?: number | undefined) => Promise<any>;
-    type: (value: string, w?: number | undefined) => Promise<any>;
-    simulate: (cb: (el: Element) => void | Promise<void>) => Promise<any>;
-};
+export declare function mount(El: any, ctx: any): Wrapped;
 declare type MockConfig = {
     value?: any;
     fixture?: string;
@@ -38,4 +26,17 @@ export declare function getModule(moduleName: string): {
     };
 };
 export declare function clearMocks(): void;
+declare type Wrapped = {
+    context: (name: string) => Wrapped;
+    handle: (name: string) => Wrapped;
+    collection: (name: string) => Wrapped;
+    shouldHaveState: (name: string, implementations?: string) => Wrapped;
+    shouldNotHaveState: (name: string) => Wrapped;
+    nth: (n: number) => Wrapped;
+    wait: (ms: number) => Promise<void>;
+    unwrap: () => Element;
+    click: (timeout?: number) => Promise<Wrapped>;
+    type: (value: string, timeout?: number) => Promise<Wrapped>;
+    simulate: (cb: (el: Element) => Promise<void> | void) => Promise<Wrapped>;
+};
 export {};

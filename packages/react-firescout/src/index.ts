@@ -90,9 +90,23 @@ export function clearMocks () {
   delete window.firescoutVars
 }
 
-function wrap (elements:t.FirescoutElement[], ctx:any) {
+type Wrapped = {
+  context: (name:string) => Wrapped
+  handle: (name:string) => Wrapped
+  collection: (name:string) => Wrapped
+  shouldHaveState: (name:string, implementations?:string) => Wrapped
+  shouldNotHaveState: (name:string) => Wrapped
+  nth: (n:number) => Wrapped
+  wait: (ms:number) => Promise<void>
+  unwrap: () => Element
+  click: (timeout?:number) => Promise<Wrapped>
+  type: (value:string, timeout?:number) => Promise<Wrapped>
+  simulate: (cb:(el:Element) => Promise<void> | void) => Promise<Wrapped>
+}
+
+function wrap (elements:t.FirescoutElement[], ctx:any):Wrapped {
   return {
-    context: (name:string) => {
+    context: name => {
       const targets = utils.query(`[data-cy-ctx="${name}"]`, elements)
 
       if(targets.length === 0) {
@@ -102,7 +116,7 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
       return wrap(targets, ctx)
     },
     
-    handle: (name:string) => {
+    handle: name => {
       const targets = utils.query(`[data-cy-handle="${name}"]`, elements)
 
       if(targets.length === 0) {
@@ -112,7 +126,7 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
       return wrap(targets, ctx)
     },
 
-    collection: (name:string) => {
+    collection: name => {
       const targets = utils.query(`[data-cy-collection="${name}"]`, elements)
 
       if(targets.length === 0) {
@@ -122,7 +136,7 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
       return wrap(targets, ctx)
     },
 
-    shouldHaveState: (name:string, implementations?:string) => {
+    shouldHaveState: (name, implementations) => {
       if(elements.length > 1) {
         utils.bubbleError(2, `found multiple elements to test. please select with "nth(n)"`)
       }
@@ -139,9 +153,11 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
         const hit = container.querySelector(`[data-cy-state="${name}"]`)
         if(!hit) utils.bubbleError(2, `expected to find state "${name}".`)
       }
+
+      return wrap(elements, ctx)
     },
 
-    shouldNotHaveState: (name:string) => {
+    shouldNotHaveState: name => {
       if(elements.length > 1) {
         utils.bubbleError(2, `found multiple elements to test. please select with "nth(n)"`)
       }
@@ -153,18 +169,20 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
           utils.bubbleError(2, `expected not to find state "${state}".`)
         }
       }
+
+      return wrap(elements, ctx)
     },
 
     // utils
 
-    nth(n:number) {
+    nth: n => {
       if(!elements[n]) {
         utils.bubbleError(2, `"nth(${n})" does not work on a list of length ${elements.length}`)
       }
       return wrap([elements[n]], ctx)
     },
 
-    wait: (ms:number) => {
+    wait: ms => {
       return ctx.act(() => new Promise(r => setTimeout(r, ms)))
     },
 
@@ -177,7 +195,7 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
 
     // events
 
-    click: async (w?:number) => {
+    click: async w => {
       if(elements.length > 1) {
         utils.bubbleError(2, `found multiple elements to click. Please use nth() to select one`)
       }
@@ -190,7 +208,7 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
       return wrap(elements, ctx)
     },
 
-    type: async (value:string, w?:number) => {
+    type: async (value, w) => {
       if(elements.length > 1) {
         utils.bubbleError(2, `found multiple elements to click. Please use nth() to select one`)
       }
@@ -203,7 +221,7 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
       return wrap(elements, ctx)
     },
 
-    simulate: async (cb:(el:Element) => Promise<void> | void) => {
+    simulate: async cb => {
       if(elements.length > 1) {
         utils.bubbleError(2, `found multiple elements to simulate event. Please use nth(n) to select one`)
       }

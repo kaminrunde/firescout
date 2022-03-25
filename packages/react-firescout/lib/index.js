@@ -185,6 +185,7 @@ function wrap(elements, ctx) {
                 if (!hit)
                     utils.bubbleError(2, "expected to find state \"" + name + "\".");
             }
+            return wrap(elements, ctx);
         },
         shouldNotHaveState: function (name) {
             if (elements.length > 1) {
@@ -199,6 +200,7 @@ function wrap(elements, ctx) {
                     utils.bubbleError(2, "expected not to find state \"" + state + "\".");
                 }
             }
+            return wrap(elements, ctx);
         },
         // utils
         nth: function (n) {
