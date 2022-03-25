@@ -5,7 +5,7 @@ export function query(query:string, elements:t.FirescoutElement[]) {
 
   for(const el of elements) targets.push(
     ...Array.from(el.container.querySelectorAll(query))
-      .map((container, index) => ({container, parent: el, type: 'context' as 'context', index}))
+      .map((container, index) => ({container, parent: el, index}))
   )
 
   return targets

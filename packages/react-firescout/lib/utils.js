@@ -5,7 +5,7 @@ function query(query, elements) {
     var targets = [];
     var _loop_1 = function (el) {
         targets.push.apply(targets, Array.from(el.container.querySelectorAll(query))
-            .map(function (container, index) { return ({ container: container, parent: el, type: 'context', index: index }); }));
+            .map(function (container, index) { return ({ container: container, parent: el, index: index }); }));
     };
     for (var _i = 0, elements_1 = elements; _i < elements_1.length; _i++) {
         var el = elements_1[_i];

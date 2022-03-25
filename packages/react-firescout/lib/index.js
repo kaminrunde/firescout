@@ -61,7 +61,7 @@ function mount(El, ctx) {
     var component = ctx.render(El);
     return wrap([{
             container: component.container,
-            type: 'root',
+            // type: 'root',
             parent: null,
             index: 0
         }], ctx);
@@ -160,46 +160,44 @@ function wrap(elements, ctx) {
             return wrap(targets, ctx);
         },
         collection: function (name) {
-            var targets = [];
-            var _loop_1 = function (el) {
-                targets.push.apply(targets, Array.from(el.container.querySelectorAll("[data-cy-collection=\"" + name + "\"]"))
-                    .map(function (container, index) { return ({ container: container, parent: el, type: 'collection', index: index }); }));
-            };
-            for (var _i = 0, elements_1 = elements; _i < elements_1.length; _i++) {
-                var el = elements_1[_i];
-                _loop_1(el);
-            }
+            var targets = utils.query("[data-cy-collection=\"" + name + "\"]", elements);
             if (targets.length === 0) {
                 utils.bubbleError(2, "could not find collection \"" + name + "\"");
             }
             return wrap(targets, ctx);
         },
-        shouldHaveState: function (name) {
-            var target = null;
-            for (var _i = 0, elements_2 = elements; _i < elements_2.length; _i++) {
-                var el = elements_2[_i];
-                var hit = el.container.querySelector("[data-cy-state=\"" + name + "\"]");
-                if (!hit)
-                    continue;
-                target = hit;
-                break;
+        shouldHaveState: function (name, implementations) {
+            if (elements.length > 1) {
+                utils.bubbleError(2, "found multiple elements to test. please select with \"nth(n)\"");
             }
-            if (!target) {
-                utils.bubbleError(2, "expected to find state \"" + name + "\".");
+            var imps = implementations ? implementations.split(',') : null;
+            var container = elements[0].container;
+            if (imps) {
+                for (var _i = 0, imps_1 = imps; _i < imps_1.length; _i++) {
+                    var key = imps_1[_i];
+                    var hit = container.querySelector("[data-cy-state=\"" + name + ":" + key + "\"]");
+                    if (!hit)
+                        utils.bubbleError(2, "expected to find state \"" + name + ":" + key + "\".");
+                }
+            }
+            else {
+                var hit = container.querySelector("[data-cy-state=\"" + name + "\"]");
+                if (!hit)
+                    utils.bubbleError(2, "expected to find state \"" + name + "\".");
             }
         },
         shouldNotHaveState: function (name) {
-            var target = null;
-            for (var _i = 0, elements_3 = elements; _i < elements_3.length; _i++) {
-                var el = elements_3[_i];
-                var hit = el.container.querySelector("[data-cy-state=\"" + name + "\"]");
-                if (!hit)
-                    continue;
-                target = hit;
-                break;
+            if (elements.length > 1) {
+                utils.bubbleError(2, "found multiple elements to test. please select with \"nth(n)\"");
             }
-            if (target) {
-                utils.bubbleError(2, "expected not to find state \"" + name + "\".");
+            var container = elements[0].container;
+            var hits = Array.from(container.querySelectorAll("[data-cy-state]"));
+            for (var _i = 0, hits_1 = hits; _i < hits_1.length; _i++) {
+                var hit = hits_1[_i];
+                var state = hit.attributes['data-cy-state'].value;
+                if (state === name || state.startsWith(name + ':')) {
+                    utils.bubbleError(2, "expected not to find state \"" + state + "\".");
+                }
             }
         },
         // utils
@@ -214,7 +212,7 @@ function wrap(elements, ctx) {
         },
         unwrap: function () {
             if (elements.length > 1) {
-                utils.bubbleError(2, "found multiple elements to unwrap.");
+                utils.bubbleError(2, "found multiple elements to unwrap. please select with \"nth(n)\"");
             }
             return elements[0].container;
         },
@@ -237,7 +235,7 @@ function wrap(elements, ctx) {
                 switch (_a.label) {
                     case 0:
                         if (elements.length > 1) {
-                            utils.bubbleError(2, "found multiple elements to simulate event. Please use nth() to select one");
+                            utils.bubbleError(2, "found multiple elements to simulate event. Please use nth(n) to select one");
                         }
                         return [4 /*yield*/, cb(elements[0].container)];
                     case 1:

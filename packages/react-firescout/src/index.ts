@@ -17,7 +17,7 @@ export function mount (El:any, ctx:any) {
 
   return wrap([{
     container: component.container,
-    type: 'root',
+    // type: 'root',
     parent: null,
     index: 0
   }], ctx)
@@ -113,11 +113,7 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
     },
 
     collection: (name:string) => {
-      const targets:t.FirescoutElement[] = []
-      for(const el of elements) targets.push(
-        ...Array.from(el.container.querySelectorAll(`[data-cy-collection="${name}"]`))
-          .map((container, index) => ({container, parent: el, type: 'collection' as 'collection', index}))
-      )
+      const targets = utils.query(`[data-cy-collection="${name}"]`, elements)
 
       if(targets.length === 0) {
         utils.bubbleError(2, `could not find collection "${name}"`)
@@ -126,29 +122,36 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
       return wrap(targets, ctx)
     },
 
-    shouldHaveState: (name:string) => {
-      let target = null
-      for(const el of elements) {
-        const hit = el.container.querySelector(`[data-cy-state="${name}"]`)
-        if(!hit) continue
-        target = hit
-        break
+    shouldHaveState: (name:string, implementations?:string) => {
+      if(elements.length > 1) {
+        utils.bubbleError(2, `found multiple elements to test. please select with "nth(n)"`)
       }
-      if(!target) {
-        utils.bubbleError(2, `expected to find state "${name}".`)
+      const imps = implementations ? implementations.split(',') : null
+      const container = elements[0].container
+
+      if(imps) {
+        for(const key of imps) {
+          const hit = container.querySelector(`[data-cy-state="${name}:${key}"]`)
+          if(!hit) utils.bubbleError(2, `expected to find state "${name}:${key}".`)
+        }
+      }
+      else {
+        const hit = container.querySelector(`[data-cy-state="${name}"]`)
+        if(!hit) utils.bubbleError(2, `expected to find state "${name}".`)
       }
     },
 
     shouldNotHaveState: (name:string) => {
-      let target = null
-      for(const el of elements) {
-        const hit = el.container.querySelector(`[data-cy-state="${name}"]`)
-        if(!hit) continue
-        target = hit
-        break
+      if(elements.length > 1) {
+        utils.bubbleError(2, `found multiple elements to test. please select with "nth(n)"`)
       }
-      if(target) {
-        utils.bubbleError(2, `expected not to find state "${name}".`)
+      const container = elements[0].container
+      const hits = Array.from(container.querySelectorAll(`[data-cy-state]`))
+      for(const hit of hits) {
+        const state:string = (hit.attributes as any)['data-cy-state'].value
+        if(state === name || state.startsWith(name + ':')) {
+          utils.bubbleError(2, `expected not to find state "${state}".`)
+        }
       }
     },
 
@@ -167,7 +170,7 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
 
     unwrap: () => {
       if(elements.length > 1) {
-        utils.bubbleError(2, `found multiple elements to unwrap.`)
+        utils.bubbleError(2, `found multiple elements to unwrap. please select with "nth(n)"`)
       }
       return elements[0].container
     },
@@ -189,7 +192,7 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
 
     simulate: async (cb:(el:Element) => Promise<void> | void) => {
       if(elements.length > 1) {
-        utils.bubbleError(2, `found multiple elements to simulate event. Please use nth() to select one`)
+        utils.bubbleError(2, `found multiple elements to simulate event. Please use nth(n) to select one`)
       }
 
       await cb(elements[0].container)
