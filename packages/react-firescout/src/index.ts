@@ -1,9 +1,4 @@
 
-declare namespace Firescout {
-  export interface FireModule {
-    getModule(name:unknown):any
-  }
-}
 
 
 type FirescoutElement = {
@@ -20,6 +15,7 @@ declare global {
       cb: Function,
     }},
     firescoutVars?: {[name:string]: any}
+
   }
 }
 
@@ -34,23 +30,63 @@ export function mount (El:any, ctx:any) {
   }], ctx)
 }
 
-export const fn:Firescout.FireModule['getModule'] = name => {
 
+type MockConfig = {
+  value?: any
+  fixture?: string
+  sync?: boolean
+  timeout?: number
+  transform?: (data:any) => any
 }
 
-export function getModule (name:string) {
+export function getModule (moduleName:string) {
+  const mock_path = "/Users/manueljung/Documents/relax/firescout/examples/jest-example/firescout-mocks"
   return {
-    fn: (name:string) => ({
-      stub() {
+    fn: (fnName:string) => ({
+      stub<Fn extends (...args: any) => any>(wrapper?:Fn) {
+        if(!window.cymocks) window.cymocks = {}
 
+        // @ts-expect-error
+        if(!wrapper) wrapper = (cb:any):unknown => cb()
+        // @ts-expect-error
+        const cb = wrapper(() => null)
+        
+        window.cymocks[moduleName + '.' + fnName] = {
+          cb: cb,
+          type: 'stub'
+        }
       },
-      mock(config: string | {
-        value?: any
-        fixture?: string
-        sync?: boolean
-        timeout?: number
-      }) {
+      async mock<Fn extends (...args: any) => any>(config: string | MockConfig, wrapper?:Fn) {
+        const c:MockConfig = (!config || typeof config === 'string')
+          ? {fixture:config}
+          : config
+          
+        let value = c.value
+        if(!value) {
+          let path = mock_path + '/' + moduleName + '/' + fnName
+          if(c.fixture && c.fixture !== 'default') path += '.' + c.fixture
+          value = (await import(`${path}`)).default
+        }
+        
+        if(!window.cymocks) window.cymocks = {}
 
+        // @ts-expect-error
+        if(!wrapper) wrapper = (cb:any):unknown => cb()
+
+        // @ts-expect-error
+        const cb = wrapper(c.sync 
+          ? () => value
+          : async () => {
+            if(c.timeout) await new Promise(r => setTimeout(r,c.timeout))
+            return value
+          })
+        
+        window.cymocks[moduleName + '.' + fnName] = {
+          cb: cb,
+          type: 'mock'
+        }
+
+        return cb as ReturnType<Fn>
       }
     }),
   }
@@ -74,7 +110,7 @@ function wrap (elements:FirescoutElement[], ctx:any) {
         throw new Error(`could not find context "${name}"`)
       }
 
-      return wrap(targets, ctx) as ReturnType<typeof wrap>
+      return wrap(targets, ctx)
     },
     
     handle: (name:string) => {

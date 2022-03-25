@@ -12,7 +12,7 @@ describe('app', () => {
   beforeEach(clearMocks)
 
   test('renders learn react link!', async () => {
-    // getModule('App').fn('my-fn').mock('my-fixture')
+    const fixture = getModule('App').fn('my-fn').mock('my-fixture', jest.fn)
     
 
     const f = mount(<App />, rtl)

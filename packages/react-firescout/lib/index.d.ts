@@ -1,8 +1,3 @@
-declare namespace Firescout {
-    interface FireModule {
-        getModule(name: unknown): any;
-    }
-}
 declare global {
     interface Window {
         cymocks?: {
@@ -28,16 +23,17 @@ export declare function mount(El: any, ctx: any): {
     click: (w?: string | number | undefined) => Promise<any>;
     simulate: (cb: (el: Element) => void | Promise<void>) => Promise<any>;
 };
-export declare const fn: Firescout.FireModule['getModule'];
-export declare function getModule(name: string): {
-    fn: (name: string) => {
-        stub(): void;
-        mock(config: string | {
-            value?: any;
-            fixture?: string;
-            sync?: boolean;
-            timeout?: number;
-        }): void;
+declare type MockConfig = {
+    value?: any;
+    fixture?: string;
+    sync?: boolean;
+    timeout?: number;
+    transform?: (data: any) => any;
+};
+export declare function getModule(moduleName: string): {
+    fn: (fnName: string) => {
+        stub<Fn extends (...args: any) => any>(wrapper?: Fn | undefined): void;
+        mock<Fn_1 extends (...args: any) => any>(config: string | MockConfig, wrapper?: Fn_1 | undefined): Promise<ReturnType<Fn_1>>;
     };
 };
 export declare function clearMocks(): void;

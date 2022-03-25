@@ -2,6 +2,10 @@ import * as React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+async function fetchData () {
+  return 'foo'
+}
+
 function App() {
   const [on, setOn] = React.useState(false)
   const [tOn, setTOn] = React.useState(false)
@@ -20,8 +24,8 @@ function App() {
   }, [tOn])
 
   React.useEffect(() => {
-    if(tOn) Promise.resolve().then(() => setT3On(true))
-    else Promise.resolve().then(() => setT3On(false))
+    if(tOn) fetchData().then(() => setT3On(true))
+    else setT3On(false)
   }, [t2On])
 
 

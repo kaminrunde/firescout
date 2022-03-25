@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -36,7 +55,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clearMocks = exports.getModule = exports.fn = exports.mount = void 0;
+exports.clearMocks = exports.getModule = exports.mount = void 0;
 function mount(El, ctx) {
     var component = ctx.render(El);
     return wrap([{
@@ -47,14 +66,71 @@ function mount(El, ctx) {
         }], ctx);
 }
 exports.mount = mount;
-exports.fn = function (name) {
-};
-function getModule(name) {
+function getModule(moduleName) {
+    var mock_path = "/Users/manueljung/Documents/relax/firescout/examples/jest-example/firescout-mocks";
     return {
-        fn: function (name) { return ({
-            stub: function () {
+        fn: function (fnName) { return ({
+            stub: function (wrapper) {
+                if (!window.cymocks)
+                    window.cymocks = {};
+                // @ts-expect-error
+                if (!wrapper)
+                    wrapper = function (cb) { return cb(); };
+                // @ts-expect-error
+                var cb = wrapper(function () { return null; });
+                window.cymocks[moduleName + '.' + fnName] = {
+                    cb: cb,
+                    type: 'stub'
+                };
             },
-            mock: function (config) {
+            mock: function (config, wrapper) {
+                return __awaiter(this, void 0, void 0, function () {
+                    var c, value, path, cb;
+                    var _this = this;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                c = (!config || typeof config === 'string')
+                                    ? { fixture: config }
+                                    : config;
+                                value = c.value;
+                                if (!!value) return [3 /*break*/, 2];
+                                path = mock_path + '/' + moduleName + '/' + fnName;
+                                if (c.fixture && c.fixture !== 'default')
+                                    path += '.' + c.fixture;
+                                return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require("" + path)); })];
+                            case 1:
+                                value = (_a.sent()).default;
+                                _a.label = 2;
+                            case 2:
+                                if (!window.cymocks)
+                                    window.cymocks = {};
+                                // @ts-expect-error
+                                if (!wrapper)
+                                    wrapper = function (cb) { return cb(); };
+                                cb = wrapper(c.sync
+                                    ? function () { return value; }
+                                    : function () { return __awaiter(_this, void 0, void 0, function () {
+                                        return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0:
+                                                    if (!c.timeout) return [3 /*break*/, 2];
+                                                    return [4 /*yield*/, new Promise(function (r) { return setTimeout(r, c.timeout); })];
+                                                case 1:
+                                                    _a.sent();
+                                                    _a.label = 2;
+                                                case 2: return [2 /*return*/, value];
+                                            }
+                                        });
+                                    }); });
+                                window.cymocks[moduleName + '.' + fnName] = {
+                                    cb: cb,
+                                    type: 'mock'
+                                };
+                                return [2 /*return*/, cb];
+                        }
+                    });
+                });
             }
         }); },
     };
