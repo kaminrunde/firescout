@@ -28,6 +28,7 @@ function App() {
   return (
     <article data-cy-ctx='App'>
       <button data-cy-handle='btn' onClick={()=>setOn(!on)}>switch</button>
+      <button data-cy-handle='btn' onClick={()=>setOn(!on)}>switch</button>
       <span data-cy-state={on && 'on'}>{on ? 'on' : 'off'}</span>
       <div data-cy-state={tOn && 'ton'}>{tOn ? 'ton' : 'toff'}</div>
       <h1 data-cy-state={t2On && 't2on'}>{t2On ? 't2on' : 't2off'}</h1>

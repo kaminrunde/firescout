@@ -1,23 +1,43 @@
+// <reference path="Firescout.d.ts"/>
+
 import React from 'react';
 // import { render, screen, fireEvent, act } from '@testing-library/react';
 import App from './App';
-import {mount} from '@kaminrunde/react-firescout'
+import {mount, getModule, clearMocks} from '@kaminrunde/react-firescout'
 import * as rtl from '@testing-library/react';
 
-test('renders learn react link', async () => {
-  const f = mount(<App />, rtl)
-  const ctx = () => f.context('App')
 
-  ctx().shouldNotHaveState('on')
-  ctx().shouldNotHaveState('ton')
-  ctx().shouldNotHaveState('t2on')
-  ctx().shouldNotHaveState('t3on')
-  await ctx().handle('btn').click(100)
-  ctx().shouldHaveState('on')
-  ctx().shouldHaveState('ton')
-  ctx().shouldHaveState('t2on')
-  ctx().shouldHaveState('t3on')
-});
+describe('app', () => {
+
+  beforeEach(clearMocks)
+
+  test('renders learn react link!', async () => {
+    // getModule('App').fn('my-fn').mock('my-fixture')
+    
+
+    const f = mount(<App />, rtl)
+    const ctx = () => f.context('App')
+
+    const el = ctx().unwrap()
+    
+  
+    // console.log(JSON.stringify(expect.getState(), null, 2))
+  
+    ctx().shouldNotHaveState('on')
+    ctx().shouldNotHaveState('ton')
+    ctx().shouldNotHaveState('t2on')
+    ctx().shouldNotHaveState('t3on')
+    await ctx().handle('btn').nth(0).click(10)
+    ctx().shouldHaveState('on')
+    ctx().shouldHaveState('ton')
+    ctx().shouldHaveState('t2on')
+    ctx().shouldHaveState('t3on')
+  });
+
+  test('foo', () => {
+    
+  })
+})
 
 
 // function wrap <T>(t:T):Firescout<T> {

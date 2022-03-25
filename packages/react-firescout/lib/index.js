@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mount = void 0;
+exports.clearMocks = exports.getModule = exports.fn = exports.mount = void 0;
 function mount(El, ctx) {
     var component = ctx.render(El);
     return wrap([{
@@ -47,6 +47,24 @@ function mount(El, ctx) {
         }], ctx);
 }
 exports.mount = mount;
+exports.fn = function (name) {
+};
+function getModule(name) {
+    return {
+        fn: function (name) { return ({
+            stub: function () {
+            },
+            mock: function (config) {
+            }
+        }); },
+    };
+}
+exports.getModule = getModule;
+function clearMocks() {
+    delete window.cymocks;
+    delete window.firescoutVars;
+}
+exports.clearMocks = clearMocks;
 function wrap(elements, ctx) {
     var _this = this;
     return {

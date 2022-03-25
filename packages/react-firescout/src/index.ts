@@ -1,9 +1,26 @@
 
+declare namespace Firescout {
+  export interface FireModule {
+    getModule(name:unknown):any
+  }
+}
+
+
 type FirescoutElement = {
   parent: null | FirescoutElement
   container: Element
   type: 'context' | 'handle' | 'collection' | 'root'
   index: number
+}
+
+declare global {
+  interface Window {
+    cymocks?: {[name:string]: {
+      type: 'stub' | 'mock',
+      cb: Function,
+    }},
+    firescoutVars?: {[name:string]: any}
+  }
 }
 
 export function mount (El:any, ctx:any) {
@@ -15,6 +32,33 @@ export function mount (El:any, ctx:any) {
     parent: null,
     index: 0
   }], ctx)
+}
+
+export const fn:Firescout.FireModule['getModule'] = name => {
+
+}
+
+export function getModule (name:string) {
+  return {
+    fn: (name:string) => ({
+      stub() {
+
+      },
+      mock(config: string | {
+        value?: any
+        fixture?: string
+        sync?: boolean
+        timeout?: number
+      }) {
+
+      }
+    }),
+  }
+}
+
+export function clearMocks () {
+  delete window.cymocks
+  delete window.firescoutVars
 }
 
 function wrap (elements:FirescoutElement[], ctx:any) {
@@ -30,7 +74,7 @@ function wrap (elements:FirescoutElement[], ctx:any) {
         throw new Error(`could not find context "${name}"`)
       }
 
-      return wrap(targets, ctx)
+      return wrap(targets, ctx) as ReturnType<typeof wrap>
     },
     
     handle: (name:string) => {
