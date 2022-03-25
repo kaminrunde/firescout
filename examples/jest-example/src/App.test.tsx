@@ -12,7 +12,8 @@ describe('app', () => {
   beforeEach(clearMocks)
 
   test('renders learn react link!', async () => {
-    // const fixture = getModule('App').fn('my-fn').mock('my-fixture', jest.fn)
+    const fixture = await getModule('App').fn('fetchData').mock('default', jest.fn)
+    // const result = fixture()
     
 
     const f = mount(<App />, rtl)
@@ -32,6 +33,8 @@ describe('app', () => {
     ctx().shouldHaveState('ton')
     ctx().shouldHaveState('t2on')
     ctx().shouldHaveState('t3on')
+
+    // expect(fixture).toBeCalledTimes(1)
   });
 
   test('foo', () => {
