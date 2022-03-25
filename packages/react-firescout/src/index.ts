@@ -174,7 +174,7 @@ function wrap (elements:t.FirescoutElement[], ctx:any) {
 
     // events
 
-    click: async (w?:number|string) => {
+    click: async (w?:number) => {
       if(elements.length > 1) {
         utils.bubbleError(2, `found multiple elements to click. Please use nth() to select one`)
       }

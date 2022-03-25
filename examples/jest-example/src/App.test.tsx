@@ -27,7 +27,7 @@ describe('app', () => {
     ctx().shouldNotHaveState('ton')
     ctx().shouldNotHaveState('t2on')
     ctx().shouldNotHaveState('t3on')
-    await ctx().handle('btn2').nth(0).click(10)
+    await ctx().handle('btn').nth(0).click(1)
     ctx().shouldHaveState('on')
     ctx().shouldHaveState('ton')
     ctx().shouldHaveState('t2on')
