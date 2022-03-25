@@ -1,12 +1,5 @@
-
-
-
-type FirescoutElement = {
-  parent: null | FirescoutElement
-  container: Element
-  type: 'context' | 'handle' | 'collection' | 'root'
-  index: number
-}
+import * as t from './types'
+import * as utils from './utils'
 
 declare global {
   interface Window {
@@ -97,45 +90,37 @@ export function clearMocks () {
   delete window.firescoutVars
 }
 
-function wrap (elements:FirescoutElement[], ctx:any) {
+function wrap (elements:t.FirescoutElement[], ctx:any) {
   return {
     context: (name:string) => {
-      const targets:FirescoutElement[] = []
-      for(const el of elements) targets.push(
-        ...Array.from(el.container.querySelectorAll(`[data-cy-ctx="${name}"]`))
-          .map((container, index) => ({container, parent: el, type: 'context' as 'context', index}))
-      )
+      const targets = utils.query(`[data-cy-ctx="${name}"]`, elements)
 
       if(targets.length === 0) {
-        throw new Error(`could not find context "${name}"`)
+        utils.bubbleError(2, `could not find context "${name}"`)
       }
 
       return wrap(targets, ctx)
     },
     
     handle: (name:string) => {
-      const targets:FirescoutElement[] = []
-      for(const el of elements) targets.push(
-        ...Array.from(el.container.querySelectorAll(`[data-cy-handle="${name}"]`))
-          .map((container, index) => ({container, parent: el, type: 'handle' as 'handle', index}))
-      )
+      const targets = utils.query(`[data-cy-handle="${name}"]`, elements)
 
       if(targets.length === 0) {
-        throw new Error(`could not find handle "${name}"`)
+        utils.bubbleError(2, `could not find handle "${name}"`)
       }
 
       return wrap(targets, ctx)
     },
 
     collection: (name:string) => {
-      const targets:FirescoutElement[] = []
+      const targets:t.FirescoutElement[] = []
       for(const el of elements) targets.push(
         ...Array.from(el.container.querySelectorAll(`[data-cy-collection="${name}"]`))
           .map((container, index) => ({container, parent: el, type: 'collection' as 'collection', index}))
       )
 
       if(targets.length === 0) {
-        throw new Error(`could not find collection "${name}"`)
+        utils.bubbleError(2, `could not find collection "${name}"`)
       }
 
       return wrap(targets, ctx)
@@ -149,7 +134,9 @@ function wrap (elements:FirescoutElement[], ctx:any) {
         target = hit
         break
       }
-      if(!target) throw new Error(`expected to find state "${name}".`)
+      if(!target) {
+        utils.bubbleError(2, `expected to find state "${name}".`)
+      }
     },
 
     shouldNotHaveState: (name:string) => {
@@ -160,13 +147,17 @@ function wrap (elements:FirescoutElement[], ctx:any) {
         target = hit
         break
       }
-      if(target) throw new Error(`expected not to find state "${name}".`)
+      if(target) {
+        utils.bubbleError(2, `expected not to find state "${name}".`)
+      }
     },
 
     // utils
 
     nth(n:number) {
-      if(!elements[n]) throw new Error(`"nth(${n})" does not work on a list of length ${elements.length}`)
+      if(!elements[n]) {
+        utils.bubbleError(2, `"nth(${n})" does not work on a list of length ${elements.length}`)
+      }
       return wrap([elements[n]], ctx)
     },
 
@@ -176,7 +167,7 @@ function wrap (elements:FirescoutElement[], ctx:any) {
 
     unwrap: () => {
       if(elements.length > 1) {
-        throw new Error(`found multiple elements to unwrap.`)
+        utils.bubbleError(2, `found multiple elements to unwrap.`)
       }
       return elements[0].container
     },
@@ -185,7 +176,7 @@ function wrap (elements:FirescoutElement[], ctx:any) {
 
     click: async (w?:number|string) => {
       if(elements.length > 1) {
-        throw new Error(`found multiple elements to click. Please use nth() to select one`)
+        utils.bubbleError(2, `found multiple elements to click. Please use nth() to select one`)
       }
       ctx.fireEvent.click(elements[0].container)
 
@@ -198,7 +189,7 @@ function wrap (elements:FirescoutElement[], ctx:any) {
 
     simulate: async (cb:(el:Element) => Promise<void> | void) => {
       if(elements.length > 1) {
-        throw new Error(`found multiple elements to simulate event. Please use nth() to select one`)
+        utils.bubbleError(2, `found multiple elements to simulate event. Please use nth() to select one`)
       }
 
       await cb(elements[0].container)

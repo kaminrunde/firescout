@@ -56,6 +56,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.clearMocks = exports.getModule = exports.mount = void 0;
+var utils = __importStar(require("./utils"));
 function mount(El, ctx) {
     var component = ctx.render(El);
     return wrap([{
@@ -145,80 +146,67 @@ function wrap(elements, ctx) {
     var _this = this;
     return {
         context: function (name) {
+            var targets = utils.query("[data-cy-ctx=\"" + name + "\"]", elements);
+            if (targets.length === 0) {
+                utils.bubbleError(2, "could not find context \"" + name + "\"");
+            }
+            return wrap(targets, ctx);
+        },
+        handle: function (name) {
+            var targets = utils.query("[data-cy-handle=\"" + name + "\"]", elements);
+            if (targets.length === 0) {
+                utils.bubbleError(2, "could not find handle \"" + name + "\"");
+            }
+            return wrap(targets, ctx);
+        },
+        collection: function (name) {
             var targets = [];
             var _loop_1 = function (el) {
-                targets.push.apply(targets, Array.from(el.container.querySelectorAll("[data-cy-ctx=\"" + name + "\"]"))
-                    .map(function (container, index) { return ({ container: container, parent: el, type: 'context', index: index }); }));
+                targets.push.apply(targets, Array.from(el.container.querySelectorAll("[data-cy-collection=\"" + name + "\"]"))
+                    .map(function (container, index) { return ({ container: container, parent: el, type: 'collection', index: index }); }));
             };
             for (var _i = 0, elements_1 = elements; _i < elements_1.length; _i++) {
                 var el = elements_1[_i];
                 _loop_1(el);
             }
             if (targets.length === 0) {
-                throw new Error("could not find context \"" + name + "\"");
-            }
-            return wrap(targets, ctx);
-        },
-        handle: function (name) {
-            var targets = [];
-            var _loop_2 = function (el) {
-                targets.push.apply(targets, Array.from(el.container.querySelectorAll("[data-cy-handle=\"" + name + "\"]"))
-                    .map(function (container, index) { return ({ container: container, parent: el, type: 'handle', index: index }); }));
-            };
-            for (var _i = 0, elements_2 = elements; _i < elements_2.length; _i++) {
-                var el = elements_2[_i];
-                _loop_2(el);
-            }
-            if (targets.length === 0) {
-                throw new Error("could not find handle \"" + name + "\"");
-            }
-            return wrap(targets, ctx);
-        },
-        collection: function (name) {
-            var targets = [];
-            var _loop_3 = function (el) {
-                targets.push.apply(targets, Array.from(el.container.querySelectorAll("[data-cy-collection=\"" + name + "\"]"))
-                    .map(function (container, index) { return ({ container: container, parent: el, type: 'collection', index: index }); }));
-            };
-            for (var _i = 0, elements_3 = elements; _i < elements_3.length; _i++) {
-                var el = elements_3[_i];
-                _loop_3(el);
-            }
-            if (targets.length === 0) {
-                throw new Error("could not find collection \"" + name + "\"");
+                utils.bubbleError(2, "could not find collection \"" + name + "\"");
             }
             return wrap(targets, ctx);
         },
         shouldHaveState: function (name) {
             var target = null;
-            for (var _i = 0, elements_4 = elements; _i < elements_4.length; _i++) {
-                var el = elements_4[_i];
+            for (var _i = 0, elements_2 = elements; _i < elements_2.length; _i++) {
+                var el = elements_2[_i];
                 var hit = el.container.querySelector("[data-cy-state=\"" + name + "\"]");
                 if (!hit)
                     continue;
                 target = hit;
                 break;
             }
-            if (!target)
-                throw new Error("expected to find state \"" + name + "\".");
+            if (!target) {
+                utils.bubbleError(2, "expected to find state \"" + name + "\".");
+            }
         },
         shouldNotHaveState: function (name) {
             var target = null;
-            for (var _i = 0, elements_5 = elements; _i < elements_5.length; _i++) {
-                var el = elements_5[_i];
+            for (var _i = 0, elements_3 = elements; _i < elements_3.length; _i++) {
+                var el = elements_3[_i];
                 var hit = el.container.querySelector("[data-cy-state=\"" + name + "\"]");
                 if (!hit)
                     continue;
                 target = hit;
                 break;
             }
-            if (target)
-                throw new Error("expected not to find state \"" + name + "\".");
+            if (target) {
+                utils.bubbleError(2, "expected not to find state \"" + name + "\".");
+            }
         },
         // utils
         nth: function (n) {
-            if (!elements[n])
-                throw new Error("\"nth(" + n + ")\" does not work on a list of length " + elements.length);
+            if (!elements[n]) {
+                utils.bubbleError(2, "\"nth(" + n + ")\" does not work on a list of length " + elements.length);
+            }
             return wrap([elements[n]], ctx);
         },
         wait: function (ms) {
@@ -226,7 +214,7 @@ function wrap(elements, ctx) {
         },
         unwrap: function () {
             if (elements.length > 1) {
-                throw new Error("found multiple elements to unwrap.");
+                utils.bubbleError(2, "found multiple elements to unwrap.");
             }
             return elements[0].container;
         },
@@ -234,7 +222,7 @@ function wrap(elements, ctx) {
         click: function (w) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 if (elements.length > 1) {
-                    throw new Error("found multiple elements to click. Please use nth() to select one");
+                    utils.bubbleError(2, "found multiple elements to click. Please use nth() to select one");
                 }
                 ctx.fireEvent.click(elements[0].container);
                 if (typeof w !== 'undefined') {
@@ -249,7 +237,7 @@ function wrap(elements, ctx) {
                 switch (_a.label) {
                     case 0:
                         if (elements.length > 1) {
-                            throw new Error("found multiple elements to simulate event. Please use nth() to select one");
+                            utils.bubbleError(2, "found multiple elements to simulate event. Please use nth() to select one");
                         }
                         return [4 /*yield*/, cb(elements[0].container)];
                     case 1:

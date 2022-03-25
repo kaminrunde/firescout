@@ -12,7 +12,7 @@ describe('app', () => {
   beforeEach(clearMocks)
 
   test('renders learn react link!', async () => {
-    const fixture = getModule('App').fn('my-fn').mock('my-fixture', jest.fn)
+    // const fixture = getModule('App').fn('my-fn').mock('my-fixture', jest.fn)
     
 
     const f = mount(<App />, rtl)
@@ -27,7 +27,7 @@ describe('app', () => {
     ctx().shouldNotHaveState('ton')
     ctx().shouldNotHaveState('t2on')
     ctx().shouldNotHaveState('t3on')
-    await ctx().handle('btn').nth(0).click(10)
+    await ctx().handle('btn2').nth(0).click(10)
     ctx().shouldHaveState('on')
     ctx().shouldHaveState('ton')
     ctx().shouldHaveState('t2on')
