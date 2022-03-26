@@ -12,6 +12,8 @@ var createModuleTree_1 = __importDefault(require("./createModuleTree"));
 var reporter_1 = require("./reporter");
 var config_1 = require("./config");
 Object.defineProperty(exports, "getConfig", { enumerable: true, get: function () { return config_1.default; } });
+var createFileContent_1 = require("./createFileContent");
+Object.defineProperty(exports, "createFileContent", { enumerable: true, get: function () { return createFileContent_1.default; } });
 function getStructure() {
     return searchWithNode_1.default()
         .then(createCommandHierarchie_1.default)

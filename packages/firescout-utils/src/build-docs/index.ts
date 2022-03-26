@@ -7,6 +7,7 @@ import createDocs from "./createDocs";
 import createModuleTree from "./createModuleTree";
 import { validate } from "./reporter";
 export { default as getConfig } from "./config";
+export { default as createFileContent } from "./createFileContent";
 
 export function getStructure() {
   return searchWithNode()

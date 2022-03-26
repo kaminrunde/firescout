@@ -100,6 +100,7 @@ Cypress.Commands.add("fn", { prevSubject: true }, function (module, name) {
 Cypress.Commands.add("variable", { prevSubject: true }, function (module, name) {
     return cy.wrap([module, name], { log: false });
 });
+//@ts-ignore
 Cypress.Commands.add("set", { prevSubject: true }, function (_a, data) {
     var module = _a[0], name = _a[1];
     var cb = function (win) {
@@ -115,6 +116,7 @@ Cypress.Commands.add("set", { prevSubject: true }, function (_a, data) {
     });
     return cy.wrap([module, name], { log: false });
 });
+//@ts-ignore
 Cypress.Commands.add("load", { prevSubject: true }, function (_a, variation) {
     var module = _a[0], name = _a[1];
     var get = function () { return null; };
@@ -157,6 +159,7 @@ Cypress.Commands.add("load", { prevSubject: true }, function (_a, variation) {
     });
     return cy.wrap([module, name], { log: false });
 });
+//@ts-ignore
 Cypress.Commands.add("mock", { prevSubject: true }, function (_a, variation, rootOpt) {
     var module = _a[0], name = _a[1];
     if (rootOpt === void 0) { rootOpt = {}; }
@@ -248,6 +251,7 @@ Cypress.Commands.add("mock", { prevSubject: true }, function (_a, variation, roo
     });
     return cy.wrap([module, name], { log: false });
 });
+//@ts-ignore
 Cypress.Commands.add("doesReturn", { prevSubject: true }, function (_a, data, opt) {
     var module = _a[0], name = _a[1];
     if (opt === void 0) { opt = {}; }
@@ -278,6 +282,7 @@ Cypress.Commands.add("doesReturn", { prevSubject: true }, function (_a, data, op
     });
     return cy.wrap([module, name], { log: false });
 });
+//@ts-ignore
 Cypress.Commands.add("createStub", { prevSubject: true }, function (_a) {
     var module = _a[0], name = _a[1];
     var cb = function (win) {

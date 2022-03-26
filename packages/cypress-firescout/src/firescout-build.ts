@@ -1,6 +1,13 @@
-import { getStructure } from "@kaminrunde/firescout-utils/lib/build-docs";
+import fs from "fs";
+import {
+  getStructure,
+  getConfig,
+  createFileContent,
+} from "@kaminrunde/firescout-utils/lib/build-docs";
 
-getStructure();
+const config = getConfig();
 
-// create firescout.d.ts content
-// save file in location defined in config
+getStructure()
+  .then(({ tree, docs, modules }) => createFileContent(tree, docs, modules))
+  .then((file) => fs.writeFileSync(config.outPath, file, "utf8"))
+  .catch(console.log);
