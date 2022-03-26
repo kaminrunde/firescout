@@ -11,9 +11,6 @@
     "build": "tsc --declaration",
     "build:types": "tsc --emitDeclarationOnly"
   },
-  "bin": {
-    "firescout-build": "./scripts/firescout-build.js"
-  },
   "author": "",
   "license": "MIT",
   "dependencies": {
