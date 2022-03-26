@@ -21,7 +21,7 @@ declare namespace Cypress {
 Cypress.Commands.add(
   "context",
   { prevSubject: "optional" },
-  (subject, name, index) => {
+  (subject: any, name, index) => {
     let cmd;
     if (subject) cmd = cy.get(`${subject.selector} [data-cy-ctx="${name}"]`);
     else if (typeof index === "string")
@@ -38,7 +38,7 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   "collection",
   { prevSubject: "optional" },
-  (subject, name, index) => {
+  (subject: any, name, index) => {
     let cmd;
     if (subject)
       cmd = cy.get(`${subject.selector} [data-cy-collection="${name}"]`);
@@ -56,7 +56,7 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   "handle",
   { prevSubject: "optional" },
-  (subject, name, index) => {
+  (subject: any, name, index) => {
     let cmd;
     if (subject.attr("data-cy-handle") === name)
       return cy.get(subject.selector);
@@ -76,7 +76,7 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   "shouldHaveState",
   { prevSubject: "optional" },
-  (subject, name, implementations) => {
+  (subject: any, name, implementations: string) => {
     const imps = implementations ? implementations.split(",") : null;
     cy.get(subject).should(($el) => {
       const ctx = $el.attr("data-cy-ctx") || $el.attr("data-cy-collection");
@@ -104,7 +104,7 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   "shouldNotHaveState",
   { prevSubject: "optional" },
-  (subject, name) => {
+  (subject: any, name) => {
     cy.get(subject).should(($el) => {
       const html = Cypress.$("<div>").append($el.clone()).html();
       const ctx = $el.attr("data-cy-ctx") || $el.attr("data-cy-collection");
@@ -141,6 +141,7 @@ Cypress.Commands.add("variable", { prevSubject: true }, (module, name) => {
   return cy.wrap([module, name], { log: false });
 });
 
+//@ts-ignore
 Cypress.Commands.add("set", { prevSubject: true }, ([module, name], data) => {
   const cb = (win: any) => {
     const id = `${module}.${name}`;
@@ -155,6 +156,7 @@ Cypress.Commands.add("set", { prevSubject: true }, ([module, name], data) => {
   return cy.wrap([module, name], { log: false });
 });
 
+//@ts-ignore
 Cypress.Commands.add(
   "load",
   { prevSubject: true },
@@ -203,10 +205,11 @@ Cypress.Commands.add(
   }
 );
 
+//@ts-ignore
 Cypress.Commands.add(
   "mock",
   { prevSubject: true },
-  ([module, name], variation, rootOpt = {}) => {
+  ([module, name], variation, rootOpt: any = {}) => {
     let get: any = () => null;
     let getOptions: any = () => ({});
     if (Cypress.env("firescoutTsFixtures")) {
@@ -298,10 +301,11 @@ Cypress.Commands.add(
   }
 );
 
+//@ts-ignore
 Cypress.Commands.add(
   "doesReturn",
   { prevSubject: true },
-  ([module, name], data, opt = {}) => {
+  ([module, name], data, opt: any = {}) => {
     const get = opt.timeout
       ? () =>
           new Promise((resolve) => setTimeout(() => resolve(data), opt.timeout))
@@ -329,6 +333,7 @@ Cypress.Commands.add(
   }
 );
 
+//@ts-ignore
 Cypress.Commands.add("createStub", { prevSubject: true }, ([module, name]) => {
   const cb = (win: any) => {
     const id = `${module}.${name}`;
