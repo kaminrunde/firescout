@@ -28,9 +28,17 @@ declare module '@kaminrunde/react-firescout' {
     simulate(cb:(el:Element) => Promise<void> | void):Promise<void>
   }
 
+  // generate for each collection (same add context; i have not created a collection yet. to test this feature you have to)
+  interface IdAppNotImplementedYet extends Interactable<IdAppNotImplementedYet> {
+    // ...
+  }
+
   // generate for each context
   interface IdApp extends Interactable<IdApp> {
+    // generate for each handle
     handle(name:'btn'):Interactable<IdApp>
+
+    // generate for each state
     shouldNotHaveState(name:'on'):IdApp
     shouldNotHaveState(name:'ton'):IdApp
     shouldNotHaveState(name:'t2on'):IdApp
@@ -39,6 +47,9 @@ declare module '@kaminrunde/react-firescout' {
     shouldHaveState(name:'ton', implemmetations:'imp1,imp2'):IdApp
     shouldHaveState(name:'t2on'):IdApp
     shouldHaveState(name:'t3on'):IdApp
+
+    // generate for each collection
+    collection(name:'not-implemented-yet'):IdAppNotImplementedYet
   }
 
   // static
