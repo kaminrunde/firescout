@@ -1,5 +1,5 @@
 {
-  "name": "@kaminrunde/cypress-firescout",
+  "name": "@kaminrunde/firescout-utils",
   "version": "1.0.1-alpha.42",
   "description": "",
   "main": "lib/index.js",
@@ -11,15 +11,11 @@
     "build": "tsc --declaration",
     "build:types": "tsc --emitDeclarationOnly"
   },
-  "bin": {
-    "firescout-build": "./scripts/firescout-build.js"
-  },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "colors": "^1.4.0",
-    "markdown-ast": "^0.2.1",
-    "@kaminrunde/firescout-utils": "^1.0.1-alpha.42"
+    "markdown-ast": "^0.2.1"
   },
   "repository": {
     "type": "git",
@@ -37,9 +33,6 @@
     "ts-node": "^8.10.1",
     "tsc": "^1.20150623.0",
     "typescript": "^3.9.3"
-  },
-  "peerDependencies": {
-    "cypress": "^6.0.1"
   },
   "publishConfig": {
     "access": "public"
