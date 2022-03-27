@@ -34,7 +34,11 @@ function App() {
       <button data-cy-handle='btn' onClick={()=>setOn(!on)}>switch</button>
       <button data-cy-handle='btn' onClick={()=>setOn(!on)}>switch</button>
       <span data-cy-state={on && 'on'}>{on ? 'on' : 'off'}</span>
-      <div data-cy-state={tOn && 'ton'}>{tOn ? 'ton' : 'toff'}</div>
+      <div data-cy-state={tOn && 'ton:imp1'}>
+        <span data-cy-state={tOn && 'ton:imp2'}>
+          {tOn ? 'ton' : 'toff'}
+        </span>
+      </div>
       <h1 data-cy-state={t2On && 't2on'}>{t2On ? 't2on' : 't2off'}</h1>
       <h1 data-cy-state={t3On && 't3on'}>{t2On ? 't3on' : 't3off'}</h1>
     </article>
