@@ -1,0 +1,3 @@
+{
+  "plugins": ["@kaminrunde/babel-plugin-firescout-mock"]
+}

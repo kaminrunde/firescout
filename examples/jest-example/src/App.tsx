@@ -1,8 +1,9 @@
-import * as React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react'
+import './App.css'
 
+/** @firescoutMockFn App.fetchData */
 async function fetchData () {
+  console.log('called')
   return 'foo'
 }
 
