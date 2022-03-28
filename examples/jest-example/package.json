@@ -24,7 +24,8 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "firescout": "firescout-build"
   },
   "eslintConfig": {
     "extends": [
