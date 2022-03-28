@@ -1,6 +1,6 @@
-import { Tree } from "./createCommandTree";
-import { Docs } from "./createDocs";
-import { ModuleTree } from "./createModuleTree";
+import { Tree } from "@kaminrunde/firescout-utils/lib/build-docs/createCommandTree";
+import { Docs } from "@kaminrunde/firescout-utils/lib/build-docs/createDocs";
+import { ModuleTree } from "@kaminrunde/firescout-utils/lib/build-docs/createModuleTree";
 
 export default function createFileContent(
   tree: Tree[],
@@ -19,7 +19,7 @@ export default function createFileContent(
     }
     
     type MockVarOptions = {
-      transform?: (val:any) => any
+      transform?: (val:any) => anyy
     }
 
     ${modules

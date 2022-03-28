@@ -2,8 +2,8 @@ import fs from "fs";
 import {
   getStructure,
   getConfig,
-  createFileContent,
 } from "@kaminrunde/firescout-utils/lib/build-docs";
+import createFileContent from "./createFileContent";
 
 const config = getConfig();
 

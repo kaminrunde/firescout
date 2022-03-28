@@ -8,7 +8,7 @@ var child_process_1 = require("child_process");
 var fs_1 = __importDefault(require("fs"));
 function executeCmd(cmd) {
     return new Promise(function (resolve, reject) {
-        (0, child_process_1.exec)(cmd, function (error, stdout) {
+        child_process_1.exec(cmd, function (error, stdout) {
             if (error)
                 resolve("");
             //reject(error)

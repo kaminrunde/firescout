@@ -100,17 +100,17 @@ function createCommandHierarchie(rawItems) {
     if (handleItems.length)
         for (var _j = 0, handleItems_1 = handleItems; _j < handleItems_1.length; _j++) {
             var item = handleItems_1[_j];
-            (0, reporter_1.report)("HANDLE_WITHOUT_PARENT", item);
+            reporter_1.report("HANDLE_WITHOUT_PARENT", item);
         }
     if (stateItems.length)
         for (var _k = 0, stateItems_1 = stateItems; _k < stateItems_1.length; _k++) {
             var item = stateItems_1[_k];
-            (0, reporter_1.report)("STATE_WITHOUT_PARENT", item);
+            reporter_1.report("STATE_WITHOUT_PARENT", item);
         }
     if (enhancedCollections.length)
         for (var _l = 0, enhancedCollections_1 = enhancedCollections; _l < enhancedCollections_1.length; _l++) {
             var item = enhancedCollections_1[_l];
-            (0, reporter_1.report)("COLLECTION_WITHOUT_PARENT", item);
+            reporter_1.report("COLLECTION_WITHOUT_PARENT", item);
         }
     return { tree: tree, mdItems: mdItems, moduleItems: moduleItems, fixtureItems: fixtureItems, variableItems: variableItems };
 }

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function createFileContent(tree, docs, modules) {
-    return ("\n    /// <reference types=\"cypress\" />\n\n    type MockFnOptions = {\n      timeout?: number,\n      throws?:boolean,\n      transform?: (val:any) => any,\n      ts?: boolean,\n      sync?: boolean\n    }\n    \n    type MockVarOptions = {\n      transform?: (val:any) => any\n    }\n\n    " + modules
+    return ("\n    /// <reference types=\"cypress\" />\n\n    type MockFnOptions = {\n      timeout?: number,\n      throws?:boolean,\n      transform?: (val:any) => any,\n      ts?: boolean,\n      sync?: boolean\n    }\n    \n    type MockVarOptions = {\n      transform?: (val:any) => anyy\n    }\n\n    " + modules
         .map(function (node) { return "\n      " + node.commands
         .map(function (cmd) { return "\n        interface " + cmd.typesaveId + " {\n          " + cmd.fixtures.map(function (f) { return "\n            " + f.description + "\n            mock(name:'" + f.variation + "', opt?:Omit<MockFnOptions,'sync'>):" + node.typesaveContext + "\n          "; }) + "\n\n          createStub():void\n\n          doesReturn(val:any, opt?:Omit<MockFnOptions,'transform'|'ts'>):void\n        }\n      "; })
         .join("\n") + "\n\n      " + node.variables

@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -54,14 +54,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
 };
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -75,16 +73,16 @@ function findInFiles() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    config = (0, config_1.default)();
-                    return [4 /*yield*/, findAllFiles(__spreadArray(__spreadArray([], config.widgetFolders, true), [
+                    config = config_1.default();
+                    return [4 /*yield*/, findAllFiles(__spreadArrays(config.widgetFolders, [
                             config.fixturesFolder,
-                        ], false))];
+                        ]))];
                 case 1:
                     files = _a.sent();
                     extensionsRegex = config.extensions
                         .split("|")
                         .concat("md")
-                        .map(function (s) { return ".".concat(s, "$"); })
+                        .map(function (s) { return "." + s + "$"; })
                         .join("|");
                     srcFiles = files.filter(function (f) {
                         return f.name.match(new RegExp(extensionsRegex));
@@ -92,9 +90,9 @@ function findInFiles() {
                     fixtureFiles = files.filter(function (f) {
                         return f.path.includes(config.fixturesFolder);
                     });
-                    allFiles = __spreadArray(__spreadArray([], srcFiles, true), fixtureFiles, true);
+                    allFiles = __spreadArrays(srcFiles, fixtureFiles);
                     rawItems = [];
-                    return [4 /*yield*/, Promise.all(__spreadArray(__spreadArray([], srcFiles.map(function (f) { return getSrcMatch(f.path); }), true), fixtureFiles.map(function (f) { return getFixtureMatch(f.path); }), true))];
+                    return [4 /*yield*/, Promise.all(__spreadArrays(srcFiles.map(function (f) { return getSrcMatch(f.path); }), fixtureFiles.map(function (f) { return getFixtureMatch(f.path); })))];
                 case 2:
                     matches = _a.sent();
                     _loop_1 = function (i) {
@@ -265,7 +263,7 @@ function getFixtureMatch(path) {
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    config = (0, config_1.default)();
+                    config = config_1.default();
                     if (!path.endsWith(".ts"))
                         return [2 /*return*/, null];
                     return [4 /*yield*/, utils.readFile(path)];
@@ -282,7 +280,7 @@ function getFixtureMatch(path) {
                     _b = fileName.split("."), name = _b[0], variation = _b[1];
                     if (variation === "ts")
                         variation = "default";
-                    result = result.replace("*/", "* @module ".concat(module, "\n * @name ").concat(name, "\n * @variation ").concat(variation, "\n */"));
+                    result = result.replace("*/", "* @module " + module + "\n * @name " + name + "\n * @variation " + variation + "\n */");
                     return [2 /*return*/, [
                             {
                                 type: "fixture",

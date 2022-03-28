@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -26,7 +26,7 @@ function createModuleTree(moduleItems, fixtureItems, variableItems) {
     var fixtureDict = {};
     for (var _i = 0, fixtures_1 = fixtures; _i < fixtures_1.length; _i++) {
         var f = fixtures_1[_i];
-        var id = "".concat(f.module, ".").concat(f.name);
+        var id = f.module + "." + f.name;
         if (!fixtureDict[id])
             fixtureDict[id] = [];
         fixtureDict[id].push(f);
@@ -76,7 +76,7 @@ function createFixture(item) {
     var variationMatch = item.payload.match(/@variation (.*)/);
     return {
         description: item.payload
-            .replace('*/', "* @file [".concat(item.file, "](").concat(process.cwd() + item.file, ")\n */")),
+            .replace('*/', "* @file [" + item.file + "](" + (process.cwd() + item.file) + ")\n */"),
         file: item.file,
         folder: item.folder,
         variation: variationMatch ? variationMatch[1] : '',
