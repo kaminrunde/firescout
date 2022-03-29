@@ -1,0 +1,7 @@
+{
+  "widgetFolders": ["src"],
+  "extensions": "tsx|ts",
+  "outPath": "jest/support/firescout.d.ts",
+  "fixturesFolder": "jest/fixtures/firescout",
+  "tsFixtures": false
+}
