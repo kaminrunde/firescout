@@ -7,13 +7,9 @@ export default function createFileContent(
   docs: Docs,
   modules: ModuleTree[]
 ) {
-  return `
-type Func = (...args: any) => any
+  return `declare module '@kaminrunde/react-firescout' {
 
-${modules.map(
-  (node) =>
-    `export function getModule (name: '${node.context}'):${node.typesaveContext}`
-)}
+type Func = (...args: any) => any
 
 ${modules.map(
   (node) =>
@@ -22,7 +18,20 @@ ${modules.map(
   mock<Wrapper extends Func>(name: 'default', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
   stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
 }`
-    )}`
+    ).join("\n")}`
+)}
+${modules.map(
+  (node) =>
+    `${node.variables.map(
+      (cmd) => `
+interface ${node.typesaveContext} {
+  /**
+   * @name ${cmd.name}
+   * @file [${cmd.file}](${process.cwd() + cmd.file})
+   */
+  fn(name:'${cmd.name}'):${cmd.typesaveId}
+`
+    )}}`
 )}
 
 ${modules.map(
@@ -211,5 +220,6 @@ ${tree.map(
 export function mount(el:any, config:any): Mount
 export function clearMocks(): void
 
-`;
+
+  }`;
 }
