@@ -19,7 +19,7 @@ export default function createFileContent(
     }
     
     type MockVarOptions = {
-      transform?: (val:any) => anyy
+      transform?: (val:any) => any
     }
 
     ${modules
