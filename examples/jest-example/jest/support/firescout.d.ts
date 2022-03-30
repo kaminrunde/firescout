@@ -79,8 +79,8 @@ shouldNotHaveState(name:'on'): IdApp
 * @name ton
 * @file [null](/Users/paul/Desktop/firescout/examples/jest-examplenull) 
 * @implementations 
-* - imp1 [(/src/App.tsx)](/Users/paul/Desktop/firescout/examples/jest-example/src/App.tsx): undefined
-* - imp2 [(/src/App.tsx)](/Users/paul/Desktop/firescout/examples/jest-example/src/App.tsx): undefined
+* - imp1 [(/src/App.tsx)](/Users/paul/Desktop/firescout/examples/jest-example/src/App.tsx): test
+* - imp2 [(/src/App.tsx)](/Users/paul/Desktop/firescout/examples/jest-example/src/App.tsx): test
 */
 shouldHaveState( name:'ton' , implementations: 'imp1,imp2'): IdApp
 
