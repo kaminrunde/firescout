@@ -22,7 +22,6 @@
   },
   "include": [
     "src",
-    "exampleFirescout.d.ts",
     "firescout.d.ts"
   ]
 }
