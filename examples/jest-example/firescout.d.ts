@@ -1,11 +1,18 @@
+declare module '@kaminrunde/react-firescout' {
 
 type Func = (...args: any) => any
-
-export function getModule (name: 'App'):IdApp
 
 interface IdAppfetchData {
   mock<Wrapper extends Func>(name: 'default', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
   stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
+}
+
+interface IdApp {
+  /**
+   * @name test
+   * @file [/src/App.tsx](/Users/paul/Desktop/firescout/examples/jest-example/src/App.tsx)
+   */
+  fn(name:'test'):IdApptest
 }
 
 export function getModule (name: 'App'):IdApp
@@ -138,3 +145,5 @@ interface Mount {
 export function mount(el:any, config:any): Mount
 export function clearMocks(): void
 
+
+  }

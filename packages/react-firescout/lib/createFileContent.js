@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function createFileContent(tree, docs, modules) {
-    return "\ntype Func = (...args: any) => any\n\n" + modules.map(function (node) {
-        return "export function getModule (name: '" + node.context + "'):" + node.typesaveContext;
-    }) + "\n\n" + modules.map(function (node) {
-        return "" + node.commands.map(function (cmd) { return "interface " + cmd.typesaveId + " {\n  mock<Wrapper extends Func>(name: 'default', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n  stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n}"; });
+    return "declare module '@kaminrunde/react-firescout' {\n\ntype Func = (...args: any) => any\n\n" + modules.map(function (node) {
+        return "" + node.commands.map(function (cmd) { return "interface " + cmd.typesaveId + " {\n  mock<Wrapper extends Func>(name: 'default', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n  stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n}"; }).join("\n");
+    }) + "\n" + modules.map(function (node) {
+        return node.variables.map(function (cmd) { return "\ninterface " + node.typesaveContext + " {\n  /**\n   * @name " + cmd.name + "\n   * @file [" + cmd.file + "](" + (process.cwd() + cmd.file) + ")\n   */\n  fn(name:'" + cmd.name + "'):" + cmd.typesaveId + "\n"; }) + "}";
     }) + "\n\n" + modules.map(function (node) {
         return "export function getModule (name: '" + node.context + "'):" + node.typesaveContext;
     }) + "\n\ninterface Interactable<Root> {\n  unwrap():Element\n  nth(n:number):Root\n  click(timeout?:number):Promise<void>\n  type(timeout?:number):Promise<void>\n  simulate(cb:(el:Element) => Promise<void> | void):Promise<void>\n}\n\n" + tree.map(function (node) { return "\n" + node.collections
@@ -56,6 +56,6 @@ function createFileContent(tree, docs, modules) {
         return " /**\n  * " + (((_a = docs[node.context]) === null || _a === void 0 ? void 0 : _a.description) || "...") + "  * @name " + node.context + "\n  * @file [" + node.folder + "](" + (process.cwd() + node.file) + ")\n  * @docs_file " + (docs[node.context]
             ? "[" + docs[node.context].file + "](" + (process.cwd() + docs[node.context].file) + ")"
             : "-") + "\n  */\n  context (name:'" + node.context + "'):" + node.typesaveContext + "\n}";
-    }) + "\n\nexport function mount(el:any, config:any): Mount\nexport function clearMocks(): void\n\n";
+    }) + "\n\nexport function mount(el:any, config:any): Mount\nexport function clearMocks(): void\n\n\n  }";
 }
 exports.default = createFileContent;

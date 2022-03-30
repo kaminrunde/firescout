@@ -68,7 +68,8 @@ function mount(El, ctx) {
 }
 exports.mount = mount;
 function getModule(moduleName) {
-    var mock_path = "/Users/manueljung/Documents/relax/firescout/examples/jest-example/firescout-mocks";
+    var mock_path = '../../../examples/jest-example/firescout-mocks';
+    // const mock_path = "/Users/manueljung/Documents/relax/firescout/examples/jest-example/firescout-mocks"
     return {
         fn: function (fnName) { return ({
             stub: function (wrapper) {
