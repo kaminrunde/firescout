@@ -33,7 +33,8 @@ type MockConfig = {
 }
 
 export function getModule (moduleName:string) {
-  const mock_path = "/Users/manueljung/Documents/relax/firescout/examples/jest-example/firescout-mocks"
+  const mock_path = '../../../examples/jest-example/firescout-mocks'
+  // const mock_path = "/Users/manueljung/Documents/relax/firescout/examples/jest-example/firescout-mocks"
   return {
     fn: (fnName:string) => ({
       stub<Fn extends (...args: any) => any>(wrapper?:Fn) {
