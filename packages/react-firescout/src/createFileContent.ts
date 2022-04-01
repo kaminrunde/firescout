@@ -13,26 +13,30 @@ type Func = (...args: any) => any
 
 ${modules.map(
   (node) =>
-    `${node.commands.map(
-      (cmd) => `interface ${cmd.typesaveId} {
+    `${node.commands
+      .map(
+        (cmd) => `interface ${cmd.typesaveId} {
   mock<Wrapper extends Func>(name: 'default', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
   stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
 }`
-    ).join("\n")}`
-)}
-${modules.map(
-  (node) =>
-    `${node.variables.map(
-      (cmd) => `
-interface ${node.typesaveContext} {
+      )
+      .join("\n")}
+  interface ${node.typesaveContext} {
+${node.commands
+  .map(
+    (cmd) => `
   /**
    * @name ${cmd.name}
    * @file [${cmd.file}](${process.cwd() + cmd.file})
    */
   fn(name:'${cmd.name}'):${cmd.typesaveId}
+  `
+  )
+  .join("\n")}
 `
-    )}}`
-)}
+)}}
+
+
 
 ${modules.map(
   (node) =>

@@ -2,10 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 function createFileContent(tree, docs, modules) {
     return "declare module '@kaminrunde/react-firescout' {\n\ntype Func = (...args: any) => any\n\n" + modules.map(function (node) {
-        return "" + node.commands.map(function (cmd) { return "interface " + cmd.typesaveId + " {\n  mock<Wrapper extends Func>(name: 'default', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n  stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n}"; }).join("\n");
-    }) + "\n" + modules.map(function (node) {
-        return node.variables.map(function (cmd) { return "\ninterface " + node.typesaveContext + " {\n  /**\n   * @name " + cmd.name + "\n   * @file [" + cmd.file + "](" + (process.cwd() + cmd.file) + ")\n   */\n  fn(name:'" + cmd.name + "'):" + cmd.typesaveId + "\n"; }) + "}";
-    }) + "\n\n" + modules.map(function (node) {
+        return node.commands
+            .map(function (cmd) { return "interface " + cmd.typesaveId + " {\n  mock<Wrapper extends Func>(name: 'default', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n  stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n}"; })
+            .join("\n") + "\n  interface " + node.typesaveContext + " {\n" + node.commands
+            .map(function (cmd) { return "\n  /**\n   * @name " + cmd.name + "\n   * @file [" + cmd.file + "](" + (process.cwd() + cmd.file) + ")\n   */\n  fn(name:'" + cmd.name + "'):" + cmd.typesaveId + "\n  "; })
+            .join("\n") + "\n";
+    }) + "}\n\n\n\n" + modules.map(function (node) {
         return "export function getModule (name: '" + node.context + "'):" + node.typesaveContext;
     }) + "\n\ninterface Interactable<Root> {\n  unwrap():Element\n  nth(n:number):Root\n  click(timeout?:number):Promise<void>\n  type(timeout?:number):Promise<void>\n  simulate(cb:(el:Element) => Promise<void> | void):Promise<void>\n}\n\n" + tree.map(function (node) { return "\n" + node.collections
         .map(function (colNode) { return "interface " + (node.typesaveContext + colNode.typesaveContext) + " extends Interactable<" + (node.typesaveContext + colNode.typesaveContext) + "> {\n" + colNode.handles
