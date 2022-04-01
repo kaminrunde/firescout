@@ -1,7 +1,14 @@
 import * as React from "react";
 
+/** @firescoutMockFn App.fetchInner */
+function fetchInner() {
+  return "foos";
+}
+
 export default function Inner(): JSX.Element {
   const [open, setOpen] = React.useState(false);
+
+  const inner = fetchInner();
 
   return (
     <div data-cy-collection="Inner">

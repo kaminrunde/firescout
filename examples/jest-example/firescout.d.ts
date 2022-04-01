@@ -6,6 +6,10 @@ interface IdAppfetchData {
   mock<Wrapper extends Func>(name: 'default', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
   stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
 }
+interface IdAppfetchInner {
+  mock<Wrapper extends Func>(name: 'default', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
+  stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
+}
   interface IdApp {
 
   /**
@@ -13,6 +17,13 @@ interface IdAppfetchData {
    * @file [/src/App.tsx](/Users/paul/Desktop/firescout/examples/jest-example/src/App.tsx)
    */
   fn(name:'fetchData'):IdAppfetchData
+  
+
+  /**
+   * @name fetchInner
+   * @file [/src/Inner/Inner.tsx](/Users/paul/Desktop/firescout/examples/jest-example/src/Inner/Inner.tsx)
+   */
+  fn(name:'fetchInner'):IdAppfetchInner
   
 }
 
