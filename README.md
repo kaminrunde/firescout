@@ -88,6 +88,9 @@ Changes:
 ? Are you sure you want to publish these packages? (ynH)
 ```
 
+### forced manual prelrelease from branch other than `master`
+
+`yarn run publish --allow-branch firescout-jest --force-publish '*'`
 
 ## Dev Setup
 

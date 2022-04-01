@@ -1,11 +1,11 @@
 {
   "name": "jest-example",
-  "version": "0.1.0",
+  "version": "1.0.1-alpha.44",
   "private": true,
   "dependencies": {
-    "@kaminrunde/babel-plugin-firescout-mock": "^1.0.1-alpha.36",
-    "@kaminrunde/firescout-utils": "^1.0.1-alpha.42",
-    "@kaminrunde/react-firescout": "^1.0.1-alpha.42",
+    "@kaminrunde/babel-plugin-firescout-mock": "^1.0.1-alpha.44",
+    "@kaminrunde/firescout-utils": "^1.0.1-alpha.44",
+    "@kaminrunde/react-firescout": "^1.0.1-alpha.44",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
