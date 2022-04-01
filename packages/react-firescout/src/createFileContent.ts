@@ -7,16 +7,17 @@ export default function createFileContent(tree: Tree[], docs: Docs, modules: Mod
 
 type Func = (...args: any) => any
 
-${modules.map(
-  (node) =>
-    `${node.commands
-      .map(
-        (cmd) => `interface ${cmd.typesaveId} {
+${modules
+  .map(
+    (node) =>
+      `${node.commands
+        .map(
+          (cmd) => `interface ${cmd.typesaveId} {
   mock<Wrapper extends Func>(name: 'default', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
   stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
 }`
-      )
-      .join('\n')}
+        )
+        .join('')}
   interface ${node.typesaveContext} {
 ${node.commands
   .map(
@@ -28,15 +29,15 @@ ${node.commands
   fn(name:'${cmd.name}'):${cmd.typesaveId}
   `
   )
+  .join('')}}`
+  )
   .join('\n')}
-`
-)}}
 
 
 
-${modules.map(
-  (node) => `export function getModule (name: '${node.context}'):${node.typesaveContext}`
-)}
+${modules
+  .map((node) => `export function getModule (name: '${node.context}'):${node.typesaveContext}`)
+  .join('\n')}
 
 interface Interactable<Root> {
   unwrap():Element
@@ -46,8 +47,9 @@ interface Interactable<Root> {
   simulate(cb:(el:Element) => Promise<void> | void):Promise<void>
 }
 
-${tree.map(
-  (node) => `
+${tree
+  .map(
+    (node) => `
 ${node.collections
   .map(
     (colNode) => `interface ${
@@ -134,32 +136,31 @@ handle(name:'${handle.name}', index?:number|string): Interactable<${node.typesav
   )
   .join('\n')}
 
-${node.states
-  .map(
-    (state) => `  /** 
+${node.states.map(
+  (state) => `  /** 
 * ${docs[node.context]?.states.bullets.find((row) => row.name === state.name)?.value || ''}
 * @name ${state.name}
 * @file [${state.file}](${process.cwd() + state.file}) ${
-      !state.implementations
-        ? ''
-        : `
+    !state.implementations
+      ? ''
+      : `
 * @implementations ${state.implementations
-            .map(
-              (imp) => `
+          .map(
+            (imp) => `
 * - ${imp.name} [(${imp.file})](${process.cwd() + imp.file}): ${
-                docs[node.context]?.states.bullets
-                  .find((row) => row.name === state.name)
-                  ?.bullets?.find((row) => row.name === imp.name)?.value
-              }`
-            )
-            .join('')}`
-    }
+              docs[node.context]?.states.bullets
+                .find((row) => row.name === state.name)
+                ?.bullets?.find((row) => row.name === imp.name)?.value
+            }`
+          )
+          .join('')}`
+  }
 */
 shouldHaveState( name:'${state.name}' ${
-      state.implementations
-        ? `, implementations: '${state.implementations.map((i) => i.name).join(',')}'`
-        : ''
-    }): ${node.typesaveContext}
+    state.implementations
+      ? `, implementations: '${state.implementations.map((i) => i.name).join(',')}'`
+      : ''
+  }): ${node.typesaveContext}
 
 /** 
 * ${docs[node.context]?.states.bullets.find((row) => row.name === state.name)?.value || ''}
@@ -168,18 +169,19 @@ shouldHaveState( name:'${state.name}' ${
 */
 shouldNotHaveState(name:'${state.name}'): ${node.typesaveContext}
 `
-  )
-  .join('\n')}
+)}
 }
 `
-)}
+  )
+  .join('')}
 
 interface Mount {
   wait(ms:number):Promise<void>
   unwrap():Element
 
-${tree.map(
-  (node) => ` /**
+${tree
+  .map(
+    (node) => ` /**
   * ${docs[node.context]?.description || '...'}  * @name ${node.context}
   * @file [${node.folder}](${process.cwd() + node.file})
   * @docs_file ${
@@ -189,8 +191,9 @@ ${tree.map(
   }
   */
   context (name:'${node.context}'):${node.typesaveContext}
-}`
-)}
+`
+  )
+  .join('\n')}
 
 export function mount(el:any, config:any): Mount
 export function clearMocks(): void
