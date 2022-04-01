@@ -29,7 +29,7 @@ function App() {
     else setT3On(false);
   }, [t2On]);
 
-  /** @firescoutMockVar App.test */
+
 
   return (
     <article data-cy-ctx="App">

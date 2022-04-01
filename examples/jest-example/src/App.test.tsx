@@ -8,17 +8,17 @@ describe("app", () => {
 
   test("renders learn react link!", async () => {
     const fixture = await getModule("App")
-      .fn('test')
-      .mock('default', jest.fn);
+      .fn("fetchData")
+      .mock("default", jest.fn);
 
     const f = mount(<App />, rtl);
     const ctx = () => f.context("App");
-    
+
     ctx().shouldNotHaveState("on");
     ctx().shouldNotHaveState("ton");
     ctx().shouldNotHaveState("t2on");
     ctx().shouldNotHaveState("t3on");
-    await ctx().handle("btn").nth(0).click(1);
+    await ctx().handle('btn').nth(0).click(1);
     ctx().shouldHaveState("on");
     ctx().shouldHaveState("ton", "imp1,imp2");
     ctx().shouldHaveState("t2on");
