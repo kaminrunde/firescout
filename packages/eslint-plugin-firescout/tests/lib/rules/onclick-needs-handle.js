@@ -15,8 +15,8 @@ RuleTester.setDefaultConfig({
   parserOptions: {
     ecmaVersion: 6,
     sourceType: 'module',
-    ecmaFeatures: { jsx: true }
-  }
+    ecmaFeatures: { jsx: true },
+  },
 })
 
 //------------------------------------------------------------------------------
@@ -27,18 +27,17 @@ var ruleTester = new RuleTester()
 ruleTester.run('onclick-needs-handle', rule, {
   valid: [
     {
-      code: "var foo = <button data-cy-handle='foo' onClick={console.log} />"
+      code: "var foo = <button data-cy-handle='foo' onClick={console.log} />",
     },
     {
-      code:
-        "var foo = <button data-cy-handle-foo='foo' onClick={console.log} />"
+      code: "var foo = <button data-cy-handle-foo='foo' onClick={console.log} />",
     },
     {
-      code: "var foo = <button data-cy-ctx='foo' onClick={console.log} />"
+      code: "var foo = <button data-cy-ctx='foo' onClick={console.log} />",
     },
     {
-      code: "var foo = <button data-cy-collection='foo' onClick={console.log} />"
-    }
+      code: "var foo = <button data-cy-collection='foo' onClick={console.log} />",
+    },
   ],
 
   invalid: [
@@ -47,9 +46,9 @@ ruleTester.run('onclick-needs-handle', rule, {
       errors: [
         {
           message: 'clickable elements need a data-cy-handle attribute',
-          type: 'JSXOpeningElement'
-        }
-      ]
-    }
-  ]
+          type: 'JSXOpeningElement',
+        },
+      ],
+    },
+  ],
 })

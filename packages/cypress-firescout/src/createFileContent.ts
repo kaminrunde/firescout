@@ -1,12 +1,8 @@
-import { Tree } from "@kaminrunde/firescout-utils/lib/build-docs/createCommandTree";
-import { Docs } from "@kaminrunde/firescout-utils/lib/build-docs/createDocs";
-import { ModuleTree } from "@kaminrunde/firescout-utils/lib/build-docs/createModuleTree";
+import { Tree } from '@kaminrunde/firescout-utils/lib/build-docs/createCommandTree'
+import { Docs } from '@kaminrunde/firescout-utils/lib/build-docs/createDocs'
+import { ModuleTree } from '@kaminrunde/firescout-utils/lib/build-docs/createModuleTree'
 
-export default function createFileContent(
-  tree: Tree[],
-  docs: Docs,
-  modules: ModuleTree[]
-): string {
+export default function createFileContent(tree: Tree[], docs: Docs, modules: ModuleTree[]): string {
   return `
     /// <reference types="cypress" />
 
@@ -42,7 +38,7 @@ export default function createFileContent(
         }
       `
         )
-        .join("\n")}
+        .join('\n')}
 
       ${node.variables
         .map(
@@ -59,7 +55,7 @@ export default function createFileContent(
         }
       `
         )
-        .join("\n")}
+        .join('\n')}
 
       interface ${node.typesaveContext} {
         ${node.commands
@@ -72,7 +68,7 @@ export default function createFileContent(
           fn(name:'${cmd.name}'):${cmd.typesaveId}
         `
           )
-          .join("\n")}
+          .join('\n')}
       }
 
       interface ${node.typesaveContext} {
@@ -86,11 +82,11 @@ export default function createFileContent(
           variable(name:'${cmd.name}'):${cmd.typesaveId}
         `
           )
-          .join("\n")}
+          .join('\n')}
       }
     `
       )
-      .join("\n")}
+      .join('\n')}
 
     ${tree
       .map(
@@ -106,48 +102,41 @@ export default function createFileContent(
               (handle) => `
             /** 
              * ${
-               docs[node.context]?.collections[
-                 colNode.context
-               ]?.handles.bullets.find((row) => row.name === handle.name)
-                 ?.value || ""
+               docs[node.context]?.collections[colNode.context]?.handles.bullets.find(
+                 (row) => row.name === handle.name
+               )?.value || ''
              }
              * @name ${handle.name}
              * @file [${handle.file}](${process.cwd() + handle.file})
              */
-            handle(name:'${
-              handle.name
-            }', index?:number|string): Cypress.Chainable<Element>
+            handle(name:'${handle.name}', index?:number|string): Cypress.Chainable<Element>
           `
             )
-            .join("\n")}
+            .join('\n')}
 
           ${colNode.states
             .map(
               (state) => `
             /** 
              * ${
-               docs[node.context]?.collections[
-                 colNode.context
-               ]?.states.bullets.find((row) => row.name === state.name)
-                 ?.value || ""
+               docs[node.context]?.collections[colNode.context]?.states.bullets.find(
+                 (row) => row.name === state.name
+               )?.value || ''
              }
              * @name ${state.name}
              * @file [${state.file}](${process.cwd() + state.file})
              */
             shouldHaveState( name:'${state.name}' ${
                 state.implementations
-                  ? `, implementations: '${state.implementations
-                      .map((i) => i.name)
-                      .join(",")}'`
-                  : ""
+                  ? `, implementations: '${state.implementations.map((i) => i.name).join(',')}'`
+                  : ''
               }): ${node.typesaveContext + colNode.typesaveContext}
 
             /** 
              * ${
-               docs[node.context]?.collections[
-                 colNode.context
-               ]?.states.bullets.find((row) => row.name === state.name)
-                 ?.value || ""
+               docs[node.context]?.collections[colNode.context]?.states.bullets.find(
+                 (row) => row.name === state.name
+               )?.value || ''
              }
              * @name ${state.name}
              * @file [${state.file}](${process.cwd() + state.file})
@@ -157,29 +146,24 @@ export default function createFileContent(
               }
           `
             )
-            .join("\n")}
+            .join('\n')}
         }
       `
         )
-        .join("\n")}
+        .join('\n')}
 
       interface ${node.typesaveContext} extends Cypress.Chainable<Element> {
         ${node.collections
           .map(
             (colNode) => `
           /**
-           * ${
-             docs[node.context]?.collections[colNode.context]?.description ||
-             "..."
-           }
+           * ${docs[node.context]?.collections[colNode.context]?.description || '...'}
            * @name ${colNode.context}
            * @file [${colNode.file}](${process.cwd() + colNode.file})
            * @docs_file ${
              docs[node.context]
-               ? `[${docs[node.context].file}](${
-                   process.cwd() + docs[node.context].file
-                 })`
-               : "-"
+               ? `[${docs[node.context].file}](${process.cwd() + docs[node.context].file})`
+               : '-'
            }
            */
           collection(name:'${colNode.context}', index?:number|string): ${
@@ -187,40 +171,35 @@ export default function createFileContent(
             }
         `
           )
-          .join("\n")}
+          .join('\n')}
 
         ${node.handles
           .map(
             (handle) => `
           /** 
            * ${
-             docs[node.context]?.handles.bullets.find(
-               (row) => row.name === handle.name
-             )?.value || ""
+             docs[node.context]?.handles.bullets.find((row) => row.name === handle.name)?.value ||
+             ''
            }
            * @name ${handle.name}
            * @file [${handle.file}](${process.cwd() + handle.file})
            */
-          handle(name:'${
-            handle.name
-          }', index?:number|string): Cypress.Chainable<Element>
+          handle(name:'${handle.name}', index?:number|string): Cypress.Chainable<Element>
         `
           )
-          .join("\n")}
+          .join('\n')}
 
         ${node.states
           .map(
             (state) => `
           /** 
            * ${
-             docs[node.context]?.states.bullets.find(
-               (row) => row.name === state.name
-             )?.value || ""
+             docs[node.context]?.states.bullets.find((row) => row.name === state.name)?.value || ''
            }
            * @name ${state.name}
            * @file [${state.file}](${process.cwd() + state.file}) ${
               !state.implementations
-                ? ""
+                ? ''
                 : `
            * @implementations ${state.implementations
              .map(
@@ -231,22 +210,18 @@ export default function createFileContent(
                    ?.bullets?.find((row) => row.name === imp.name)?.value
                }`
              )
-             .join("\n")}`
+             .join('\n')}`
             }
            */
           shouldHaveState( name:'${state.name}' ${
               state.implementations
-                ? `, implementations: '${state.implementations
-                    .map((i) => i.name)
-                    .join(",")}'`
-                : ""
+                ? `, implementations: '${state.implementations.map((i) => i.name).join(',')}'`
+                : ''
             }): ${node.typesaveContext}
 
           /** 
            * ${
-             docs[node.context]?.states.bullets.find(
-               (row) => row.name === state.name
-             )?.value || ""
+             docs[node.context]?.states.bullets.find((row) => row.name === state.name)?.value || ''
            }
            * @name ${state.name}
            * @file [${state.file}](${process.cwd() + state.file})
@@ -254,34 +229,30 @@ export default function createFileContent(
           shouldNotHaveState(name:'${state.name}'): ${node.typesaveContext}
         `
           )
-          .join("\n")}
+          .join('\n')}
       }
     `
       )
-      .join("\n")}
+      .join('\n')}
 
     declare namespace Firescout {
       ${tree
         .map(
           (node) => `
         /**
-         * ${docs[node.context]?.description || "..."} 
+         * ${docs[node.context]?.description || '...'} 
          * @name ${node.context}
          * @file [${node.folder}](${process.cwd() + node.file})
          * @docs_file ${
            docs[node.context]
-             ? `[${docs[node.context].file}](${
-                 process.cwd() + docs[node.context].file
-               })`
-             : "-"
+             ? `[${docs[node.context].file}](${process.cwd() + docs[node.context].file})`
+             : '-'
          }
          */
-        function context (name:'${node.context}', index?:number|string):${
-            node.typesaveContext
-          }
+        function context (name:'${node.context}', index?:number|string):${node.typesaveContext}
       `
         )
-        .join("\n")}
+        .join('\n')}
 
       ${modules
         .map(
@@ -289,7 +260,7 @@ export default function createFileContent(
         function module (name: '${node.context}'):${node.typesaveContext}
       `
         )
-        .join("\n")}
+        .join('\n')}
     }
 
     declare namespace Cypress {
@@ -299,8 +270,8 @@ export default function createFileContent(
       }
     }
   `
-    .split("\n")
+    .split('\n')
     .slice(1)
     .map((s) => s.trim())
-    .join("\n");
+    .join('\n')
 }

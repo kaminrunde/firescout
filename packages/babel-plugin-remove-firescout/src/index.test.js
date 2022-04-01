@@ -1,10 +1,11 @@
-var {transformSync} = require('@babel/core')
+var { transformSync } = require('@babel/core')
 var plugin = require('.')
 
-const transform = code => transformSync(code, {
-  presets: ["@babel/preset-react"],
-  plugins: [plugin],
-}).code
+const transform = (code) =>
+  transformSync(code, {
+    presets: ['@babel/preset-react'],
+    plugins: [plugin],
+  }).code
 
 test('removes "data-cy-ctx"', () => {
   const output = transform(`
@@ -13,7 +14,7 @@ test('removes "data-cy-ctx"', () => {
     </div>
   `)
   expect(output).not.toContain('organisms/Wishlist')
-});
+})
 
 test('removes "data-cy-state"', () => {
   const output = transform(`
@@ -22,7 +23,7 @@ test('removes "data-cy-state"', () => {
     </div>
   `)
   expect(output).not.toContain('state')
-});
+})
 
 test('removes "data-cy-handle"', () => {
   const output = transform(`
@@ -31,7 +32,7 @@ test('removes "data-cy-handle"', () => {
     </div>
   `)
   expect(output).not.toContain('handle')
-});
+})
 
 test('removes "data-cy-collection"', () => {
   const output = transform(`
@@ -40,7 +41,7 @@ test('removes "data-cy-collection"', () => {
     </div>
   `)
   expect(output).not.toContain('collection')
-});
+})
 
 test('removes "data-cy-handle-xy"', () => {
   const output = transform(`
@@ -49,7 +50,7 @@ test('removes "data-cy-handle-xy"', () => {
     </div>
   `)
   expect(output).not.toContain('handle')
-});
+})
 
 test('removes conditional "data-cy-state"', () => {
   const output = transform(`
@@ -58,4 +59,4 @@ test('removes conditional "data-cy-state"', () => {
     </div>
   `)
   expect(output).not.toContain('state')
-});
+})

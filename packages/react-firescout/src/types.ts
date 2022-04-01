@@ -1,4 +1,3 @@
-
 export type FirescoutElement = {
   parent: null | FirescoutElement
   container: Element
