@@ -39,7 +39,7 @@ type MockConfig = {
 }
 
 export function getModule(moduleName: string) {
-  const mock_path = getConfig().outPath
+  const mock_path = getConfig().fixturesFolder
   // const mock_path = "/Users/manueljung/Documents/relax/firescout/examples/jest-example/firescout-mocks"
   return {
     fn: (fnName: string) => ({

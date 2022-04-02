@@ -6,6 +6,13 @@ export default function createFileContent(tree: Tree[], docs: Docs, modules: Mod
   return `declare module '@kaminrunde/react-firescout' {
 
 type Func = (...args: any) => any
+type MockConfig = {
+  value?: any
+  fixture?: string
+  sync?: boolean
+  timeout?: number
+  transform?: (data: any) => any
+}
 
 ${modules
   .map(
@@ -13,7 +20,8 @@ ${modules
       `${node.commands
         .map(
           (cmd) => `interface ${cmd.typesaveId} {
-  mock<Wrapper extends Func>(name: 'default', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
+  mock<Wrapper extends Func>(config:MockConfig, wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
+  ${cmd.fixtures.map(f => `mock<Wrapper extends Func>(name:${f.name}, wrapper?: Wrapper): Promise<ReturnType<Wrapper>>`)}
   stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
 }`
         )
@@ -194,10 +202,11 @@ ${tree
 `
   )
   .join('\n')}
+}
 
 export function mount(el:any, config:any): Mount
 export function clearMocks(): void
 
-
+export type Context = ${tree.map(node => `"${node.context}"`).join('|')}
   }`
 }

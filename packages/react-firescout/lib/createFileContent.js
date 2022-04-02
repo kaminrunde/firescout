@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function createFileContent(tree, docs, modules) {
-    return "declare module '@kaminrunde/react-firescout' {\n\ntype Func = (...args: any) => any\n\n" + modules
+    return "declare module '@kaminrunde/react-firescout' {\n\ntype Func = (...args: any) => any\ntype MockConfig = {\n  value?: any\n  fixture?: string\n  sync?: boolean\n  timeout?: number\n  transform?: (data: any) => any\n}\n\n" + modules
         .map(function (node) {
         return node.commands
-            .map(function (cmd) { return "interface " + cmd.typesaveId + " {\n  mock<Wrapper extends Func>(name: 'default', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n  stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n}"; })
+            .map(function (cmd) { return "interface " + cmd.typesaveId + " {\n  mock<Wrapper extends Func>(config:MockConfig, wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n  " + cmd.fixtures.map(function (f) { return "mock<Wrapper extends Func>(name:" + f.name + ", wrapper?: Wrapper): Promise<ReturnType<Wrapper>>"; }) + "\n  stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n}"; })
             .join('') + "\n  interface " + node.typesaveContext + " {\n" + node.commands
             .map(function (cmd) { return "\n  /**\n   * @name " + cmd.name + "\n   * @file [" + cmd.file + "](" + (process.cwd() + cmd.file) + ")\n   */\n  fn(name:'" + cmd.name + "'):" + cmd.typesaveId + "\n  "; })
             .join('') + "}";
@@ -58,6 +58,6 @@ function createFileContent(tree, docs, modules) {
             ? "[" + docs[node.context].file + "](" + (process.cwd() + docs[node.context].file) + ")"
             : '-') + "\n  */\n  context (name:'" + node.context + "'):" + node.typesaveContext + "\n";
     })
-        .join('\n') + "\n\nexport function mount(el:any, config:any): Mount\nexport function clearMocks(): void\n\n\n  }";
+        .join('\n') + "\n}\n\nexport function mount(el:any, config:any): Mount\nexport function clearMocks(): void\n\nexport type Context = " + tree.map(function (node) { return "\"" + node.context + "\""; }).join('|') + "\n  }";
 }
 exports.default = createFileContent;

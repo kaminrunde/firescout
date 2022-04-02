@@ -57,6 +57,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.clearMocks = exports.getModule = exports.mount = void 0;
 var utils = __importStar(require("./utils"));
+var build_docs_1 = require("@kaminrunde/firescout-utils/lib/build-docs");
 function mount(El, ctx) {
     var component = ctx.render(El);
     return wrap([
@@ -70,7 +71,7 @@ function mount(El, ctx) {
 }
 exports.mount = mount;
 function getModule(moduleName) {
-    var mock_path = '../../../examples/jest-example/firescout-mocks';
+    var mock_path = build_docs_1.getConfig().fixturesFolder;
     // const mock_path = "/Users/manueljung/Documents/relax/firescout/examples/jest-example/firescout-mocks"
     return {
         fn: function (fnName) { return ({
