@@ -1,5 +1,6 @@
 import * as t from './types'
 import * as utils from './utils'
+import {getConfig} from '@kaminrunde/firescout-utils/lib/build-docs'
 
 declare global {
   interface Window {
@@ -38,7 +39,7 @@ type MockConfig = {
 }
 
 export function getModule(moduleName: string) {
-  const mock_path = '../../../examples/jest-example/firescout-mocks'
+  const mock_path = getConfig().outPath
   // const mock_path = "/Users/manueljung/Documents/relax/firescout/examples/jest-example/firescout-mocks"
   return {
     fn: (fnName: string) => ({
