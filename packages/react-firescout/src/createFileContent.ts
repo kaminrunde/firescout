@@ -43,6 +43,19 @@ ${node.commands
   )
   .join('\n')}
 
+  ${modules.map(node => `
+    interface ${node.typesaveContext} {
+      ${node.variables.map(variable => `
+        var(name:'${variable.name}'): {
+          set(val:any):void
+          ${variable.fixtures.map(fix => (
+            `fixture(name:'${fix.variation}'):Promise<void>`
+          )).join('\n')}
+        }
+      `).join('\n')}
+    }
+  `).join('\n')}
+
 
 
 ${modules

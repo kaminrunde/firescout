@@ -9,7 +9,7 @@ function createFileContent(tree, docs, modules) {
             .map(function (cmd) { return "\n  /**\n   * @name " + cmd.name + "\n   * @file [" + cmd.file + "](" + (process.cwd() + cmd.file) + ")\n   */\n  fn(name:'" + cmd.name + "'):" + cmd.typesaveId + "\n  "; })
             .join('') + "}";
     })
-        .join('\n') + "\n\n\n\n" + modules
+        .join('\n') + "\n\n  " + modules.map(function (node) { return "\n    interface " + node.typesaveContext + " {\n      " + node.variables.map(function (variable) { return "\n        var(name:'" + variable.name + "'): {\n          set(val:any):void\n          " + variable.fixtures.map(function (fix) { return ("fixture(name:'" + fix.variation + "'):Promise<void>"); }).join('\n') + "\n        }\n      "; }).join('\n') + "\n    }\n  "; }).join('\n') + "\n\n\n\n" + modules
         .map(function (node) { return "export function getModule (name: '" + node.context + "'):" + node.typesaveContext; })
         .join('\n') + "\n\ninterface Interactable<Root> {\n  unwrap():Element\n  nth(n:number):Root\n  click(timeout?:number):Promise<void>\n  type(timeout?:number):Promise<void>\n  simulate(cb:(el:Element) => Promise<void> | void):Promise<void>\n}\n\n" + tree
         .map(function (node) { return "\n" + node.collections

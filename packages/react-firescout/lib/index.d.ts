@@ -20,6 +20,10 @@ declare type MockConfig = {
     transform?: (data: any) => any;
 };
 export declare function getModule(moduleName: string): {
+    var: (varName: string) => {
+        set(val: any): void;
+        fixture(name?: string | undefined): Promise<void>;
+    };
     fn: (fnName: string) => {
         stub<Fn extends (...args: any) => any>(wrapper?: Fn | undefined): void;
         mock<Fn_1 extends (...args: any) => any>(config: string | MockConfig, wrapper?: Fn_1 | undefined): Promise<ReturnType<Fn_1>>;

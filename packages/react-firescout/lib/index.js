@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -81,6 +92,31 @@ function getModule(moduleName) {
     var mock_path = build_docs_1.getConfig().fixturesFolder;
     // const mock_path = "/Users/manueljung/Documents/relax/firescout/examples/jest-example/firescout-mocks"
     return {
+        var: function (varName) { return ({
+            set: function (val) {
+                var _a;
+                window.firescoutVars = __assign(__assign({}, window.firescoutVars), (_a = {}, _a[moduleName + '.' + varName] = val, _a));
+            },
+            fixture: function (name) {
+                return __awaiter(this, void 0, void 0, function () {
+                    var path, val;
+                    var _a;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                path = mock_path + '/' + moduleName + '/' + varName;
+                                if (name && name !== 'default')
+                                    path += '.' + name;
+                                return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require("" + path)); })];
+                            case 1:
+                                val = (_b.sent()).default;
+                                window.firescoutVars = __assign(__assign({}, window.firescoutVars), (_a = {}, _a[moduleName + '.' + varName] = val, _a));
+                                return [2 /*return*/];
+                        }
+                    });
+                });
+            }
+        }); },
         fn: function (fnName) { return ({
             stub: function (wrapper) {
                 if (!window.cymocks)
