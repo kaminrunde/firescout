@@ -4,7 +4,11 @@ function createFileContent(tree, docs, modules) {
     return "\n/* eslint-disable */\ndeclare module '@kaminrunde/react-firescout' {\n\ntype Func = (...args: any) => any\ntype MockConfig = {\n  value?: any\n  fixture?: string\n  sync?: boolean\n  timeout?: number\n  transform?: (data: any) => any\n}\n\n" + modules
         .map(function (node) {
         return node.commands
-            .map(function (cmd) { return "interface " + cmd.typesaveId + " {\n            \n  " + cmd.fixtures.map(function (f) { return "mock<Wrapper extends Func>(name:'" + f.variation + "', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>"; }) + "\n  stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n}"; })
+            .map(function (cmd) { return "interface " + cmd.typesaveId + " {\n            \n  " + (cmd.fixtures.length > 0
+            ? cmd.fixtures.map(function (f) {
+                return "mock<Wrapper extends Func>(name:'" + f.variation + "' | {[key: string]: any}, wrapper?: Wrapper): Promise<ReturnType<Wrapper>>";
+            })
+            : "mock<Wrapper extends Func>(individualMock: {[key: string]: any}, wrapper?: Wrapper): Promise<ReturnType<Wrapper>>") + "\n  stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n}"; })
             .join('') + "\n  interface " + node.typesaveContext + " {\n" + node.commands
             .map(function (cmd) { return "\n  /**\n   * @name " + cmd.name + "\n   * @file [" + cmd.file + "](" + (process.cwd() + cmd.file) + ")\n   */\n  fn(name:'" + cmd.name + "'):" + cmd.typesaveId + "\n  "; })
             .join('') + "}";
