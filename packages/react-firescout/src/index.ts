@@ -150,13 +150,15 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
       const imps = implementations ? implementations.split(',') : null
       const container = elements[0].container
 
+      const query = (s:string) => [container, container.querySelector(s)].filter(el => el?.matches(s))[0]
+
       if (imps) {
         for (const key of imps) {
-          const hit = container.querySelector(`[data-cy-state="${name}:${key}"]`)
+          const hit = query(`[data-cy-state="${name}:${key}"]`)
           if (!hit) utils.bubbleError(2, `expected to find state "${name}:${key}".`)
         }
       } else {
-        const hit = container.querySelector(`[data-cy-state="${name}"]`)
+        const hit = query(`[data-cy-state="${name}"]`)
         if (!hit) utils.bubbleError(2, `expected to find state "${name}".`)
       }
 
@@ -168,7 +170,8 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
         utils.bubbleError(2, `found multiple elements to test. please select with "nth(n)"`)
       }
       const container = elements[0].container
-      const hits = Array.from(container.querySelectorAll(`[data-cy-state]`))
+      const query = (s:string) => [container, ...Array.from(container.querySelectorAll(s))].filter(el => el?.matches(s))
+      const hits = query(`[data-cy-state]`)
       for (const hit of hits) {
         const state: string = (hit.attributes as any)['data-cy-state'].value
         if (state === name || state.startsWith(name + ':')) {

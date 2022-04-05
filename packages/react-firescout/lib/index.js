@@ -54,6 +54,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.clearMocks = exports.getModule = exports.mount = void 0;
 var utils = __importStar(require("./utils"));
@@ -174,16 +181,17 @@ function wrap(elements, ctx) {
             }
             var imps = implementations ? implementations.split(',') : null;
             var container = elements[0].container;
+            var query = function (s) { return [container, container.querySelector(s)].filter(function (el) { return el === null || el === void 0 ? void 0 : el.matches(s); })[0]; };
             if (imps) {
                 for (var _i = 0, imps_1 = imps; _i < imps_1.length; _i++) {
                     var key = imps_1[_i];
-                    var hit = container.querySelector("[data-cy-state=\"" + name + ":" + key + "\"]");
+                    var hit = query("[data-cy-state=\"" + name + ":" + key + "\"]");
                     if (!hit)
                         utils.bubbleError(2, "expected to find state \"" + name + ":" + key + "\".");
                 }
             }
             else {
-                var hit = container.querySelector("[data-cy-state=\"" + name + "\"]");
+                var hit = query("[data-cy-state=\"" + name + "\"]");
                 if (!hit)
                     utils.bubbleError(2, "expected to find state \"" + name + "\".");
             }
@@ -194,7 +202,8 @@ function wrap(elements, ctx) {
                 utils.bubbleError(2, "found multiple elements to test. please select with \"nth(n)\"");
             }
             var container = elements[0].container;
-            var hits = Array.from(container.querySelectorAll("[data-cy-state]"));
+            var query = function (s) { return __spreadArrays([container], Array.from(container.querySelectorAll(s))).filter(function (el) { return el === null || el === void 0 ? void 0 : el.matches(s); }); };
+            var hits = query("[data-cy-state]");
             for (var _i = 0, hits_1 = hits; _i < hits_1.length; _i++) {
                 var hit = hits_1[_i];
                 var state = hit.attributes['data-cy-state'].value;
