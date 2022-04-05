@@ -149,6 +149,8 @@ function getModule(moduleName) {
                                 value = (_a.sent()).default;
                                 _a.label = 2;
                             case 2:
+                                if (c.transform)
+                                    value = c.transform(value);
                                 if (!window.cymocks)
                                     window.cymocks = {};
                                 // @ts-expect-error

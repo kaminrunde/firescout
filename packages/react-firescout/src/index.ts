@@ -83,6 +83,8 @@ export function getModule(moduleName: string) {
           value = (await import(`${path}`)).default
         }
 
+        if(c.transform) value = c.transform(value)
+
         if (!window.cymocks) window.cymocks = {}
 
         // @ts-expect-error
