@@ -3,7 +3,9 @@ import { Docs } from '@kaminrunde/firescout-utils/lib/build-docs/createDocs'
 import { ModuleTree } from '@kaminrunde/firescout-utils/lib/build-docs/createModuleTree'
 
 export default function createFileContent(tree: Tree[], docs: Docs, modules: ModuleTree[]) {
-  return `declare module '@kaminrunde/react-firescout' {
+  return `
+/* eslint-disable */
+declare module '@kaminrunde/react-firescout' {
 
 type Func = (...args: any) => any
 type MockConfig = {
@@ -20,8 +22,8 @@ ${modules
       `${node.commands
         .map(
           (cmd) => `interface ${cmd.typesaveId} {
-  mock<Wrapper extends Func>(config:MockConfig, wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
-  ${cmd.fixtures.map(f => `mock<Wrapper extends Func>(name:${f.name}, wrapper?: Wrapper): Promise<ReturnType<Wrapper>>`)}
+            
+  ${cmd.fixtures.map(f => `mock<Wrapper extends Func>(name:'${f.variation}', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>`)}
   stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
 }`
         )
