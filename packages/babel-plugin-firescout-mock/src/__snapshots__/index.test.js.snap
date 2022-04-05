@@ -1,103 +1,103 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`firescoutMockFn transforms arrow functions with non-block body 1`] = `
-"const xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", async function fn(test) {
+"const xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", async function fn(test) {
   return 'foo';
 });"
 `;
 
 exports[`firescoutMockFn transforms async function expressions 1`] = `
-"const xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", async function fn(test) {
+"const xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", async function fn(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms async functions 1`] = `
-"var xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", async function xy(test) {
+"var xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", async function xy(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms declared arrow functions 1`] = `
-"const xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", function fn(test) {
+"const xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", function fn(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms declared async arrow functions 1`] = `
-"const xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", async function fn(test) {
+"const xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", async function fn(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms declared exported arrow functions 1`] = `
-"export const xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", function fn(test) {
+"export const xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", function fn(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms default exported anonym functions 1`] = `
-"export default require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", function fn(test) {
+"export default require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", function fn(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms default exported arrow functions 1`] = `
-"export default require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", function fn(test) {
+"export default require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", function fn(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms default exported functions 1`] = `
-"export default require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", function xy(test) {
+"export default require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", function xy(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms exported functions 1`] = `
-"export var xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", function xy(test) {
+"export var xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", function xy(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms function expressions 1`] = `
-"const xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", function xy(test) {
+"const xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", function xy(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms function expressions 2`] = `
-"const xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", function fn(test) {
+"const xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", function fn(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms functions 1`] = `
-"var xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", function xy(test) {
+"var xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", function xy(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms named exported function expressions 1`] = `
-"export const xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", function fn(test) {
+"export const xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", function fn(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockFn transforms named function expressions 1`] = `
-"const xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockFn(\\"Config.config\\", function xy(test) {
+"const xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockFn(\\"Config.config\\", function xy(test) {
   return test;
 });"
 `;
 
 exports[`firescoutMockVar tranforms object properties 1`] = `
 "const xy = {
-  foo: require(\\"@kaminrunde/cypress-firescout\\").firescoutMockVar(\\"Config.config\\", 'bar')
+  foo: require(\\"@kaminrunde/firescout-utils\\").firescoutMockVar(\\"Config.config\\", 'bar')
 };"
 `;
 
 exports[`firescoutMockVar transforms declared variables 1`] = `
-"const xy = require(\\"@kaminrunde/cypress-firescout\\").firescoutMockVar(\\"Config.config\\", {
+"const xy = require(\\"@kaminrunde/firescout-utils\\").firescoutMockVar(\\"Config.config\\", {
   foo: 'bar'
 });"
 `;
