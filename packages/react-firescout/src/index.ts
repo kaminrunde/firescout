@@ -42,6 +42,23 @@ export function getModule(moduleName: string) {
   const mock_path = getConfig().fixturesFolder
   // const mock_path = "/Users/manueljung/Documents/relax/firescout/examples/jest-example/firescout-mocks"
   return {
+    var: (varName:string) => ({
+      set(val:any) {
+        window.firescoutVars = {
+          ...window.firescoutVars,
+          [moduleName + '.' + varName]: val
+        }
+      },
+      async fixture(name?:string) {
+        let path = mock_path + '/' + moduleName + '/' + varName
+        if(name && name !== 'default') path += '.' + name
+        const val = (await import(`${path}`)).default
+        window.firescoutVars = {
+          ...window.firescoutVars,
+          [moduleName + '.' + varName]: val
+        }
+      }
+    }),
     fn: (fnName: string) => ({
       stub<Fn extends (...args: any) => any>(wrapper?: Fn) {
         if (!window.cymocks) window.cymocks = {}
