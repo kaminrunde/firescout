@@ -16,57 +16,44 @@ type MockConfig = {
   transform?: (data: any) => any
 }
 
-${modules
-  .map(
-    (node) =>
-      `${node.commands
-        .map(
-          (cmd) => `interface ${cmd.typesaveId} {
-            
-  ${cmd.fixtures
-    .map(
-      (f) =>
-        `mock<Wrapper extends Func>(name:'${f.variation}', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>`
-    )
-    .join('\n')}
-  mock<Wrapper extends Func>(config: MockConfig, wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
-  stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
-}`
-        )
-        .join('')}
+${modules.map((node) =>
+  `${node.commands.map((cmd) => 
+    `interface ${cmd.typesaveId} {
+    ${cmd.fixtures.map((f) =>
+      `mock<Wrapper extends Func>(name:'${f.variation}', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
+    `).join('\n')}
+      mock<Wrapper extends Func>(config: MockConfig, wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
+      stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
+  }`).join('')}
+  
   interface ${node.typesaveContext} {
-${node.commands
-  .map(
-    (cmd) => `
-  /**
-   * @name ${cmd.name}
-   * @file [${cmd.file}](${process.cwd() + cmd.file})
-   */
-  fn(name:'${cmd.name}'):${cmd.typesaveId}
-  `
-  )
-  .join('')}}`
-  )
-  .join('\n')}
+    ${node.commands.map((cmd) => `
+    /**
+     * @name ${cmd.name}
+     * @file [${cmd.file}](${process.cwd() + cmd.file})
+     */
+    fn(name:'${cmd.name}'):${cmd.typesaveId}
+  `).join('')}
+}`).join('\n')}
 
-  ${modules.map(node => `
-    interface ${node.typesaveContext} {
-      ${node.variables.map(variable => `
-        var(name:'${variable.name}'): {
-          set(val:any):void
-          ${variable.fixtures.map(fix => (
-            `fixture(name:'${fix.variation}'):Promise<void>`
-          )).join('\n')}
-        }
-      `).join('\n')}
-    }
-  `).join('\n')}
+${modules.map(node => `
+  interface ${node.typesaveContext} {
+    ${node.variables.map(variable => `
+      var(name:'${variable.name}'): {
+        set(val:any):void
+        ${variable.fixtures.map(fix => (
+          `fixture(name:'${fix.variation}'):Promise<void>`
+        )).join('\n')}
+      }
+    `).join('\n')}
+  }
+`).join('\n')}
 
 
 
-${modules
-  .map((node) => `export function getModule (name: '${node.context}'):${node.typesaveContext}`)
-  .join('\n')}
+${modules.map((node) => 
+  `export function getModule (name: '${node.context}'):${node.typesaveContext}
+`).join('\n')}
 
 interface Interactable<Root> {
   unwrap():Element
@@ -77,157 +64,111 @@ interface Interactable<Root> {
 }
 
 ${tree
-  .map(
-    (node) => `
-${node.collections
-  .map(
-    (colNode) => `interface ${
-      node.typesaveContext + colNode.typesaveContext
-    } extends Interactable<${node.typesaveContext + colNode.typesaveContext}> {
-${colNode.handles
-  .map(
-    (handle) => ` /** 
-* ${
-      docs[node.context]?.collections[colNode.context]?.handles.bullets.find(
-        (row) => row.name === handle.name
-      )?.value || ''
-    }
-* @name ${handle.name}
-* @file [${handle.file}](${process.cwd() + handle.file})
-*/
-handle(name:'${handle.name}', index?:number|string): Interactable<${
-      node.typesaveContext + colNode.typesaveContext
-    }>`
-  )
-  .join('\n')}
+  .map((node) => 
+    `${node.collections.map((colNode) => 
+      `interface ${node.typesaveContext + colNode.typesaveContext} extends Interactable<${node.typesaveContext + colNode.typesaveContext}> {
+        ${colNode.handles.map((handle) => 
+        ` /** 
+          * ${docs[node.context]?.collections[colNode.context]?.handles.bullets.find((row) => row.name === handle.name)?.value || ''}
+          * @name ${handle.name}
+          * @file [${handle.file}](${process.cwd() + handle.file})
+          */
+          handle(name:'${handle.name}', index?:number|string): Interactable<${node.typesaveContext + colNode.typesaveContext}>`
+  ).join('\n')}
 
-${colNode.states
-  .map(
-    (state) => `  /** 
-    * ${
-      docs[node.context]?.collections[colNode.context]?.states.bullets.find(
-        (row) => row.name === state.name
-      )?.value || ''
-    }
-  * @name ${state.name}
-  * @file [${state.file}](${process.cwd() + state.file})
-  */
-  shouldHaveState( name:'${state.name}' ${
-      state.implementations
-        ? `, implementations: '${state.implementations.map((i) => i.name).join(',')}'`
-        : ''
-    }): ${node.typesaveContext + colNode.typesaveContext}
-      
-  /** 
-   * ${
-     docs[node.context]?.collections[colNode.context]?.states.bullets.find(
-       (row) => row.name === state.name
-     )?.value || ''
-   }
-  * @name ${state.name}
-  * @file [${state.file}](${process.cwd() + state.file})
-  */
-  shouldNotHaveState(name:'${state.name}'): ${node.typesaveContext + colNode.typesaveContext}`
-  )
-  .join('\n')}
-}
-`
-  )
-  .join('\n')}
+${colNode.states.map((state) => 
+  `  /** 
+      * ${docs[node.context]?.collections[colNode.context]?.states.bullets.find((row) => row.name === state.name)?.value || ''}
+      * @name ${state.name}
+      * @file [${state.file}](${process.cwd() + state.file})
+      */
+      shouldHaveState( name:'${state.name}' ${
+        state.implementations
+          ? `, implementations: '${state.implementations.map((i) => i.name).join(',')}'`
+          : ''
+      }): ${node.typesaveContext + colNode.typesaveContext}
+        
+    /** 
+    * ${docs[node.context]?.collections[colNode.context]?.states.bullets.find((row) => row.name === state.name)?.value || ''}
+    * @name ${state.name}
+    * @file [${state.file}](${process.cwd() + state.file})
+    */
+    shouldNotHaveState(name:'${state.name}'): ${node.typesaveContext + colNode.typesaveContext}`
+    ).join('\n')}
+  }`).join('\n')}
 
-interface ${node.typesaveContext} extends Interactable<${node.typesaveContext}> {
-${node.collections
-  .map(
-    (colNode) => `  /**
-  * ${docs[node.context]?.collections[colNode.context]?.description || '...'}
-* @name ${colNode.context}
-* @file [${colNode.file}](${process.cwd() + colNode.file})
-* @docs_file ${
-      docs[node.context]
-        ? `[${docs[node.context].file}](${process.cwd() + docs[node.context].file})`
-        : '-'
-    }
-*/
-collection(name:'${colNode.context}', index?:number|string): ${
-      node.typesaveContext + colNode.typesaveContext
-    }`
-  )
-  .join('\n')}
-${node.handles
-  .map(
-    (handle) => `/** 
-* ${docs[node.context]?.handles.bullets.find((row) => row.name === handle.name)?.value || ''}
-* @name ${handle.name}
-* @file [${handle.file}](${process.cwd() + handle.file})
-*/
-handle(name:'${handle.name}', index?:number|string): Interactable<${node.typesaveContext}>
-`
-  )
-  .join('\n')}
+  interface ${node.typesaveContext} extends Interactable<${node.typesaveContext}> {
+  ${node.collections.map((colNode) => `  /**
+    * ${docs[node.context]?.collections[colNode.context]?.description || '...'}
+    * @name ${colNode.context}
+    * @file [${colNode.file}](${process.cwd() + colNode.file})
+    * @docs_file ${docs[node.context]
+          ? `[${docs[node.context].file}](${process.cwd() + docs[node.context].file})`
+          : '-'}
+    */
+    collection(name:'${colNode.context}', index?:number|string): ${node.typesaveContext + colNode.typesaveContext}
+    `).join('\n')}
 
-${node.states.map(
-  (state) => `  /** 
-* ${docs[node.context]?.states.bullets.find((row) => row.name === state.name)?.value || ''}
-* @name ${state.name}
-* @file [${state.file}](${process.cwd() + state.file}) ${
-    !state.implementations
-      ? ''
-      : `
-* @implementations ${state.implementations
-          .map(
-            (imp) => `
-* - ${imp.name} [(${imp.file})](${process.cwd() + imp.file}): ${
+  ${node.handles.map((handle) => 
+    `/** 
+      * ${docs[node.context]?.handles.bullets.find((row) => row.name === handle.name)?.value || ''}
+      * @name ${handle.name}
+      * @file [${handle.file}](${process.cwd() + handle.file})
+      */
+      handle(name:'${handle.name}', index?:number|string): Interactable<${node.typesaveContext}>
+  `).join('\n')}
+
+  ${node.states.map((state) => 
+  `  /** 
+      * ${docs[node.context]?.states.bullets.find((row) => row.name === state.name)?.value || ''}
+      * @name ${state.name}
+      * @file [${state.file}](${process.cwd() + state.file}) ${!state.implementations ? '' : `
+      * @implementations ${state.implementations.map((imp) => `
+      * - ${imp.name} [(${imp.file})](${process.cwd() + imp.file}): ${
               docs[node.context]?.states.bullets
                 .find((row) => row.name === state.name)
                 ?.bullets?.find((row) => row.name === imp.name)?.value
             }`
-          )
-          .join('')}`
+      ).join('')}`
   }
-*/
-shouldHaveState( name:'${state.name}' ${
-    state.implementations
-      ? `, implementations: '${state.implementations.map((i) => i.name).join(',')}'`
-      : ''
+      */
+      shouldHaveState( name:'${state.name}' ${
+      state.implementations
+        ? `, implementations: '${state.implementations.map((i) => i.name).join(',')}'`
+        : ''
   }): ${node.typesaveContext}
 
-/** 
-* ${docs[node.context]?.states.bullets.find((row) => row.name === state.name)?.value || ''}
-* @name ${state.name}
-* @file [${state.file}](${process.cwd() + state.file})
-*/
-shouldNotHaveState(name:'${state.name}'): ${node.typesaveContext}
-`
-)}
-}
-`
-  )
-  .join('')}
+  /** 
+  * ${docs[node.context]?.states.bullets.find((row) => row.name === state.name)?.value || ''}
+  * @name ${state.name}
+  * @file [${state.file}](${process.cwd() + state.file})
+  */
+  shouldNotHaveState(name:'${state.name}'): ${node.typesaveContext}
+  `
+)}}`).join('')}
 
 interface Mount {
   wait(ms:number):Promise<void>
   unwrap():Element
 
-${tree
-  .map(
-    (node) => ` /**
-  * ${docs[node.context]?.description || '...'}  * @name ${node.context}
-  * @file [${node.folder}](${process.cwd() + node.file})
-  * @docs_file ${
-    docs[node.context]
-      ? `[${docs[node.context].file}](${process.cwd() + docs[node.context].file})`
-      : '-'
+  ${tree
+    .map((node) => ` 
+    /**
+    * ${docs[node.context]?.description || '...'}  * @name ${node.context}
+    * @file [${node.folder}](${process.cwd() + node.file})
+    * @docs_file ${
+      docs[node.context]
+        ? `[${docs[node.context].file}](${process.cwd() + docs[node.context].file})`
+        : '-'
+    }
+    */
+    context (name:'${node.context}'):${node.typesaveContext}
+  `).join('\n')}
   }
-  */
-  context (name:'${node.context}'):${node.typesaveContext}
-`
-  )
-  .join('\n')}
-}
 
-export function mount(el:any, config:any): Mount
-export function clearMocks(): void
+  export function mount(el:any, config:any): Mount
+  export function clearMocks(): void
 
-export type Context = ${tree.map((node) => `"${node.context}"`).join('|')}
+  export type Context = ${tree.map((node) => `"${node.context}"`).join('|')}
   }`
 }
