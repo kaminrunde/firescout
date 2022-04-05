@@ -86,7 +86,7 @@ export function getModule(moduleName: string) {
         if (!window.cymocks) window.cymocks = {}
 
         // @ts-expect-error
-        if (!wrapper) wrapper = (cb: any): unknown => cb()
+        if (!wrapper) wrapper = (cb: any): unknown => () => cb()
 
         // @ts-expect-error
         const cb = wrapper(

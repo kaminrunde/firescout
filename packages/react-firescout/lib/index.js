@@ -153,7 +153,7 @@ function getModule(moduleName) {
                                     window.cymocks = {};
                                 // @ts-expect-error
                                 if (!wrapper)
-                                    wrapper = function (cb) { return cb(); };
+                                    wrapper = function (cb) { return function () { return cb(); }; };
                                 cb = wrapper(c.sync
                                     ? function () { return value; }
                                     : function () { return __awaiter(_this, void 0, void 0, function () {
