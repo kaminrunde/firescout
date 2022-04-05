@@ -85,6 +85,8 @@ export function getModule(moduleName: string) {
 
         if(c.transform) value = c.transform(value)
 
+        if(value.__sync) c.sync = true
+
         if (!window.cymocks) window.cymocks = {}
 
         // @ts-expect-error

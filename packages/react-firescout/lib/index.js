@@ -151,6 +151,8 @@ function getModule(moduleName) {
                             case 2:
                                 if (c.transform)
                                     value = c.transform(value);
+                                if (value.__sync)
+                                    c.sync = true;
                                 if (!window.cymocks)
                                     window.cymocks = {};
                                 // @ts-expect-error
