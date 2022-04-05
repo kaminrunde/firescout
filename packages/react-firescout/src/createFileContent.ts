@@ -23,7 +23,13 @@ ${modules
         .map(
           (cmd) => `interface ${cmd.typesaveId} {
             
-  ${cmd.fixtures.map(f => `mock<Wrapper extends Func>(name:'${f.variation}', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>`)}
+  ${cmd.fixtures
+    .map(
+      (f) =>
+        `mock<Wrapper extends Func>(name:'${f.variation}', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>`
+    )
+    .join('\n')}
+  mock<Wrapper extends Func>(config: MockConfig, wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
   stub<Wrapper extends Func>(wrapper?: Wrapper): Promise<ReturnType<Wrapper>>
 }`
         )
@@ -222,6 +228,6 @@ ${tree
 export function mount(el:any, config:any): Mount
 export function clearMocks(): void
 
-export type Context = ${tree.map(node => `"${node.context}"`).join('|')}
+export type Context = ${tree.map((node) => `"${node.context}"`).join('|')}
   }`
 }
