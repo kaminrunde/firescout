@@ -85,6 +85,10 @@ export function getModule(moduleName: string) {
 
         if(c.transform) value = c.transform(value)
 
+        if(typeof value === 'undefined') {
+          utils.bubbleError(1, 'either mock data resolved undefined or you forgot to resolve value in "transform"')
+        }
+
         if(value.__sync) c.sync = true
 
         if (!window.cymocks) window.cymocks = {}
