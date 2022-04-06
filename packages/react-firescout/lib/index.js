@@ -76,6 +76,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.clearMocks = exports.getModule = exports.mount = void 0;
 var utils = __importStar(require("./utils"));
 var build_docs_1 = require("@kaminrunde/firescout-utils/lib/build-docs");
+var matchers = __importStar(require("./matchers"));
 function mount(El, ctx) {
     var component = ctx.render(El);
     return wrap([
@@ -313,5 +314,39 @@ function wrap(elements, ctx) {
                 }
             });
         }); },
+        // MATCHERS
+        should: function (m, val) {
+            if (elements.length > 1) {
+                utils.bubbleError(2, "found multiple elements to test. Please use nth(n) to select one");
+            }
+            var node = elements[0].container;
+            switch (m) {
+                case 'contain.text': {
+                    var e = matchers.containText(node, val, false);
+                    if (e)
+                        utils.bubbleError(2, e);
+                    break;
+                }
+                case 'not.contain.text': {
+                    var e = matchers.containText(node, val, true);
+                    if (e)
+                        utils.bubbleError(2, e);
+                    break;
+                }
+                case 'have.value': {
+                    var e = matchers.haveValue(node, val, false);
+                    if (e)
+                        utils.bubbleError(2, e);
+                    break;
+                }
+                case 'not.have.value': {
+                    var e = matchers.haveValue(node, val, true);
+                    if (e)
+                        utils.bubbleError(2, e);
+                    break;
+                }
+                default: utils.bubbleError(2, 'unknown matcher');
+            }
+        }
     };
 }

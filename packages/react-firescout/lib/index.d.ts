@@ -30,7 +30,13 @@ export declare function getModule(moduleName: string): {
     };
 };
 export declare function clearMocks(): void;
-declare type Wrapped = {
+interface Matchers {
+    should(m: 'contain.text', s: string): void;
+    should(m: 'not.contain.text', s: string): void;
+    should(m: 'have.value', s: string): void;
+    should(m: 'not.have.value', s: string): void;
+}
+interface Wrapped extends Matchers {
     context: (name: string) => Wrapped;
     handle: (name: string) => Wrapped;
     collection: (name: string) => Wrapped;
@@ -42,5 +48,5 @@ declare type Wrapped = {
     click: (timeout?: number) => Promise<Wrapped>;
     type: (value: string, timeout?: number) => Promise<Wrapped>;
     simulate: (cb: (el: Element) => Promise<void> | void) => Promise<Wrapped>;
-};
+}
 export {};

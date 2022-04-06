@@ -1,6 +1,7 @@
 import * as t from './types'
 import * as utils from './utils'
 import {getConfig} from '@kaminrunde/firescout-utils/lib/build-docs'
+import * as matchers from './matchers'
 
 declare global {
   interface Window {
@@ -122,7 +123,14 @@ export function clearMocks() {
   delete window.firescoutVars
 }
 
-type Wrapped = {
+interface Matchers {
+  should(m:'contain.text', s:string):void
+  should(m:'not.contain.text', s:string):void
+  should(m:'have.value', s:string):void
+  should(m:'not.have.value', s:string):void
+}
+
+interface Wrapped extends Matchers {
   context: (name: string) => Wrapped
   handle: (name: string) => Wrapped
   collection: (name: string) => Wrapped
@@ -267,5 +275,40 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
 
       return wrap(elements, ctx)
     },
+
+    // MATCHERS
+
+    should(m, val) {
+      if (elements.length > 1) {
+        utils.bubbleError(
+          2,
+          `found multiple elements to test. Please use nth(n) to select one`
+        )
+      }
+      const node = elements[0].container
+      switch(m) {
+        case 'contain.text': {
+          const e = matchers.containText(node, val, false)
+          if(e) utils.bubbleError(2, e)
+          break
+        }
+        case 'not.contain.text': {
+          const e = matchers.containText(node, val, true)
+          if(e) utils.bubbleError(2, e)
+          break
+        }
+        case 'have.value': {
+          const e = matchers.haveValue(node, val, false)
+          if(e) utils.bubbleError(2, e)
+          break
+        }
+        case 'not.have.value': {
+          const e = matchers.haveValue(node, val, true)
+          if(e) utils.bubbleError(2, e)
+          break
+        }
+        default: utils.bubbleError(2, 'unknown matcher')
+      }
+    }
   }
 }

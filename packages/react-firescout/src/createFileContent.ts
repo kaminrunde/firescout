@@ -16,6 +16,13 @@ type MockConfig = {
   transform?: (data: any) => any
 }
 
+interface Matchers {
+  should(m:'contain.text', s:string):void
+  should(m:'not.contain.text', s:string):void
+  should(m:'have.value', s:string):void
+  should(m:'not.have.value', s:string):void
+}
+
 ${modules.map((node) =>
   `${node.commands.map((cmd) => 
     `interface ${cmd.typesaveId} {
@@ -55,11 +62,11 @@ ${modules.map((node) =>
   `export function getModule (name: '${node.context}'):${node.typesaveContext}
 `).join('\n')}
 
-interface Interactable<Root> {
+interface Interactable<Root> extends Matchers {
   unwrap():Element
   nth(n:number):Root
   click(timeout?:number):Promise<void>
-  type(timeout?:number):Promise<void>
+  type(val:string, timeout?:number):Promise<void>
   simulate(cb:(el:Element) => Promise<void> | void):Promise<void>
 }
 
