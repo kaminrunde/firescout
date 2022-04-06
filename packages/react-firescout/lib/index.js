@@ -151,7 +151,7 @@ function getModule(moduleName) {
                                 _a.label = 2;
                             case 2:
                                 if (c.transform)
-                                    value = c.transform(value);
+                                    value = c.transform(JSON.parse(JSON.stringify(value)));
                                 if (typeof value === 'undefined') {
                                     utils.bubbleError(1, 'either mock data resolved undefined or you forgot to resolve value in "transform"');
                                 }

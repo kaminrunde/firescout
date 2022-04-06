@@ -84,7 +84,7 @@ export function getModule(moduleName: string) {
           value = (await import(`${path}`)).default
         }
 
-        if(c.transform) value = c.transform(value)
+        if(c.transform) value = c.transform(JSON.parse(JSON.stringify(value)))
 
         if(typeof value === 'undefined') {
           utils.bubbleError(1, 'either mock data resolved undefined or you forgot to resolve value in "transform"')
