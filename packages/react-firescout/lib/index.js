@@ -219,6 +219,13 @@ function wrap(elements, ctx) {
             }
             return wrap(targets, ctx);
         },
+        query: function (s) {
+            var targets = utils.query(s, elements);
+            if (targets.length === 0) {
+                utils.bubbleError(2, "could not find elements with selector \"" + s + "\"");
+            }
+            return wrap(targets, ctx);
+        },
         shouldHaveState: function (name, implementations) {
             if (elements.length > 1) {
                 utils.bubbleError(2, "found multiple elements to test. please select with \"nth(n)\"");
@@ -315,32 +322,44 @@ function wrap(elements, ctx) {
             });
         }); },
         // MATCHERS
-        should: function (m, val) {
+        should: function (m, arg1, arg2) {
             if (elements.length > 1) {
                 utils.bubbleError(2, "found multiple elements to test. Please use nth(n) to select one");
             }
             var node = elements[0].container;
             switch (m) {
                 case 'contain.text': {
-                    var e = matchers.containText(node, val, false);
+                    var e = matchers.containText(node, arg1, false);
                     if (e)
                         utils.bubbleError(2, e);
                     break;
                 }
                 case 'not.contain.text': {
-                    var e = matchers.containText(node, val, true);
+                    var e = matchers.containText(node, arg1, true);
                     if (e)
                         utils.bubbleError(2, e);
                     break;
                 }
                 case 'have.value': {
-                    var e = matchers.haveValue(node, val, false);
+                    var e = matchers.haveValue(node, arg1, false);
                     if (e)
                         utils.bubbleError(2, e);
                     break;
                 }
                 case 'not.have.value': {
-                    var e = matchers.haveValue(node, val, true);
+                    var e = matchers.haveValue(node, arg1, true);
+                    if (e)
+                        utils.bubbleError(2, e);
+                    break;
+                }
+                case 'have.css': {
+                    var e = matchers.haveCss(node, arg1, arg2, false);
+                    if (e)
+                        utils.bubbleError(2, e);
+                    break;
+                }
+                case 'not.have.css': {
+                    var e = matchers.haveCss(node, arg1, arg2, true);
                     if (e)
                         utils.bubbleError(2, e);
                     break;

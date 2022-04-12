@@ -17,10 +17,12 @@ type MockConfig = {
 }
 
 interface Matchers {
-  should(m:'contain.text', s:string):void
-  should(m:'not.contain.text', s:string):void
-  should(m:'have.value', s:string):void
-  should(m:'not.have.value', s:string):void
+  should(m:'contain.text', s:string, x?:never):void
+  should(m:'not.contain.text', s:string, x?:never):void
+  should(m:'have.value', s:string, x?:never):void
+  should(m:'not.have.value', s:string, x?:never):void
+  should(m:'have.css', key:string, val:string):void
+  should(m:'not.have.css', key:string, val:string):void
 }
 
 ${modules.map((node) =>
@@ -68,6 +70,7 @@ interface Interactable<Root> extends Matchers {
   click(timeout?:number):Promise<void>
   type(val:string, timeout?:number):Promise<void>
   simulate(cb:(el:Element) => Promise<void> | void):Promise<void>
+  query: (s:string) => Interactable<unknown>
 }
 
 ${tree

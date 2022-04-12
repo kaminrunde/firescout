@@ -124,10 +124,12 @@ export function clearMocks() {
 }
 
 interface Matchers {
-  should(m:'contain.text', s:string):void
-  should(m:'not.contain.text', s:string):void
-  should(m:'have.value', s:string):void
-  should(m:'not.have.value', s:string):void
+  should(m:'contain.text', s:string, x?:never):void
+  should(m:'not.contain.text', s:string, x?:never):void
+  should(m:'have.value', s:string, x?:never):void
+  should(m:'not.have.value', s:string, x?:never):void
+  should(m:'have.css', key:string, val:string):void
+  should(m:'not.have.css', key:string, val:string):void
 }
 
 interface Wrapped extends Matchers {
@@ -139,6 +141,7 @@ interface Wrapped extends Matchers {
   nth: (n: number) => Wrapped
   wait: (ms: number) => Promise<void>
   unwrap: () => Element
+  query: (s:string) => Wrapped
   click: (timeout?: number) => Promise<Wrapped>
   type: (value: string, timeout?: number) => Promise<Wrapped>
   simulate: (cb: (el: Element) => Promise<void> | void) => Promise<Wrapped>
@@ -171,6 +174,16 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
 
       if (targets.length === 0) {
         utils.bubbleError(2, `could not find collection "${name}"`)
+      }
+
+      return wrap(targets, ctx)
+    },
+
+    query: (s) => {
+      const targets = utils.query(s, elements)
+
+      if (targets.length === 0) {
+        utils.bubbleError(2, `could not find elements with selector "${s}"`)
       }
 
       return wrap(targets, ctx)
@@ -278,7 +291,7 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
 
     // MATCHERS
 
-    should(m, val) {
+    should(m, arg1, arg2) {
       if (elements.length > 1) {
         utils.bubbleError(
           2,
@@ -288,22 +301,32 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
       const node = elements[0].container
       switch(m) {
         case 'contain.text': {
-          const e = matchers.containText(node, val, false)
+          const e = matchers.containText(node, arg1, false)
           if(e) utils.bubbleError(2, e)
           break
         }
         case 'not.contain.text': {
-          const e = matchers.containText(node, val, true)
+          const e = matchers.containText(node, arg1, true)
           if(e) utils.bubbleError(2, e)
           break
         }
         case 'have.value': {
-          const e = matchers.haveValue(node, val, false)
+          const e = matchers.haveValue(node, arg1, false)
           if(e) utils.bubbleError(2, e)
           break
         }
         case 'not.have.value': {
-          const e = matchers.haveValue(node, val, true)
+          const e = matchers.haveValue(node, arg1, true)
+          if(e) utils.bubbleError(2, e)
+          break
+        }
+        case 'have.css': {
+          const e = matchers.haveCss(node, arg1, arg2 as string, false)
+          if(e) utils.bubbleError(2, e)
+          break
+        }
+        case 'not.have.css': {
+          const e = matchers.haveCss(node, arg1, arg2 as string, true)
           if(e) utils.bubbleError(2, e)
           break
         }

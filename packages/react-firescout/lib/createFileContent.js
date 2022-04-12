@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function createFileContent(tree, docs, modules) {
-    return "\n/* eslint-disable */\ndeclare module '@kaminrunde/react-firescout' {\n\ntype Func = (...args: any) => any\ntype MockConfig = {\n  value?: any\n  fixture?: string\n  sync?: boolean\n  timeout?: number\n  transform?: (data: any) => any\n}\n\ninterface Matchers {\n  should(m:'contain.text', s:string):void\n  should(m:'not.contain.text', s:string):void\n  should(m:'have.value', s:string):void\n  should(m:'not.have.value', s:string):void\n}\n\n" + modules.map(function (node) {
+    return "\n/* eslint-disable */\ndeclare module '@kaminrunde/react-firescout' {\n\ntype Func = (...args: any) => any\ntype MockConfig = {\n  value?: any\n  fixture?: string\n  sync?: boolean\n  timeout?: number\n  transform?: (data: any) => any\n}\n\ninterface Matchers {\n  should(m:'contain.text', s:string, x?:never):void\n  should(m:'not.contain.text', s:string, x?:never):void\n  should(m:'have.value', s:string, x?:never):void\n  should(m:'not.have.value', s:string, x?:never):void\n  should(m:'have.css', key:string, val:string):void\n  should(m:'not.have.css', key:string, val:string):void\n}\n\n" + modules.map(function (node) {
         return node.commands.map(function (cmd) {
             return "interface " + cmd.typesaveId + " {\n    " + cmd.fixtures.map(function (f) {
                 return "mock<Wrapper extends Func>(name:'" + f.variation + "', wrapper?: Wrapper): Promise<ReturnType<Wrapper>>\n    ";
@@ -9,7 +9,7 @@ function createFileContent(tree, docs, modules) {
         }).join('') + "\n  \n  interface " + node.typesaveContext + " {\n    " + node.commands.map(function (cmd) { return "\n    /**\n     * @name " + cmd.name + "\n     * @file [" + cmd.file + "](" + (process.cwd() + cmd.file) + ")\n     */\n    fn(name:'" + cmd.name + "'):" + cmd.typesaveId + "\n  "; }).join('') + "\n}";
     }).join('\n') + "\n\n" + modules.map(function (node) { return "\n  interface " + node.typesaveContext + " {\n    " + node.variables.map(function (variable) { return "\n      var(name:'" + variable.name + "'): {\n        set(val:any):void\n        " + variable.fixtures.map(function (fix) { return ("fixture(name:'" + fix.variation + "'):Promise<void>"); }).join('\n') + "\n      }\n    "; }).join('\n') + "\n  }\n"; }).join('\n') + "\n\n\n\n" + modules.map(function (node) {
         return "export function getModule (name: '" + node.context + "'):" + node.typesaveContext + "\n";
-    }).join('\n') + "\n\ninterface Interactable<Root> extends Matchers {\n  unwrap():Element\n  nth(n:number):Root\n  click(timeout?:number):Promise<void>\n  type(val:string, timeout?:number):Promise<void>\n  simulate(cb:(el:Element) => Promise<void> | void):Promise<void>\n}\n\n" + tree
+    }).join('\n') + "\n\ninterface Interactable<Root> extends Matchers {\n  unwrap():Element\n  nth(n:number):Root\n  click(timeout?:number):Promise<void>\n  type(val:string, timeout?:number):Promise<void>\n  simulate(cb:(el:Element) => Promise<void> | void):Promise<void>\n  query: (s:string) => Interactable<unknown>\n}\n\n" + tree
         .map(function (node) {
         return node.collections.map(function (colNode) {
             return "interface " + (node.typesaveContext + colNode.typesaveContext) + " extends Interactable<" + (node.typesaveContext + colNode.typesaveContext) + "> {\n        " + colNode.handles.map(function (handle) {

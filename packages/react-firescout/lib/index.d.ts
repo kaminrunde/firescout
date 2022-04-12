@@ -31,10 +31,12 @@ export declare function getModule(moduleName: string): {
 };
 export declare function clearMocks(): void;
 interface Matchers {
-    should(m: 'contain.text', s: string): void;
-    should(m: 'not.contain.text', s: string): void;
-    should(m: 'have.value', s: string): void;
-    should(m: 'not.have.value', s: string): void;
+    should(m: 'contain.text', s: string, x?: never): void;
+    should(m: 'not.contain.text', s: string, x?: never): void;
+    should(m: 'have.value', s: string, x?: never): void;
+    should(m: 'not.have.value', s: string, x?: never): void;
+    should(m: 'have.css', key: string, val: string): void;
+    should(m: 'not.have.css', key: string, val: string): void;
 }
 interface Wrapped extends Matchers {
     context: (name: string) => Wrapped;
@@ -45,6 +47,7 @@ interface Wrapped extends Matchers {
     nth: (n: number) => Wrapped;
     wait: (ms: number) => Promise<void>;
     unwrap: () => Element;
+    query: (s: string) => Wrapped;
     click: (timeout?: number) => Promise<Wrapped>;
     type: (value: string, timeout?: number) => Promise<Wrapped>;
     simulate: (cb: (el: Element) => Promise<void> | void) => Promise<Wrapped>;

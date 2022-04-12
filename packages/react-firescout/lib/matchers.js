@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.haveValue = exports.containText = void 0;
+exports.haveCss = exports.haveValue = exports.containText = void 0;
 function containText(node, val, inverse) {
     var text = node.textContent;
     if (!inverse) {
@@ -36,3 +36,19 @@ function haveValue(node, val, inverse) {
     return null;
 }
 exports.haveValue = haveValue;
+function haveCss(node, key, val, inverse) {
+    if (node instanceof HTMLElement) {
+        var style = getComputedStyle(node);
+        if (inverse && style[key] === val) {
+            return "expected node not to have css-property \"" + key + "\" with value \"" + val + "\"";
+        }
+        if (!inverse && style[key] !== val) {
+            return "expected node to have css-property \"" + key + "\" to have value \"" + val + "\" but got \"" + style[key] + "\"";
+        }
+    }
+    else {
+        return 'only HTML-Elements can have css property';
+    }
+    return null;
+}
+exports.haveCss = haveCss;

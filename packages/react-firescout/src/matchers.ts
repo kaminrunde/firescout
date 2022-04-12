@@ -37,3 +37,19 @@ export function haveValue (node:Element, val:string, inverse:boolean) {
 
   return null
 }
+
+export function haveCss (node:Element, key:string, val:string, inverse:boolean) {
+  if(node instanceof HTMLElement) {
+    const style = getComputedStyle(node)
+    if(inverse && style[key as any] === val) {
+      return `expected node not to have css-property "${key}" with value "${val}"`
+    }
+    if(!inverse && style[key as any] !== val) {
+      return `expected node to have css-property "${key}" to have value "${val}" but got "${style[key as any]}"`
+    }
+  }
+  else {
+    return 'only HTML-Elements can have css property'
+  }
+  return null
+}
