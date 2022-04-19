@@ -297,7 +297,7 @@ function wrap(elements, ctx) {
         type: function (value, w) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 if (elements.length > 1) {
-                    utils.bubbleError(2, "found multiple elements to click. Please use nth() to select one");
+                    utils.bubbleError(2, "found multiple elements to type. Please use nth() to select one");
                 }
                 ctx.fireEvent.change(elements[0].container, { target: { value: value } });
                 if (typeof w !== 'undefined') {
@@ -323,10 +323,22 @@ function wrap(elements, ctx) {
         }); },
         // MATCHERS
         should: function (m, arg1, arg2) {
+            var node = elements[0].container;
+            if (m === 'have.length') {
+                if (elements.length !== arg1) {
+                    utils.bubbleError(2, "expected elements to have length \"" + arg1 + "\" but got \"" + elements.length + "\"");
+                }
+                return;
+            }
+            if (m === 'not.have.length') {
+                if (elements.length === arg1) {
+                    utils.bubbleError(2, "expected elements not to have length \"" + arg1 + "\"");
+                }
+                return;
+            }
             if (elements.length > 1) {
                 utils.bubbleError(2, "found multiple elements to test. Please use nth(n) to select one");
             }
-            var node = elements[0].container;
             switch (m) {
                 case 'contain.text': {
                     var e = matchers.containText(node, arg1, false);

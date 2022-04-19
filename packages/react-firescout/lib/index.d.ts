@@ -37,6 +37,8 @@ interface Matchers {
     should(m: 'not.have.value', s: string, x?: never): void;
     should(m: 'have.css', key: string, val: string): void;
     should(m: 'not.have.css', key: string, val: string): void;
+    should(m: 'have.length', n: number, x?: never): void;
+    should(m: 'not.have.length', n: number, x?: never): void;
 }
 interface Wrapped extends Matchers {
     context: (name: string) => Wrapped;

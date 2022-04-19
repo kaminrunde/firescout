@@ -130,6 +130,8 @@ interface Matchers {
   should(m:'not.have.value', s:string, x?:never):void
   should(m:'have.css', key:string, val:string):void
   should(m:'not.have.css', key:string, val:string):void
+  should(m:'have.length', n:number, x?:never):void
+  should(m:'not.have.length', n:number, x?:never):void
 }
 
 interface Wrapped extends Matchers {
@@ -265,7 +267,7 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
 
     type: async (value, w) => {
       if (elements.length > 1) {
-        utils.bubbleError(2, `found multiple elements to click. Please use nth() to select one`)
+        utils.bubbleError(2, `found multiple elements to type. Please use nth() to select one`)
       }
       ctx.fireEvent.change(elements[0].container, { target: { value } })
 
@@ -291,14 +293,26 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
 
     // MATCHERS
 
-    should(m, arg1, arg2) {
+    should(m:string, arg1:any, arg2:any) {
+      const node = elements[0].container
+      if(m === 'have.length') {
+        if(elements.length !== arg1) {
+          utils.bubbleError(2, `expected elements to have length "${arg1}" but got "${elements.length}"`)
+        }
+        return
+      }
+      if(m === 'not.have.length') {
+        if(elements.length === arg1) {
+          utils.bubbleError(2, `expected elements not to have length "${arg1}"`)
+        }
+        return
+      }
       if (elements.length > 1) {
         utils.bubbleError(
           2,
           `found multiple elements to test. Please use nth(n) to select one`
         )
       }
-      const node = elements[0].container
       switch(m) {
         case 'contain.text': {
           const e = matchers.containText(node, arg1, false)
