@@ -50,13 +50,30 @@ export function getModule(moduleName: string) {
           [moduleName + '.' + varName]: val
         }
       },
-      async fixture(name?:string) {
-        let path = mock_path + '/' + moduleName + '/' + varName
-        if(name && name !== 'default') path += '.' + name
-        const val = (await import(`${path}`)).default
+      async fixture(config: string | MockConfig) {
+        const c: MockConfig = !config || typeof config === 'string' ? { fixture: config } : config
+
+        let value = c.value
+        if (!value) {
+          let path = mock_path + '/' + moduleName + '/' + varName
+          if (c.fixture && c.fixture !== 'default') path += '.' + c.fixture
+          value = (await import(`${path}`)).default
+        }
+
+        if(c.transform) {
+          const nvalue = c.transform(JSON.parse(JSON.stringify(value)))
+          if(typeof value === 'object') for(const key in value) {
+            if(typeof value[key] === 'function') nvalue[key] = value[key]
+          }
+        }
+
+        if(typeof value === 'undefined') {
+          utils.bubbleError(1, 'either mock data resolved undefined or you forgot to resolve value in "transform"')
+        }
+
         window.firescoutVars = {
           ...window.firescoutVars,
-          [moduleName + '.' + varName]: val
+          [moduleName + '.' + varName]: value
         }
       }
     }),
@@ -84,7 +101,12 @@ export function getModule(moduleName: string) {
           value = (await import(`${path}`)).default
         }
 
-        if(c.transform) value = c.transform(JSON.parse(JSON.stringify(value)))
+        if(c.transform) {
+          const nvalue = c.transform(JSON.parse(JSON.stringify(value)))
+          if(typeof value === 'object') for(const key in value) {
+            if(typeof value[key] === 'function') nvalue[key] = value[key]
+          }
+        }
 
         if(typeof value === 'undefined') {
           utils.bubbleError(1, 'either mock data resolved undefined or you forgot to resolve value in "transform"')

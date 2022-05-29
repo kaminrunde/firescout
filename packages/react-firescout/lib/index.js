@@ -98,20 +98,36 @@ function getModule(moduleName) {
                 var _a;
                 window.firescoutVars = __assign(__assign({}, window.firescoutVars), (_a = {}, _a[moduleName + '.' + varName] = val, _a));
             },
-            fixture: function (name) {
+            fixture: function (config) {
                 return __awaiter(this, void 0, void 0, function () {
-                    var path, val;
+                    var c, value, path, nvalue, key;
                     var _a;
                     return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
+                                c = !config || typeof config === 'string' ? { fixture: config } : config;
+                                value = c.value;
+                                if (!!value) return [3 /*break*/, 2];
                                 path = mock_path + '/' + moduleName + '/' + varName;
-                                if (name && name !== 'default')
-                                    path += '.' + name;
+                                if (c.fixture && c.fixture !== 'default')
+                                    path += '.' + c.fixture;
                                 return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require("" + path)); })];
                             case 1:
-                                val = (_b.sent()).default;
-                                window.firescoutVars = __assign(__assign({}, window.firescoutVars), (_a = {}, _a[moduleName + '.' + varName] = val, _a));
+                                value = (_b.sent()).default;
+                                _b.label = 2;
+                            case 2:
+                                if (c.transform) {
+                                    nvalue = c.transform(JSON.parse(JSON.stringify(value)));
+                                    if (typeof value === 'object')
+                                        for (key in value) {
+                                            if (typeof value[key] === 'function')
+                                                nvalue[key] = value[key];
+                                        }
+                                }
+                                if (typeof value === 'undefined') {
+                                    utils.bubbleError(1, 'either mock data resolved undefined or you forgot to resolve value in "transform"');
+                                }
+                                window.firescoutVars = __assign(__assign({}, window.firescoutVars), (_a = {}, _a[moduleName + '.' + varName] = value, _a));
                                 return [2 /*return*/];
                         }
                     });
@@ -134,7 +150,7 @@ function getModule(moduleName) {
             },
             mock: function (config, wrapper) {
                 return __awaiter(this, void 0, void 0, function () {
-                    var c, value, path, cb;
+                    var c, value, path, nvalue, key, cb;
                     var _this = this;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
@@ -150,8 +166,14 @@ function getModule(moduleName) {
                                 value = (_a.sent()).default;
                                 _a.label = 2;
                             case 2:
-                                if (c.transform)
-                                    value = c.transform(JSON.parse(JSON.stringify(value)));
+                                if (c.transform) {
+                                    nvalue = c.transform(JSON.parse(JSON.stringify(value)));
+                                    if (typeof value === 'object')
+                                        for (key in value) {
+                                            if (typeof value[key] === 'function')
+                                                nvalue[key] = value[key];
+                                        }
+                                }
                                 if (typeof value === 'undefined') {
                                     utils.bubbleError(1, 'either mock data resolved undefined or you forgot to resolve value in "transform"');
                                 }

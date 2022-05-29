@@ -22,7 +22,7 @@ declare type MockConfig = {
 export declare function getModule(moduleName: string): {
     var: (varName: string) => {
         set(val: any): void;
-        fixture(name?: string | undefined): Promise<void>;
+        fixture(config: string | MockConfig): Promise<void>;
     };
     fn: (fnName: string) => {
         stub<Fn extends (...args: any) => any>(wrapper?: Fn | undefined): void;
