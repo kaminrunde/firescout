@@ -173,6 +173,7 @@ function getModule(moduleName) {
                                             if (typeof value[key] === 'function')
                                                 nvalue[key] = value[key];
                                         }
+                                    value = nvalue;
                                 }
                                 if (typeof value === 'undefined') {
                                     utils.bubbleError(1, 'either mock data resolved undefined or you forgot to resolve value in "transform"');

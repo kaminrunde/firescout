@@ -106,6 +106,7 @@ export function getModule(moduleName: string) {
           if(typeof value === 'object') for(const key in value) {
             if(typeof value[key] === 'function') nvalue[key] = value[key]
           }
+          value = nvalue
         }
 
         if(typeof value === 'undefined') {
