@@ -4,8 +4,7 @@ import searchWithNode from './searchWithNode'
 import createCommandHierarchie from './createCommandHierarchie'
 import createDocs from './createDocs'
 import createModuleTree from './createModuleTree'
-import { validate } from './reporter'
-export { default as getConfig } from './config'
+import validate from './validate'
 
 export function getStructure() {
   return searchWithNode()

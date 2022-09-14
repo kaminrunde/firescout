@@ -1,5 +1,5 @@
 import { RawItem } from './searchWithNode'
-import { report } from './reporter'
+import * as reporter from './reporter'
 
 export type HierarchieTree = {
   payload: string
@@ -114,10 +114,10 @@ export default function createCommandHierarchie(rawItems: RawItem[]): {
     })
   }
 
-  if (handleItems.length) for (let item of handleItems) report('HANDLE_WITHOUT_PARENT', item)
-  if (stateItems.length) for (let item of stateItems) report('STATE_WITHOUT_PARENT', item)
+  if (handleItems.length) for (let item of handleItems) reporter.report('HANDLE_WITHOUT_PARENT', item)
+  if (stateItems.length) for (let item of stateItems) reporter.report('STATE_WITHOUT_PARENT', item)
   if (enhancedCollections.length)
-    for (let item of enhancedCollections) report('COLLECTION_WITHOUT_PARENT', item)
+    for (let item of enhancedCollections) reporter.report('COLLECTION_WITHOUT_PARENT', item)
 
   return { tree, mdItems, moduleItems, fixtureItems, variableItems }
 }

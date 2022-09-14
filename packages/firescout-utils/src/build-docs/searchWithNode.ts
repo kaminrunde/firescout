@@ -1,4 +1,4 @@
-import getConfig from './config'
+import {getConfig} from './config'
 import * as utils from './utils'
 
 export type RawItem = {

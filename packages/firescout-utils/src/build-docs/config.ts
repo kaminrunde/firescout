@@ -9,7 +9,7 @@ export type Config = {
 }
 let config: Config | null = null
 
-export default function getConfig(): Config {
+export function getConfig(): Config {
   if (!config) {
     const configRaw = fs.readFileSync(process.cwd() + '/firescout.json', 'utf8')
     config = JSON.parse(configRaw) as Config
