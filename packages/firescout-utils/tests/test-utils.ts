@@ -5,7 +5,8 @@ import * as config from '../src/build-docs/config'
 
 type ExecutionResult = {
   logs: {code:keyof typeof reporter.codes, name:string, path:string}[],
-  result: Awaited<ReturnType<typeof getStructure>>
+  result: Awaited<ReturnType<typeof getStructure>>,
+  getComponent: (name:string) => Awaited<ReturnType<typeof getStructure>>['tree'][0]
 }
 
 const defaultConfig:config.Config = {
@@ -51,62 +52,8 @@ export function create (_config:Partial<config.Config> = {}) {
     return files[path]
   }
 
-  // jest.mock('../src/build-docs/config', () => {
-  //   const originalModule = jest.requireActual('../src/build-docs/config');
-  //   const defaultConfig:config.Config = {
-  //     extensions: 'ts',
-  //     fixturesFolder: 'fixtures',
-  //     outPath: 'out',
-  //     tsFixtures: true,
-  //     widgetFolders: ['src']
-  //   }
-  
-  //   return {
-  //     __esModule: true,
-  //     ...originalModule,
-  //     getConfig: () => defaultConfig
-  //   };
-  // })
-
-  // jest.mock('../src/build-docs/reporter', () => {
-  //   const originalModule = jest.requireActual('../src/build-docs/reporter');
-  
-  //   return {
-  //     __esModule: true,
-  //     ...originalModule,
-  //     report: (code: keyof typeof reporter.codes, ctx: any) => {
-  //       const [name, path] = originalModule.codes[code](ctx)
-  //       logs.push({code, name, path})
-  //     }
-  //   };
-  // })
-
-  // jest.mock('../src/build-docs/utils', () => {
-  //   const originalModule = jest.requireActual('../src/build-docs/utils');
-  
-  //   return {
-  //     __esModule: true,
-  //     ...originalModule,
-  //     readFile: async (path:string) => {
-  //       return files[path]
-  //     },
-  //     readDir: async (path:string):Promise<utils.File[]> => {
-  //       const filenames = Object.keys(files).filter(name => name.includes(path))
-  //       return filenames.map(filename => {
-  //         const rest = filename.replace(path, '')
-  //         const name = rest.split('/')[1]
-  //         return {
-  //           name: name,
-  //           path: path + '/' + name,
-  //           isFile: Boolean(files[path]),
-  //           isDir: !files[path]
-  //         }
-  //       })
-  //     }
-  //   };
-  // })
-
   const instance = {
+    getFile: (path:string) => files[path],
     addMarkdown(path:string, def:MarkdownDef) {
       files[path] = toMarkdown(def)
       return instance
@@ -121,7 +68,17 @@ export function create (_config:Partial<config.Config> = {}) {
     },
     async execute():Promise<ExecutionResult> {
       const result = await getStructure()
-      return {result, logs}
+      return {
+        result, 
+        logs,
+        getComponent(context:string) {
+          const c = result.tree.find(row => row.context === context)
+
+          if(!c) throw new Error(`cannot find context "${context}" (getComponent)`)
+
+          return c
+        }
+      }
     }
   }
 
@@ -145,18 +102,18 @@ function toMarkdown (def:MarkdownDef) {
   if(def.desc) content += `${def.desc}\n`
 
   if(def.handles) {
-    content += `## Handles\n`
+    content += `\n## Handles\n\n`
     def.handles.forEach(row => content += `- **${row.name}**: ${row.description}\n`)
   }
 
   if(def.states) {
-    content += `## States\n`
+    content += `\n## States\n\n`
     def.states.forEach(row => content += `- **${row.name}**: ${row.description}\n`)
   }
 
   if(def.collections) {
-    content += `## Collections\n`
-    def.collections.forEach(row => content += `- [${row.name}]:(${row.path})\n`)
+    content += `\n## Collections\n\n`
+    def.collections.forEach(row => content += `- [${row.name}](${row.path})\n`)
   }
   return content
 }
