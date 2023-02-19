@@ -110,9 +110,9 @@ async function getSrcMatch(path: string): Promise<Match[] | null> {
     'g'
   )
   const moduleRegex = new RegExp('firescoutMockFn ?(<.*>)? *\\([ \r\n]*("|\').*("|\')', 'g')
-  const moduleCommentRegex = new RegExp('@firescoutMockFn ([^ ]*)', 'g')
+  const moduleCommentRegex = new RegExp('@firescoutMockFn ([^\\n]*)', 'g')
   const variableRegex = new RegExp('firescoutMockVar *:? *(<.*>)? *\\([ \r\n]*("|\').*("|\')', 'g')
-  const variableCommentRegex = new RegExp('@firescoutMockVar ([^ ]*)', 'g')
+  const variableCommentRegex = new RegExp('@firescoutMockVar ([^\\n]*)', 'g')
 
   let cMatchesString = result.match(cRegexString)
   let cMatchesCond = result.match(cRegexCond)
