@@ -5,7 +5,6 @@ import * as md from 'markdown-ast'
  */
 export default class Visitor {
   listeners: any = {}
-
   static getText(nodes: md.Node[]) {
     const v = new Visitor()
     let text = ''
