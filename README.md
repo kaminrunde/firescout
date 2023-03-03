@@ -58,8 +58,10 @@ Lerna copies root license (`LICENSE`) into package location, no need to do this 
 
 > To authenticate by logging in to npm, use the npm login command, replacing USERNAME with your GitHub username, TOKEN with your [personal access token](https://github.com/settings/tokens), and PUBLIC-EMAIL-ADDRESS with your email address.
 
+**hint:** for login use your github handle (lowercase!) for username. and create a token in your github (classic token with access to publish packages)
+
 ```bash
-npm login --registry=https://npm.pkg.github.com --scope=@kaminrunde
+npm login --registry=https://npm.pkg.github.com --scope=@kaminrunde --auth-type=legacy
 > Username: USERNAME
 > Password: TOKEN
 > Email: PUBLIC-EMAIL-ADDRESS
