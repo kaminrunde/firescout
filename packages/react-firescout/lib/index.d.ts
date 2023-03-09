@@ -50,7 +50,7 @@ interface Wrapped extends Matchers {
     wait: (ms: number) => Promise<void>;
     unwrap: () => Element;
     query: (s: string) => Wrapped;
-    click: (element?: number) => Promise<Wrapped>;
+    click: (timeout?: number) => Promise<Wrapped>;
     type: (value: string, timeout?: number) => Promise<Wrapped>;
     simulate: (cb: (el: Element) => Promise<void> | void) => Promise<Wrapped>;
 }

@@ -315,25 +315,25 @@ function wrap(elements, ctx) {
         // events
         click: function (w) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (elements.length > 1 && w === undefined) {
-                    return [2 /*return*/, utils.bubbleError(2, "found " + (elements.length + 1) + " elements to click. Please specify which one you want to click. First element = 0 index")];
+                if (elements.length > 1) {
+                    utils.bubbleError(2, "found multiple elements to click. Please use nth() to select one");
                 }
-                if (w && w >= elements.length) {
-                    return [2 /*return*/, utils.bubbleError(2, "found " + (elements.length + 1) + " elements to click. Your submitted param was to high, no element found. You should probably decrease the param. First element = 0 index")];
+                ctx.fireEvent.click(elements[0].container);
+                if (typeof w !== 'undefined' && typeof w === 'number') {
+                    return [2 /*return*/, ctx.act(function () { return new Promise(function (r) { return setTimeout(r, w); }); })];
                 }
-                ctx.fireEvent.click(elements[w || 0].container);
                 return [2 /*return*/, ctx.act(function () { return wrap(elements, ctx); })];
             });
         }); },
         type: function (value, w) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (elements.length > 1 && w === undefined) {
-                    return [2 /*return*/, utils.bubbleError(2, "found " + (elements.length + 1) + " elements to click. Please specify which one you want to type. First element = 0 index")];
+                if (elements.length > 1) {
+                    utils.bubbleError(2, "found multiple elements to type. Please use nth() to select one");
                 }
-                if (w && w >= elements.length) {
-                    return [2 /*return*/, utils.bubbleError(2, "found " + (elements.length + 1) + " elements to click. Your submitted param was to high, no element found. You should probably decrease the param. First element = 0 index")];
+                ctx.fireEvent.change(elements[0].container, { target: { value: value } });
+                if (typeof w !== 'undefined' && typeof w === 'number') {
+                    return [2 /*return*/, ctx.act(function () { return new Promise(function (r) { return setTimeout(r, w); }); })];
                 }
-                ctx.fireEvent.change(elements[w || 0].container, { target: { value: value } });
                 return [2 /*return*/, ctx.act(function () { return wrap(elements, ctx); })];
             });
         }); },

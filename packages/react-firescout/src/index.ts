@@ -179,7 +179,7 @@ interface Wrapped extends Matchers {
   wait: (ms: number) => Promise<void>
   unwrap: () => Element
   query: (s: string) => Wrapped
-  click: (element?: number) => Promise<Wrapped>
+  click: (timeout?: number) => Promise<Wrapped>
   type: (value: string, timeout?: number) => Promise<Wrapped>
   simulate: (cb: (el: Element) => Promise<void> | void) => Promise<Wrapped>
 }
@@ -289,45 +289,27 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
 
     // events
     click: async (w) => {
-      if (elements.length > 1 && w === undefined) {
-        return utils.bubbleError(
-          2,
-          `found ${
-            elements.length + 1
-          } elements to click. Please specify which one you want to click. First element = 0 index`
-        )
+      if (elements.length > 1) {
+        utils.bubbleError(2, `found multiple elements to click. Please use nth() to select one`)
       }
-      if (w && w >= elements.length) {
-        return utils.bubbleError(
-          2,
-          `found ${
-            elements.length + 1
-          } elements to click. Your submitted param was to high, no element found. You should probably decrease the param. First element = 0 index`
-        )
+      ctx.fireEvent.click(elements[0].container)
+
+      if (typeof w !== 'undefined' && typeof w === 'number') {
+        return ctx.act(() => new Promise((r) => setTimeout(r, w)))
       }
-      ctx.fireEvent.click(elements[w || 0].container)
 
       return ctx.act(() => wrap(elements, ctx))
     },
 
     type: async (value, w) => {
-      if (elements.length > 1 && w === undefined) {
-        return utils.bubbleError(
-          2,
-          `found ${
-            elements.length + 1
-          } elements to click. Please specify which one you want to type. First element = 0 index`
-        )
+      if (elements.length > 1) {
+        utils.bubbleError(2, `found multiple elements to type. Please use nth() to select one`)
       }
-      if (w && w >= elements.length) {
-        return utils.bubbleError(
-          2,
-          `found ${
-            elements.length + 1
-          } elements to click. Your submitted param was to high, no element found. You should probably decrease the param. First element = 0 index`
-        )
+      ctx.fireEvent.change(elements[0].container, { target: { value } })
+
+      if (typeof w !== 'undefined' && typeof w === 'number') {
+        return ctx.act(() => new Promise((r) => setTimeout(r, w)))
       }
-      ctx.fireEvent.change(elements[w || 0].container, { target: { value } })
 
       return ctx.act(() => wrap(elements, ctx))
     },
