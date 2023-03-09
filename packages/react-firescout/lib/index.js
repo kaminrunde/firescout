@@ -132,7 +132,7 @@ function getModule(moduleName) {
                         }
                     });
                 });
-            }
+            },
         }); },
         fn: function (fnName) { return ({
             stub: function (wrapper) {
@@ -182,9 +182,14 @@ function getModule(moduleName) {
                                     c.sync = true;
                                 if (!window.cymocks)
                                     window.cymocks = {};
-                                // @ts-expect-error
                                 if (!wrapper)
-                                    wrapper = function (cb) { return function () { return cb(); }; };
+                                    // @ts-expect-error
+                                    wrapper =
+                                        function (cb) {
+                                            return function () {
+                                                return cb();
+                                            };
+                                        };
                                 cb = wrapper(c.sync
                                     ? function () { return value; }
                                     : function () { return __awaiter(_this, void 0, void 0, function () {
@@ -255,7 +260,9 @@ function wrap(elements, ctx) {
             }
             var imps = implementations ? implementations.split(',') : null;
             var container = elements[0].container;
-            var query = function (s) { return [container, container.querySelector(s)].filter(function (el) { return el === null || el === void 0 ? void 0 : el.matches(s); })[0]; };
+            var query = function (s) {
+                return [container, container.querySelector(s)].filter(function (el) { return el === null || el === void 0 ? void 0 : el.matches(s); })[0];
+            };
             if (imps) {
                 for (var _i = 0, imps_1 = imps; _i < imps_1.length; _i++) {
                     var key = imps_1[_i];
@@ -276,7 +283,9 @@ function wrap(elements, ctx) {
                 utils.bubbleError(2, "found multiple elements to test. please select with \"nth(n)\"");
             }
             var container = elements[0].container;
-            var query = function (s) { return __spreadArrays([container], Array.from(container.querySelectorAll(s))).filter(function (el) { return el === null || el === void 0 ? void 0 : el.matches(s); }); };
+            var query = function (s) {
+                return __spreadArrays([container], Array.from(container.querySelectorAll(s))).filter(function (el) { return el === null || el === void 0 ? void 0 : el.matches(s); });
+            };
             var hits = query("[data-cy-state]");
             for (var _i = 0, hits_1 = hits; _i < hits_1.length; _i++) {
                 var hit = hits_1[_i];
@@ -306,28 +315,26 @@ function wrap(elements, ctx) {
         // events
         click: function (w) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (elements.length > 1) {
-                    utils.bubbleError(2, "found multiple elements to click. Please use nth() to select one");
+                if (elements.length > 1 && w === undefined) {
+                    return [2 /*return*/, utils.bubbleError(2, "found " + (elements.length + 1) + " elements to click. Please specify which one you want to click. First element = 0 index")];
                 }
-                ctx.fireEvent.click(elements[0].container);
-                if (typeof w !== 'undefined') {
-                    if (typeof w === 'number')
-                        return [2 /*return*/, ctx.act(function () { return new Promise(function (r) { return setTimeout(r, w); }); })];
+                if (w && w >= elements.length) {
+                    return [2 /*return*/, utils.bubbleError(2, "found " + (elements.length + 1) + " elements to click. Your submitted param was to high, no element found. You should probably decrease the param. First element = 0 index")];
                 }
-                return [2 /*return*/, wrap(elements, ctx)];
+                ctx.fireEvent.click(elements[w || 0].container);
+                return [2 /*return*/, ctx.act(function () { return wrap(elements, ctx); })];
             });
         }); },
         type: function (value, w) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (elements.length > 1) {
-                    utils.bubbleError(2, "found multiple elements to type. Please use nth() to select one");
+                if (elements.length > 1 && w === undefined) {
+                    return [2 /*return*/, utils.bubbleError(2, "found " + (elements.length + 1) + " elements to click. Please specify which one you want to type. First element = 0 index")];
                 }
-                ctx.fireEvent.change(elements[0].container, { target: { value: value } });
-                if (typeof w !== 'undefined') {
-                    if (typeof w === 'number')
-                        return [2 /*return*/, ctx.act(function () { return new Promise(function (r) { return setTimeout(r, w); }); })];
+                if (w && w >= elements.length) {
+                    return [2 /*return*/, utils.bubbleError(2, "found " + (elements.length + 1) + " elements to click. Your submitted param was to high, no element found. You should probably decrease the param. First element = 0 index")];
                 }
-                return [2 /*return*/, wrap(elements, ctx)];
+                ctx.fireEvent.change(elements[w || 0].container, { target: { value: value } });
+                return [2 /*return*/, ctx.act(function () { return wrap(elements, ctx); })];
             });
         }); },
         simulate: function (cb) { return __awaiter(_this, void 0, void 0, function () {
@@ -399,8 +406,9 @@ function wrap(elements, ctx) {
                         utils.bubbleError(2, e);
                     break;
                 }
-                default: utils.bubbleError(2, 'unknown matcher');
+                default:
+                    utils.bubbleError(2, 'unknown matcher');
             }
-        }
+        },
     };
 }

@@ -1,6 +1,6 @@
 import * as t from './types'
 import * as utils from './utils'
-import {getConfig} from '@kaminrunde/firescout-utils/lib/build-docs'
+import { getConfig } from '@kaminrunde/firescout-utils/lib/build-docs'
 import * as matchers from './matchers'
 
 declare global {
@@ -43,11 +43,11 @@ export function getModule(moduleName: string) {
   const mock_path = getConfig().fixturesFolder
   // const mock_path = "/Users/manueljung/Documents/relax/firescout/examples/jest-example/firescout-mocks"
   return {
-    var: (varName:string) => ({
-      set(val:any) {
+    var: (varName: string) => ({
+      set(val: any) {
         window.firescoutVars = {
           ...window.firescoutVars,
-          [moduleName + '.' + varName]: val
+          [moduleName + '.' + varName]: val,
         }
       },
       async fixture(config: string | MockConfig) {
@@ -60,22 +60,26 @@ export function getModule(moduleName: string) {
           value = (await import(`${path}`)).default
         }
 
-        if(c.transform) {
+        if (c.transform) {
           const nvalue = c.transform(JSON.parse(JSON.stringify(value)))
-          if(typeof value === 'object') for(const key in value) {
-            if(typeof value[key] === 'function') nvalue[key] = value[key]
-          }
+          if (typeof value === 'object')
+            for (const key in value) {
+              if (typeof value[key] === 'function') nvalue[key] = value[key]
+            }
         }
 
-        if(typeof value === 'undefined') {
-          utils.bubbleError(1, 'either mock data resolved undefined or you forgot to resolve value in "transform"')
+        if (typeof value === 'undefined') {
+          utils.bubbleError(
+            1,
+            'either mock data resolved undefined or you forgot to resolve value in "transform"'
+          )
         }
 
         window.firescoutVars = {
           ...window.firescoutVars,
-          [moduleName + '.' + varName]: value
+          [moduleName + '.' + varName]: value,
         }
-      }
+      },
     }),
     fn: (fnName: string) => ({
       stub<Fn extends (...args: any) => any>(wrapper?: Fn) {
@@ -101,24 +105,32 @@ export function getModule(moduleName: string) {
           value = (await import(`${path}`)).default
         }
 
-        if(c.transform) {
+        if (c.transform) {
           const nvalue = c.transform(JSON.parse(JSON.stringify(value)))
-          if(typeof value === 'object') for(const key in value) {
-            if(typeof value[key] === 'function') nvalue[key] = value[key]
-          }
+          if (typeof value === 'object')
+            for (const key in value) {
+              if (typeof value[key] === 'function') nvalue[key] = value[key]
+            }
           value = nvalue
         }
 
-        if(typeof value === 'undefined') {
-          utils.bubbleError(1, 'either mock data resolved undefined or you forgot to resolve value in "transform"')
+        if (typeof value === 'undefined') {
+          utils.bubbleError(
+            1,
+            'either mock data resolved undefined or you forgot to resolve value in "transform"'
+          )
         }
 
-        if(value.__sync) c.sync = true
+        if (value.__sync) c.sync = true
 
         if (!window.cymocks) window.cymocks = {}
 
-        // @ts-expect-error
-        if (!wrapper) wrapper = (cb: any): unknown => () => cb()
+        if (!wrapper)
+          // @ts-expect-error
+          wrapper =
+            (cb: any): unknown =>
+            () =>
+              cb()
 
         // @ts-expect-error
         const cb = wrapper(
@@ -147,14 +159,14 @@ export function clearMocks() {
 }
 
 interface Matchers {
-  should(m:'contain.text', s:string, x?:never):void
-  should(m:'not.contain.text', s:string, x?:never):void
-  should(m:'have.value', s:string, x?:never):void
-  should(m:'not.have.value', s:string, x?:never):void
-  should(m:'have.css', key:string, val:string):void
-  should(m:'not.have.css', key:string, val:string):void
-  should(m:'have.length', n:number, x?:never):void
-  should(m:'not.have.length', n:number, x?:never):void
+  should(m: 'contain.text', s: string, x?: never): void
+  should(m: 'not.contain.text', s: string, x?: never): void
+  should(m: 'have.value', s: string, x?: never): void
+  should(m: 'not.have.value', s: string, x?: never): void
+  should(m: 'have.css', key: string, val: string): void
+  should(m: 'not.have.css', key: string, val: string): void
+  should(m: 'have.length', n: number, x?: never): void
+  should(m: 'not.have.length', n: number, x?: never): void
 }
 
 interface Wrapped extends Matchers {
@@ -166,8 +178,8 @@ interface Wrapped extends Matchers {
   nth: (n: number) => Wrapped
   wait: (ms: number) => Promise<void>
   unwrap: () => Element
-  query: (s:string) => Wrapped
-  click: (timeout?: number) => Promise<Wrapped>
+  query: (s: string) => Wrapped
+  click: (element?: number) => Promise<Wrapped>
   type: (value: string, timeout?: number) => Promise<Wrapped>
   simulate: (cb: (el: Element) => Promise<void> | void) => Promise<Wrapped>
 }
@@ -221,7 +233,8 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
       const imps = implementations ? implementations.split(',') : null
       const container = elements[0].container
 
-      const query = (s:string) => [container, container.querySelector(s)].filter(el => el?.matches(s))[0]
+      const query = (s: string) =>
+        [container, container.querySelector(s)].filter((el) => el?.matches(s))[0]
 
       if (imps) {
         for (const key of imps) {
@@ -241,7 +254,8 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
         utils.bubbleError(2, `found multiple elements to test. please select with "nth(n)"`)
       }
       const container = elements[0].container
-      const query = (s:string) => [container, ...Array.from(container.querySelectorAll(s))].filter(el => el?.matches(s))
+      const query = (s: string) =>
+        [container, ...Array.from(container.querySelectorAll(s))].filter((el) => el?.matches(s))
       const hits = query(`[data-cy-state]`)
       for (const hit of hits) {
         const state: string = (hit.attributes as any)['data-cy-state'].value
@@ -274,31 +288,48 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
     },
 
     // events
-
     click: async (w) => {
-      if (elements.length > 1) {
-        utils.bubbleError(2, `found multiple elements to click. Please use nth() to select one`)
+      if (elements.length > 1 && w === undefined) {
+        return utils.bubbleError(
+          2,
+          `found ${
+            elements.length + 1
+          } elements to click. Please specify which one you want to click. First element = 0 index`
+        )
       }
-      ctx.fireEvent.click(elements[0].container)
-
-      if (typeof w !== 'undefined') {
-        if (typeof w === 'number') return ctx.act(() => new Promise((r) => setTimeout(r, w)))
+      if (w && w >= elements.length) {
+        return utils.bubbleError(
+          2,
+          `found ${
+            elements.length + 1
+          } elements to click. Your submitted param was to high, no element found. You should probably decrease the param. First element = 0 index`
+        )
       }
+      ctx.fireEvent.click(elements[w || 0].container)
 
-      return wrap(elements, ctx)
+      return ctx.act(() => wrap(elements, ctx))
     },
 
     type: async (value, w) => {
-      if (elements.length > 1) {
-        utils.bubbleError(2, `found multiple elements to type. Please use nth() to select one`)
+      if (elements.length > 1 && w === undefined) {
+        return utils.bubbleError(
+          2,
+          `found ${
+            elements.length + 1
+          } elements to click. Please specify which one you want to type. First element = 0 index`
+        )
       }
-      ctx.fireEvent.change(elements[0].container, { target: { value } })
-
-      if (typeof w !== 'undefined') {
-        if (typeof w === 'number') return ctx.act(() => new Promise((r) => setTimeout(r, w)))
+      if (w && w >= elements.length) {
+        return utils.bubbleError(
+          2,
+          `found ${
+            elements.length + 1
+          } elements to click. Your submitted param was to high, no element found. You should probably decrease the param. First element = 0 index`
+        )
       }
+      ctx.fireEvent.change(elements[w || 0].container, { target: { value } })
 
-      return wrap(elements, ctx)
+      return ctx.act(() => wrap(elements, ctx))
     },
 
     simulate: async (cb) => {
@@ -316,59 +347,60 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
 
     // MATCHERS
 
-    should(m:string, arg1:any, arg2:any) {
+    should(m: string, arg1: any, arg2: any) {
       const node = elements[0].container
-      if(m === 'have.length') {
-        if(elements.length !== arg1) {
-          utils.bubbleError(2, `expected elements to have length "${arg1}" but got "${elements.length}"`)
+      if (m === 'have.length') {
+        if (elements.length !== arg1) {
+          utils.bubbleError(
+            2,
+            `expected elements to have length "${arg1}" but got "${elements.length}"`
+          )
         }
         return
       }
-      if(m === 'not.have.length') {
-        if(elements.length === arg1) {
+      if (m === 'not.have.length') {
+        if (elements.length === arg1) {
           utils.bubbleError(2, `expected elements not to have length "${arg1}"`)
         }
         return
       }
       if (elements.length > 1) {
-        utils.bubbleError(
-          2,
-          `found multiple elements to test. Please use nth(n) to select one`
-        )
+        utils.bubbleError(2, `found multiple elements to test. Please use nth(n) to select one`)
       }
-      switch(m) {
+      switch (m) {
         case 'contain.text': {
           const e = matchers.containText(node, arg1, false)
-          if(e) utils.bubbleError(2, e)
+          if (e) utils.bubbleError(2, e)
           break
         }
         case 'not.contain.text': {
           const e = matchers.containText(node, arg1, true)
-          if(e) utils.bubbleError(2, e)
+          if (e) utils.bubbleError(2, e)
           break
         }
         case 'have.value': {
           const e = matchers.haveValue(node, arg1, false)
-          if(e) utils.bubbleError(2, e)
+          if (e) utils.bubbleError(2, e)
           break
         }
         case 'not.have.value': {
           const e = matchers.haveValue(node, arg1, true)
-          if(e) utils.bubbleError(2, e)
+          if (e) utils.bubbleError(2, e)
           break
         }
         case 'have.css': {
           const e = matchers.haveCss(node, arg1, arg2 as string, false)
-          if(e) utils.bubbleError(2, e)
+          if (e) utils.bubbleError(2, e)
           break
         }
         case 'not.have.css': {
           const e = matchers.haveCss(node, arg1, arg2 as string, true)
-          if(e) utils.bubbleError(2, e)
+          if (e) utils.bubbleError(2, e)
           break
         }
-        default: utils.bubbleError(2, 'unknown matcher')
+        default:
+          utils.bubbleError(2, 'unknown matcher')
       }
-    }
+    },
   }
 }
