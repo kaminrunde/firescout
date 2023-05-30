@@ -39,17 +39,19 @@ interface Matchers {
     should(m: 'not.have.css', key: string, val: string): void;
     should(m: 'have.length', n: number, x?: never): void;
     should(m: 'not.have.length', n: number, x?: never): void;
+    should(m: 'exist', a?: never, b?: never): void;
+    should(m: 'not.exist', a?: never, b?: never): void;
 }
 interface Wrapped extends Matchers {
-    context: (name: string) => Wrapped;
-    handle: (name: string) => Wrapped;
-    collection: (name: string) => Wrapped;
+    context: (name: string, ignoreError?: boolean) => Wrapped;
+    handle: (name: string, ignoreError?: boolean) => Wrapped;
+    collection: (name: string, ignoreError?: boolean) => Wrapped;
     shouldHaveState: (name: string, implementations?: string) => Wrapped;
     shouldNotHaveState: (name: string) => Wrapped;
-    nth: (n: number) => Wrapped;
+    nth: (n: number, ignoreError?: boolean) => Wrapped;
     wait: (ms: number) => Promise<void>;
     unwrap: () => Element;
-    query: (s: string) => Wrapped;
+    query: (s: string, ignoreError?: boolean) => Wrapped;
     click: (timeout?: number) => Promise<Wrapped>;
     type: (value: string, timeout?: number) => Promise<Wrapped>;
     simulate: (cb: (el: Element) => Promise<void> | void) => Promise<Wrapped>;

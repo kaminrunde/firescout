@@ -19,10 +19,13 @@ export function bubbleError(size: number, msg: string) {
   const e = new Error(msg)
   if (e.stack) {
     const lines = e.stack.split('\n')
-    const combined = [lines.shift()]
-    for (let i = 0; i < size; i++) lines.shift()
 
-    e.stack = combined.concat(lines).join('\n')
+    e.stack = lines.filter(s => !s.includes('/kaminrunde/firescout/')).join('\n')
+
+    // const combined = [lines.shift()]
+    // for (let i = 0; i < size; i++) lines.shift()
+
+    // e.stack = combined.concat(lines).join('\n')
   }
   throw e
 }

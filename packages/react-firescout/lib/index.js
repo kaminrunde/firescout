@@ -226,31 +226,31 @@ exports.clearMocks = clearMocks;
 function wrap(elements, ctx) {
     var _this = this;
     return {
-        context: function (name) {
+        context: function (name, ignoreError) {
             var targets = utils.query("[data-cy-ctx=\"" + name + "\"]", elements);
-            if (targets.length === 0) {
-                utils.bubbleError(2, "could not find context \"" + name + "\"");
+            if (targets.length === 0 && !ignoreError) {
+                utils.bubbleError(3, "could not find context \"" + name + "\"");
             }
             return wrap(targets, ctx);
         },
-        handle: function (name) {
+        handle: function (name, ignoreError) {
             var targets = utils.query("[data-cy-handle=\"" + name + "\"]", elements);
-            if (targets.length === 0) {
-                utils.bubbleError(2, "could not find handle \"" + name + "\"");
+            if (targets.length === 0 && !ignoreError) {
+                utils.bubbleError(3, "could not find handle \"" + name + "\"");
             }
             return wrap(targets, ctx);
         },
-        collection: function (name) {
+        collection: function (name, ignoreError) {
             var targets = utils.query("[data-cy-collection=\"" + name + "\"]", elements);
-            if (targets.length === 0) {
-                utils.bubbleError(2, "could not find collection \"" + name + "\"");
+            if (targets.length === 0 && !ignoreError) {
+                utils.bubbleError(3, "could not find collection \"" + name + "\"");
             }
             return wrap(targets, ctx);
         },
-        query: function (s) {
+        query: function (s, ignoreError) {
             var targets = utils.query(s, elements);
-            if (targets.length === 0) {
-                utils.bubbleError(2, "could not find elements with selector \"" + s + "\"");
+            if (targets.length === 0 && !ignoreError) {
+                utils.bubbleError(3, "could not find elements with selector \"" + s + "\"");
             }
             return wrap(targets, ctx);
         },
@@ -359,6 +359,18 @@ function wrap(elements, ctx) {
         }); },
         // MATCHERS
         should: function (m, arg1, arg2) {
+            if (m === 'not.exist') {
+                if (elements.length > 0) {
+                    utils.bubbleError(2, "expected element to not exist");
+                }
+                return;
+            }
+            if (m === 'exist') {
+                if (elements.length === 0) {
+                    utils.bubbleError(2, "expected element to exist");
+                }
+                return;
+            }
             var node = elements[0].container;
             if (m === 'have.length') {
                 if (elements.length !== arg1) {

@@ -25,6 +25,8 @@ interface Matchers {
   should(m:'not.have.css', key:string, val:string):void
   should(m:'have.length', n:number, x?:never):void
   should(m:'not.have.length', n:number, x?:never):void
+  should(m:'not.exist', n?:number, x?:never):void
+  should(m:'exist', n?:number, x?:never):void
 }
 
 ${modules.map((node) =>
@@ -92,7 +94,7 @@ interface Mount {
         : '-'
     }
     */
-    context (name:'${node.context}'):${node.typesaveContext}
+    context (name:'${node.context}', ignoreError?:boolean):${node.typesaveContext}
   `).join('\n')}
   }
 
@@ -113,7 +115,7 @@ function recursiceCollection (node:Tree, docs: Docs):string {
         * @name ${handle.name}
         * @file [${handle.file}](${process.cwd() + handle.file})
         */
-        handle(name:'${handle.name}', index?:number|string): Interactable<${node.typesaveContext + colNode.typesaveContext}>`
+        handle(name:'${handle.name}', ignoreError?:boolean): Interactable<${node.typesaveContext + colNode.typesaveContext}>`
     ).join('\n')}
 
     ${colNode.states.map((state) => 
@@ -137,7 +139,7 @@ function recursiceCollection (node:Tree, docs: Docs):string {
         ).join('\n')}
 
         ${colNode.collections.map(inner => `
-          collection(name:"${inner.context}"):${colNode.typesaveContext + inner.typesaveContext}
+          collection(name:"${inner.context}", ignoreError?:boolean):${colNode.typesaveContext + inner.typesaveContext}
         `).join('\n')}
     }`).join('\n')}
 
@@ -150,7 +152,7 @@ function recursiceCollection (node:Tree, docs: Docs):string {
             ? `[${docs[node.context].file}](${process.cwd() + docs[node.context].file})`
             : '-'}
       */
-      collection(name:'${colNode.context}', index?:number|string): ${node.typesaveContext + colNode.typesaveContext}
+      collection(name:'${colNode.context}', ignoreError?:boolean): ${node.typesaveContext + colNode.typesaveContext}
       `).join('\n')}
 
     ${node.handles.map((handle) => 
@@ -159,7 +161,7 @@ function recursiceCollection (node:Tree, docs: Docs):string {
         * @name ${handle.name}
         * @file [${handle.file}](${process.cwd() + handle.file})
         */
-        handle(name:'${handle.name}', index?:number|string): Interactable<${node.typesaveContext}>
+        handle(name:'${handle.name}', ignoreError?:boolean): Interactable<${node.typesaveContext}>
     `).join('\n')}
 
     ${node.states.map((state) => 
@@ -190,6 +192,6 @@ function recursiceCollection (node:Tree, docs: Docs):string {
     shouldNotHaveState(name:'${state.name}'): ${node.typesaveContext}
     `
     )}}
-    ${node.collections.map(node => recursiceCollection(node, docs))}
+    ${node.collections.map(node => recursiceCollection(node, docs)).join('\n')}
     `
 }
