@@ -288,7 +288,7 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
     },
 
     // events
-    click: async (w) => {
+    click: async (w=1) => {
       if (elements.length > 1) {
         utils.bubbleError(2, `found multiple elements to click. Please use nth() to select one`)
       }
@@ -301,7 +301,7 @@ function wrap(elements: t.FirescoutElement[], ctx: any): Wrapped {
       return ctx.act(() => wrap(elements, ctx))
     },
 
-    type: async (value, w) => {
+    type: async (value, w=1) => {
       if (elements.length > 1) {
         utils.bubbleError(2, `found multiple elements to type. Please use nth() to select one`)
       }
