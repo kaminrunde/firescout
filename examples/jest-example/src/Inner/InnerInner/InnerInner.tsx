@@ -1,11 +1,10 @@
 import * as React from "react";
-import InnerInner from "./InnerInner";
 
 export default function Inner(): JSX.Element {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <div data-cy-collection="Inner">
+    <div data-cy-collection="InnerInner">
       <p>
         <button
           data-cy-handle="open-inner-secret"
@@ -15,8 +14,6 @@ export default function Inner(): JSX.Element {
         </button>
         {open && <span data-cy-state="inner-secret-visible">Hello</span>}
       </p>
-
-      <InnerInner />
     </div>
   );
 }

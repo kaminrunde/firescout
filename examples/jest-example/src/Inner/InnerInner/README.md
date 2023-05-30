@@ -1,6 +1,6 @@
 <!-- firescout-collection -->
 
-# Inner
+# InnerInner
 
 Just a another small component to test firescout
 
@@ -12,6 +12,3 @@ Just a another small component to test firescout
 
 - **inner-secret-visible**: Oops! the secret is visible!
 
-## Collections
-
-- [InnerInner](./InnerInner/README.md)
