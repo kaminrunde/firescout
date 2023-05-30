@@ -313,36 +313,30 @@ function wrap(elements, ctx) {
             return elements[0].container;
         },
         // events
-        click: function (w) {
-            if (w === void 0) { w = 1; }
-            return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    if (elements.length > 1) {
-                        utils.bubbleError(2, "found multiple elements to click. Please use nth() to select one");
-                    }
-                    ctx.fireEvent.click(elements[0].container);
-                    if (typeof w !== 'undefined' && typeof w === 'number') {
-                        return [2 /*return*/, ctx.act(function () { return new Promise(function (r) { return setTimeout(r, w); }); })];
-                    }
-                    return [2 /*return*/, ctx.act(function () { return wrap(elements, ctx); })];
-                });
+        click: function (w) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                if (elements.length > 1) {
+                    utils.bubbleError(2, "found multiple elements to click. Please use nth() to select one");
+                }
+                ctx.fireEvent.click(elements[0].container);
+                if (typeof w !== 'undefined' && typeof w === 'number') {
+                    return [2 /*return*/, ctx.act(function () { return new Promise(function (r) { return setTimeout(r, w); }); })];
+                }
+                return [2 /*return*/, ctx.act(function () { return wrap(elements, ctx); })];
             });
-        },
-        type: function (value, w) {
-            if (w === void 0) { w = 1; }
-            return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    if (elements.length > 1) {
-                        utils.bubbleError(2, "found multiple elements to type. Please use nth() to select one");
-                    }
-                    ctx.fireEvent.change(elements[0].container, { target: { value: value } });
-                    if (typeof w !== 'undefined' && typeof w === 'number') {
-                        return [2 /*return*/, ctx.act(function () { return new Promise(function (r) { return setTimeout(r, w); }); })];
-                    }
-                    return [2 /*return*/, ctx.act(function () { return wrap(elements, ctx); })];
-                });
+        }); },
+        type: function (value, w) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                if (elements.length > 1) {
+                    utils.bubbleError(2, "found multiple elements to type. Please use nth() to select one");
+                }
+                ctx.fireEvent.change(elements[0].container, { target: { value: value } });
+                if (typeof w !== 'undefined' && typeof w === 'number') {
+                    return [2 /*return*/, ctx.act(function () { return new Promise(function (r) { return setTimeout(r, w); }); })];
+                }
+                return [2 /*return*/, ctx.act(function () { return wrap(elements, ctx); })];
             });
-        },
+        }); },
         simulate: function (cb) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
