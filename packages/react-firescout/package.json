@@ -39,7 +39,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "9ed1612cf6478a5095c1d5384844aff42b7a3e2a",
+  "gitHead": "fe35d3cb36743ba24e49bd1abf00963e4f32a569",
   "peerDependencies": {
     "@testing-library/user-event": "*",
     "react": "*",
