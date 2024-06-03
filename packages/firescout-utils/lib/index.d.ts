@@ -1,4 +1,4 @@
-declare type ArgumentTypes<T> = T extends (...args: infer A) => any ? A : any;
+type ArgumentTypes<T> = T extends (...args: infer A) => any ? A : any;
 declare global {
     interface Window {
         cymocks?: {

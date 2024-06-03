@@ -12,7 +12,11 @@ var __assign = (this && this.__assign) || function () {
 };
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -25,7 +29,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -44,7 +48,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -67,10 +71,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = void 0;
-var build_docs_1 = require("../src/build-docs");
-var reporter = __importStar(require("../src/build-docs/reporter"));
-var utils = __importStar(require("../src/build-docs/utils"));
-var config = __importStar(require("../src/build-docs/config"));
+var build_docs_1 = require("..//build-docs");
+var reporter = __importStar(require("..//build-docs/reporter"));
+var utils = __importStar(require("..//build-docs/utils"));
+var config = __importStar(require("..//build-docs/config"));
 var defaultConfig = {
     extensions: 'ts',
     fixturesFolder: 'fixtures',
@@ -134,7 +138,7 @@ function create(_config) {
                 var result;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, build_docs_1.getStructure()];
+                        case 0: return [4 /*yield*/, (0, build_docs_1.getStructure)()];
                         case 1:
                             result = _a.sent();
                             return [2 /*return*/, {
@@ -143,7 +147,7 @@ function create(_config) {
                                     getComponent: function (context) {
                                         var c = result.tree.find(function (row) { return row.context === context; });
                                         if (!c)
-                                            throw new Error("cannot find context \"" + context + "\" (getComponent)");
+                                            throw new Error("cannot find context \"".concat(context, "\" (getComponent)"));
                                         return c;
                                     }
                                 }];
@@ -161,20 +165,20 @@ function toMarkdown(def) {
         content += '<!-- firescout-component -->\n';
     if (def.type === 'collection')
         content += '<!-- firescout-collection -->\n';
-    content += "# " + def.name + "\n";
+    content += "# ".concat(def.name, "\n");
     if (def.desc)
-        content += def.desc + "\n";
+        content += "".concat(def.desc, "\n");
     if (def.handles) {
         content += "\n## Handles\n\n";
-        def.handles.forEach(function (row) { return content += "- **" + row.name + "**: " + row.description + "\n"; });
+        def.handles.forEach(function (row) { return content += "- **".concat(row.name, "**: ").concat(row.description, "\n"); });
     }
     if (def.states) {
         content += "\n## States\n\n";
-        def.states.forEach(function (row) { return content += "- **" + row.name + "**: " + row.description + "\n"; });
+        def.states.forEach(function (row) { return content += "- **".concat(row.name, "**: ").concat(row.description, "\n"); });
     }
     if (def.collections) {
         content += "\n## Collections\n\n";
-        def.collections.forEach(function (row) { return content += "- [" + row.name + "](" + row.path + ")\n"; });
+        def.collections.forEach(function (row) { return content += "- [".concat(row.name, "](").concat(row.path, ")\n"); });
     }
     return content;
 }
@@ -183,16 +187,16 @@ function toReact(def) {
         var inner = c[2] ? c[2].map(traverse).join('') : '';
         var content = '';
         if (c[0] === 'ctx')
-            content = "<div data-cy-ctx='" + c[1] + "'>" + inner + "</div>";
+            content = "<div data-cy-ctx='".concat(c[1], "'>").concat(inner, "</div>");
         if (c[0] === 'col')
-            content = "<div data-cy-collection='" + c[1] + "'>" + inner + "</div>";
+            content = "<div data-cy-collection='".concat(c[1], "'>").concat(inner, "</div>");
         if (c[0] === 'handle')
-            content = "<div data-cy-handle='" + c[1] + "'>" + inner + "</div>";
+            content = "<div data-cy-handle='".concat(c[1], "'>").concat(inner, "</div>");
         if (c[0] === 'state')
-            content = "<div data-cy-state='" + c[1] + "'>" + inner + "</div>";
+            content = "<div data-cy-state='".concat(c[1], "'>").concat(inner, "</div>");
         return content;
     };
-    return "export default function Component () { return (" + traverse(def.jsx) + ") }";
+    return "export default function Component () { return (".concat(traverse(def.jsx), ") }");
 }
 expect.extend({
     toContainLog: function (received, code, name, path) {
@@ -207,13 +211,13 @@ expect.extend({
         ]));
         if (pass) {
             return {
-                message: function () { return ("expected " + _this.utils.printReceived(received.logs) + " not to contain log-object " + _this.utils.printExpected(log)); },
+                message: function () { return ("expected ".concat(_this.utils.printReceived(received.logs), " not to contain log-object ").concat(_this.utils.printExpected(log))); },
                 pass: true
             };
         }
         else {
             return {
-                message: function () { return ("expected " + _this.utils.printReceived(received.logs) + " to contain log-object " + _this.utils.printExpected(log)); },
+                message: function () { return ("expected ".concat(_this.utils.printReceived(received.logs), " to contain log-object ").concat(_this.utils.printExpected(log))); },
                 pass: false
             };
         }
@@ -228,13 +232,13 @@ expect.extend({
         ]));
         if (pass) {
             return {
-                message: function () { return ("expected " + _this.utils.printReceived(received) + " not to contain object " + _this.utils.printExpected(argument)); },
+                message: function () { return ("expected ".concat(_this.utils.printReceived(received), " not to contain object ").concat(_this.utils.printExpected(argument))); },
                 pass: true
             };
         }
         else {
             return {
-                message: function () { return ("expected " + _this.utils.printReceived(received) + " to contain object " + _this.utils.printExpected(argument)); },
+                message: function () { return ("expected ".concat(_this.utils.printReceived(received), " to contain object ").concat(_this.utils.printExpected(argument))); },
                 pass: false
             };
         }

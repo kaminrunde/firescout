@@ -122,9 +122,9 @@ async function getSrcMatch(path: string): Promise<Match[] | null> {
   const variableCommentMatches = result.match(variableCommentRegex)
 
   if (cMatchesString) {
-    cMatchesString = Array.from(new Set(cMatchesString.filter(Boolean)))
+    const list = Array.from(new Set(cMatchesString.filter(Boolean)))
     const regex = new RegExp('data-cy-(state|ctx|handle|collection)[^="\' ]* ?=("|\')(.*)("|\')')
-    let matches: any = cMatchesString.map((s) => s.match(regex))
+    let matches: any = list.map((s) => s.match(regex))
     allMatches.push(
       ...matches.map((match: any) => ({
         type: match[1] as 'ctx' | 'handle' | 'state' | 'collection',
@@ -133,9 +133,9 @@ async function getSrcMatch(path: string): Promise<Match[] | null> {
     )
   }
   if (cMatchesCond) {
-    cMatchesCond = Array.from(new Set(cMatchesCond.filter(Boolean)))
+    const list = Array.from(new Set(cMatchesCond.filter(Boolean)))
     const sMatchesRegex = new RegExp('["\'][^"\']*["\']', 'g') // matches static strings
-    for (let s of cMatchesCond) {
+    for (let s of list) {
       const type = (s.match(/data-cy-(state|ctx|handle|collection)/) || [])[1]
       let matches = s.replace(/[\s]*/g, '').match(sMatchesRegex)
       if (!matches) continue
@@ -149,7 +149,7 @@ async function getSrcMatch(path: string): Promise<Match[] | null> {
       }
     }
     const regex = new RegExp('data-cy-(state|ctx|handle|collection)[^="\' ]* ?=("|\')(.*)("|\')')
-    let matches: any = cMatchesCond.map((s) => s.match(regex)).filter((a) => a && a[0])
+    let matches: any = list.map((s) => s.match(regex)).filter((a) => a && a[0])
     allMatches.push(
       ...matches.map((match: any) => ({
         type: match[1] as 'ctx' | 'handle' | 'state' | 'collection',

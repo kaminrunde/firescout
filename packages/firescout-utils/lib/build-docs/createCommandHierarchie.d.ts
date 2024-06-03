@@ -1,5 +1,5 @@
 import { RawItem } from './searchWithNode';
-export declare type HierarchieTree = {
+export type HierarchieTree = {
     payload: string;
     file: string;
     folder: string;

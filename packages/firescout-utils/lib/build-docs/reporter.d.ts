@@ -1,7 +1,4 @@
 import { RawItem } from './searchWithNode';
-import { Tree } from './createCommandTree';
-import { Docs } from './createDocs';
-import { ModuleTree } from './createModuleTree';
 export declare const codes: {
     HANDLE_WITHOUT_PARENT: (item: RawItem) => string[];
     STATE_WITHOUT_PARENT: (item: RawItem) => string[];
@@ -98,10 +95,3 @@ export declare function report(code: 'MIXED_STATES_AND_IMPLEMENTATIONS', item: {
     name: string;
     file: string;
 }): void;
-declare type Input = {
-    tree: Tree[];
-    docs: Docs;
-    modules: ModuleTree[];
-};
-export declare function validate(input: Input): Input;
-export {};

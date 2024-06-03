@@ -1,7 +1,7 @@
-import {getStructure} from '../src/build-docs'
-import * as reporter from '../src/build-docs/reporter'
-import * as utils from '../src/build-docs/utils'
-import * as config from '../src/build-docs/config'
+import {getStructure} from '..//build-docs'
+import * as reporter from '..//build-docs/reporter'
+import * as utils from '..//build-docs/utils'
+import * as config from '..//build-docs/config'
 
 type ExecutionResult = {
   logs: {code:keyof typeof reporter.codes, name:string, path:string}[],

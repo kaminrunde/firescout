@@ -1,10 +1,11 @@
 import createCommandTree from './createCommandTree'
-import fs from 'fs'
 import searchWithNode from './searchWithNode'
 import createCommandHierarchie from './createCommandHierarchie'
 import createDocs from './createDocs'
 import createModuleTree from './createModuleTree'
 import validate from './validate'
+
+export { getConfig } from './config'
 
 export function getStructure() {
   return searchWithNode()

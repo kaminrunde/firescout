@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -14,7 +18,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -26,7 +30,7 @@ function createModuleTree(moduleItems, fixtureItems, variableItems) {
     var fixtureDict = {};
     for (var _i = 0, fixtures_1 = fixtures; _i < fixtures_1.length; _i++) {
         var f = fixtures_1[_i];
-        var id = f.module + "." + f.name;
+        var id = "".concat(f.module, ".").concat(f.name);
         if (!fixtureDict[id])
             fixtureDict[id] = [];
         fixtureDict[id].push(f);
@@ -75,7 +79,7 @@ function createFixture(item) {
     var nameMatch = item.payload.match(/@name (.*)/);
     var variationMatch = item.payload.match(/@variation (.*)/);
     return {
-        description: item.payload.replace('*/', "* @file [" + item.file + "](" + (process.cwd() + item.file) + ")\n */"),
+        description: item.payload.replace('*/', "* @file [".concat(item.file, "](").concat(process.cwd() + item.file, ")\n */")),
         file: item.file,
         folder: item.folder,
         variation: variationMatch ? variationMatch[1] : '',

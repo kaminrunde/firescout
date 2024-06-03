@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.firescoutMockVar = exports.firescoutMockFn = void 0;
 function firescoutMockFn(name, cb) {
-    return function () {
+    var fn = function () {
         var _a;
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -21,6 +21,9 @@ function firescoutMockFn(name, cb) {
         }
         return cb.apply(void 0, args);
     };
+    fn.originalImplementation = cb;
+    fn.mockName = name;
+    return fn;
 }
 exports.firescoutMockFn = firescoutMockFn;
 function firescoutMockVar(name, val) {

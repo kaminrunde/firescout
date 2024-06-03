@@ -1,7 +1,7 @@
 import { Tree } from './createCommandTree';
 import { Docs } from './createDocs';
 import { ModuleTree } from './createModuleTree';
-declare type Input = {
+type Input = {
     tree: Tree[];
     docs: Docs;
     modules: ModuleTree[];

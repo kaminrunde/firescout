@@ -1,6 +1,6 @@
-export { default as getConfig } from './config';
+export { getConfig } from './config';
 export declare function getStructure(): Promise<{
     tree: import("./createCommandTree").Tree[];
-    docs: Record<string, import("./parseMdDocs").Docs>;
+    docs: import("./createDocs").Docs;
     modules: import("./createModuleTree").ModuleTree[];
 }>;

@@ -1,5 +1,5 @@
 export declare function executeCmd(cmd: string): Promise<string>;
-export declare type File = {
+export type File = {
     name: string;
     path: string;
     isFile: boolean;

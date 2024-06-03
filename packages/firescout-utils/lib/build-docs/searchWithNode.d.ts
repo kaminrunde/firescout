@@ -1,4 +1,4 @@
-export declare type RawItem = {
+export type RawItem = {
     type: 'ctx' | 'handle' | 'state' | 'component-doc' | 'collection-doc' | 'collection' | 'module-fn' | 'fixture' | 'module-var';
     payload: string;
     file: string;

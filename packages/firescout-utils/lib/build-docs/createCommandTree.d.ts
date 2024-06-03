@@ -1,5 +1,5 @@
 import { HierarchieTree } from './createCommandHierarchie';
-declare type State = {
+type State = {
     name: string;
     file: string;
     hasRootRef: boolean;
@@ -8,7 +8,7 @@ declare type State = {
         file: string;
     }[];
 };
-export declare type Tree = {
+export type Tree = {
     context: string;
     typesaveContext: string;
     file: string;

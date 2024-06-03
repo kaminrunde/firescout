@@ -1,5 +1,5 @@
 import { RawItem } from './searchWithNode';
-export declare type Docs = {
+export type Docs = {
     context: string;
     file: string;
     folder: string;
@@ -9,14 +9,14 @@ export declare type Docs = {
     states: ChapterContent;
     collections: Record<string, Docs>;
 };
-declare type Bullet = {
+type Bullet = {
     name: string;
     value: string;
     bullets: Bullet[] | null;
     _name: string;
     _value: string;
 };
-declare type ChapterContent = {
+type ChapterContent = {
     description: string;
     _description: string;
     bullets: Bullet[];

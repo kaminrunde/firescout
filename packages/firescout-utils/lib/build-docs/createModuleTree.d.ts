@@ -1,5 +1,5 @@
 import { RawItem as ModuleItem } from './searchWithNode';
-export declare type ModuleTree = {
+export type ModuleTree = {
     context: string;
     typesaveContext: string;
     commands: {
@@ -17,7 +17,7 @@ export declare type ModuleTree = {
         fixtures: Fixture[];
     }[];
 };
-declare type Fixture = {
+type Fixture = {
     module: string;
     name: string;
     variation: string;

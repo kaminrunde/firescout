@@ -16,7 +16,7 @@ export function firescoutMockFn<CB extends (...args: any) => any>(
   name: string,
   cb: CB
 ): (...args: ArgumentTypes<CB>) => ReturnType<CB> {
-  return (...args) => {
+  const fn = (...args: ArgumentTypes<CB>) => {
     if (typeof window !== 'undefined') {
       if (window.cymocks && window.cymocks[name]) {
         const { type, cb } = window.cymocks[name]
@@ -30,6 +30,10 @@ export function firescoutMockFn<CB extends (...args: any) => any>(
     }
     return cb(...args)
   }
+  fn.originalImplementation = cb
+  fn.mockName = name
+
+  return fn
 }
 
 export function firescoutMockVar<Val>(name: string, val: Val): Val {
