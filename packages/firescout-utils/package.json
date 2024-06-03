@@ -1,6 +1,6 @@
 {
   "name": "@kaminrunde/firescout-utils",
-  "version": "1.0.1-alpha.55",
+  "version": "1.0.1-alpha.56",
   "description": "",
   "main": "lib/index.js",
   "scripts": {

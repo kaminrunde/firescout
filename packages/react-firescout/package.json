@@ -1,6 +1,6 @@
 {
   "name": "@kaminrunde/react-firescout",
-  "version": "1.0.1-alpha.55",
+  "version": "1.0.1-alpha.56",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   "author": "Manuel Jung",
   "license": "MIT",
   "dependencies": {
-    "@kaminrunde/firescout-utils": "^1.0.1-alpha.55"
+    "@kaminrunde/firescout-utils": "^1.0.1-alpha.56"
   },
   "repository": {
     "type": "git",
