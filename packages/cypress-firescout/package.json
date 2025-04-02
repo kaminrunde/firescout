@@ -1,6 +1,6 @@
 {
   "name": "@kaminrunde/cypress-firescout",
-  "version": "1.0.1-alpha.59",
+  "version": "1.0.1-alpha.60",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@kaminrunde/firescout-utils": "^1.0.1-alpha.59",
+    "@kaminrunde/firescout-utils": "^1.0.1-alpha.60",
     "colors": "^1.4.0",
     "markdown-ast": "^0.2.1"
   },
@@ -46,5 +46,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "417ecd3ccd4805e566ebc80098663b3795ab5882"
+  "gitHead": "411091011df8a8a9e7db2fcb7536e2f3b079e8fe"
 }

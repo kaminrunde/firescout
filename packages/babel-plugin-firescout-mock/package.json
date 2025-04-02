@@ -1,6 +1,6 @@
 {
   "name": "@kaminrunde/babel-plugin-firescout-mock",
-  "version": "1.0.1-alpha.59",
+  "version": "1.0.1-alpha.60",
   "description": "transforms firescoutMock comments to firescout mocks",
   "main": "src/index.js",
   "scripts": {
@@ -27,5 +27,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "411091011df8a8a9e7db2fcb7536e2f3b079e8fe"
 }
