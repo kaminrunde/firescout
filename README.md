@@ -43,10 +43,9 @@ Lerna copies root license (`LICENSE`) into package location, no need to do this 
 **hint:** for login use your github handle (lowercase!) for username. and create a token in your github (classic token with access to publish packages)
 
 ```bash
-npm login --registry=https://npm.pkg.github.com --scope=@kaminrunde --auth-type=legacy
+npm login --registry=https://npm.pkg.github.com --scope=@kaminrunde
 > Username: USERNAME
 > Password: TOKEN
-> Email: PUBLIC-EMAIL-ADDRESS
 ```
 
 Publishing a package using a local `.npmrc` file
@@ -71,6 +70,10 @@ Changes:
 
 ? Are you sure you want to publish these packages? (ynH)
 ```
+
+### forced manual prelrelease from branch `master`
+
+`yarn run publish --force-publish '*'`
 
 ### forced manual prelrelease from branch other than `master`
 
