@@ -1,6 +1,6 @@
 {
   "name": "@kaminrunde/eslint-plugin-firescout",
-  "version": "1.0.1-alpha.45",
+  "version": "1.0.1-alpha.60",
   "description": "Adds hints for usage with cypress-firescout",
   "keywords": [
     "eslint",
@@ -31,5 +31,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kaminrunde/firescout.git"
-  }
+  },
+  "gitHead": "411091011df8a8a9e7db2fcb7536e2f3b079e8fe"
 }

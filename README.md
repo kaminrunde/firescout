@@ -2,23 +2,7 @@
 
 WIP
 
-## Install GitHub Private Package
-
-In order to use the currently (still) private packages from firescout's GitHub repo you wants to apply the following approach to the project to require any firescout artifact:
-
-Create or edit file  `.npmrc` in project root dir w/ following contents:
-
-```bash
-registry=https://registry.npmjs.org/
-@kaminrunde:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=ef23d5132868664608943b05063a6dd5d191d3f0
-```
-
-The trick here is to indicate the default registry (`registry.npmjs.org`) for all other public packages you want to use.
-
-NOTE: the `authToken` is limited to scope `read:packages` and will be deleted once will become public.
-
-With the above setup 
+## Usage
 
 ```bash
 npm install --save \
@@ -37,8 +21,6 @@ Usage:
 lerna bootstrap --force-local
 # !!! NOTE comment in registry=... in .npmrc
 ```
-
-Add `"private": true` to package's `package.json` for package to remain private.
 
 To publish packages with a scope (e.g., `@kaminrunde/rocks`), [you must set `access`](https://github.com/lerna/lerna/tree/master/commands/publish#per-package-configuration) in packages' `package.json`: 
 
@@ -61,10 +43,9 @@ Lerna copies root license (`LICENSE`) into package location, no need to do this 
 **hint:** for login use your github handle (lowercase!) for username. and create a token in your github (classic token with access to publish packages)
 
 ```bash
-npm login --registry=https://npm.pkg.github.com --scope=@kaminrunde --auth-type=legacy
+npm login --registry=https://npm.pkg.github.com --scope=@kaminrunde
 > Username: USERNAME
 > Password: TOKEN
-> Email: PUBLIC-EMAIL-ADDRESS
 ```
 
 Publishing a package using a local `.npmrc` file
@@ -89,6 +70,10 @@ Changes:
 
 ? Are you sure you want to publish these packages? (ynH)
 ```
+
+### forced manual prelrelease from branch `master`
+
+`yarn run publish --force-publish '*'`
 
 ### forced manual prelrelease from branch other than `master`
 
