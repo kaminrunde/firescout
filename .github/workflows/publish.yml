@@ -1,0 +1,74 @@
+# Publishes the packages in packages/* to npmjs.com and/or GitHub Packages.
+#
+# No secrets required:
+#   - npmjs.com:       npm Trusted Publishing (OIDC, `id-token: write`)
+#   - GitHub Packages: the automatic GITHUB_TOKEN of this run (`packages: write`)
+#
+# Trigger: pushing a version tag (created by `yarn release` / `yarn prerelease`)
+# or manually via "Run workflow".
+# Default target for tag pushes: repository variable PUBLISH_TARGET (npm | github | both), fallback "both".
+name: Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Where to publish'
+        type: choice
+        options:
+          - both
+          - npm
+          - github
+        default: both
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      target: ${{ steps.target.outputs.target }}
+    steps:
+      - id: target
+        run: echo "target=${{ inputs.target || vars.PUBLISH_TARGET || 'both' }}" >> "$GITHUB_OUTPUT"
+
+  npm:
+    needs: setup
+    if: needs.setup.outputs.target == 'npm' || needs.setup.outputs.target == 'both'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # no registry-url here: it would write a placeholder token into .npmrc;
+          # Trusted Publishing authenticates via OIDC without any .npmrc entry
+          node-version: 22
+      # Trusted Publishing needs npm >= 11.5.1
+      - run: npm install -g npm@latest
+      - run: scripts/publish-packages.sh npm
+
+  github:
+    needs: setup
+    if: needs.setup.outputs.target == 'github' || needs.setup.outputs.target == 'both'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@kaminrunde'
+      - run: scripts/publish-packages.sh github
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

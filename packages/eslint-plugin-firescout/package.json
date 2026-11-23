@@ -9,6 +9,9 @@
   ],
   "author": "Manuel Jung",
   "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "test": "mocha tests --recursive",
     "prettier": "npx prettier --write \"**/*.{ts,tsx,md,js}\""
@@ -30,7 +33,11 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kaminrunde/firescout.git"
+    "url": "git+https://github.com/kaminrunde/firescout.git",
+    "directory": "packages/eslint-plugin-firescout"
   },
-  "gitHead": "04882cc39b1150c571b60f1fc2ff80a6ebd81563"
+  "gitHead": "04882cc39b1150c571b60f1fc2ff80a6ebd81563",
+  "publishConfig": {
+    "access": "public"
+  }
 }

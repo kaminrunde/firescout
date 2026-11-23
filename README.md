@@ -2,7 +2,24 @@
 
 WIP
 
+[![Publish](https://github.com/kaminrunde/firescout/actions/workflows/publish.yml/badge.svg)](https://github.com/kaminrunde/firescout/actions/workflows/publish.yml)
+
+## Packages
+
+All packages are published **publicly on [npmjs.com](https://www.npmjs.com/org/kaminrunde)** (and mirrored to GitHub Packages).
+
+| Package | npm |
+| --- | --- |
+| `@kaminrunde/firescout-utils` | [![npm](https://img.shields.io/npm/v/@kaminrunde/firescout-utils)](https://www.npmjs.com/package/@kaminrunde/firescout-utils) |
+| `@kaminrunde/react-firescout` | [![npm](https://img.shields.io/npm/v/@kaminrunde/react-firescout)](https://www.npmjs.com/package/@kaminrunde/react-firescout) |
+| `@kaminrunde/cypress-firescout` | [![npm](https://img.shields.io/npm/v/@kaminrunde/cypress-firescout)](https://www.npmjs.com/package/@kaminrunde/cypress-firescout) |
+| `@kaminrunde/eslint-plugin-firescout` | [![npm](https://img.shields.io/npm/v/@kaminrunde/eslint-plugin-firescout)](https://www.npmjs.com/package/@kaminrunde/eslint-plugin-firescout) |
+| `@kaminrunde/babel-plugin-firescout-mock` | [![npm](https://img.shields.io/npm/v/@kaminrunde/babel-plugin-firescout-mock)](https://www.npmjs.com/package/@kaminrunde/babel-plugin-firescout-mock) |
+| `@kaminrunde/babel-plugin-remove-firescout` | [![npm](https://img.shields.io/npm/v/@kaminrunde/babel-plugin-remove-firescout)](https://www.npmjs.com/package/@kaminrunde/babel-plugin-remove-firescout) |
+
 ## Usage
+
+No token and no `.npmrc` configuration needed:
 
 ```bash
 npm install --save \
@@ -11,18 +28,28 @@ npm install --save \
   @kaminrunde/eslint-plugin-firescout
 ```
 
+### Migrating from GitHub Packages
+
+Older setups installed these packages from GitHub Packages and needed a GitHub token plus this line in the project's `.npmrc`:
+
+```
+@kaminrunde:registry=https://npm.pkg.github.com
+```
+
+Remove that line (and the token) to install from npmjs.com instead.
+
+> **Note:** a registry mapping in `.npmrc` applies to the whole `@kaminrunde` scope. If your project also uses other `@kaminrunde/*` packages that exist **only** on GitHub Packages, keep the line – the firescout packages are still mirrored there, so both setups keep working.
+
 ## Lerna
 
 Usage:
 
 ```bash
 # bootstrap
-# !!! NOTE comment out registry=... in .npmrc
 lerna bootstrap --force-local
-# !!! NOTE comment in registry=... in .npmrc
 ```
 
-To publish packages with a scope (e.g., `@kaminrunde/rocks`), [you must set `access`](https://github.com/lerna/lerna/tree/master/commands/publish#per-package-configuration) in packages' `package.json`: 
+To publish packages with a scope (e.g., `@kaminrunde/rocks`) publicly, `access` must be set in the packages' `package.json` (all firescout packages already have it):
 
 ```
   "publishConfig": {
@@ -30,54 +57,79 @@ To publish packages with a scope (e.g., `@kaminrunde/rocks`), [you must set `acc
   }
 ```
 
-Lerna copies root license (`LICENSE`) into package location, no need to do this manually (of via symlink for that matter).
+Each package defines a `files` list in its `package.json` – only those files end up in the published tarball. Check with `npm pack --dry-run` inside the package folder.
 
-## Configuring npm for use with GitHub Packages
+## Releasing
 
-<https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages>
+Publishing happens **only in CI** via [`.github/workflows/publish.yml`](.github/workflows/publish.yml). Nobody needs an npm or GitHub token locally, and there are no secrets in this repository or in the GitHub repository settings:
 
-<https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line>
+- **npmjs.com** – [npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers) (OIDC). Packages are published with [provenance](https://docs.npmjs.com/generating-provenance-statements).
+- **GitHub Packages** – the workflow's automatic `GITHUB_TOKEN`.
 
-> To authenticate by logging in to npm, use the npm login command, replacing USERNAME with your GitHub username, TOKEN with your [personal access token](https://github.com/settings/tokens), and PUBLIC-EMAIL-ADDRESS with your email address.
+### Release flow
 
-**hint:** for login use your github handle (lowercase!) for username. and create a token in your github (classic token with access to publish packages)
-
-```bash
-npm login --registry=https://npm.pkg.github.com --scope=@kaminrunde
-> Username: USERNAME
-> Password: TOKEN
-```
-
-Publishing a package using a local `.npmrc` file
-
-<https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages#publishing-a-package-using-a-local-npmrc-file>
-
-### manual prerelease `lerna publish prerelease`
+The committed `lib/` folders are published as they are – build (`yarn build` in the package) and commit them before releasing.
 
 ```bash
-❯ yarn run prerelease
-yarn run v1.22.4
-$ lerna publish prerelease
-lerna notice cli v3.22.0
-lerna info current version 1.0.0
-lerna info Assuming all packages changed
+# stable release: bump versions, commit, tag (vX.Y.Z) and push
+yarn release
 
-Changes:
- - @kaminrunde/example-app-firescout: 1.0.0 => 1.0.1-alpha.0 (private)
- - @kaminrunde/babel-plugin-remove-firescout: 1.0.0 => 1.0.1-alpha.0
- - @kaminrunde/cypress-firescout: 1.0.0 => 1.0.1-alpha.0
- - @kaminrunde/eslint-plugin-firescout: 1.0.0 => 1.0.1-alpha.0
-
-? Are you sure you want to publish these packages? (ynH)
+# prerelease (e.g. 1.0.2-alpha.0), published with dist-tag `next`
+yarn prerelease
 ```
 
-### forced manual prelrelease from branch `master`
+Pushing the `v*` tag triggers the **Publish** workflow. It publishes every non-private package in `packages/*` whose version is not yet in the target registry, so re-running it is safe.
 
-`yarn run publish --force-publish '*'`
+Install a prerelease with `npm install @kaminrunde/cypress-firescout@next`.
 
-### forced manual prelrelease from branch other than `master`
+### Choosing the target registry
 
-`yarn run publish --allow-branch firescout-jest --force-publish '*'`
+| Where | How |
+| --- | --- |
+| Default for tag pushes | repository variable `PUBLISH_TARGET` (*Settings → Secrets and variables → Actions → Variables*): `npm`, `github` or `both`. Unset = `both`. |
+| Manual run | *Actions → Publish → Run workflow* and pick `both`, `npm` or `github` |
+
+The workflow can also be used to (re-)publish an existing version, e.g. to fill up a registry that is missing it.
+
+### One-time setup on npmjs.com
+
+npm Trusted Publishing can only be configured for packages that already exist, so the very first version is published once by hand:
+
+1. Log in locally (browser login with 2FA; the session token stays in your `~/.npmrc`, never in this repo):
+   ```bash
+   npm login
+   ```
+2. Publish the current versions (dry run first):
+   ```bash
+   scripts/publish-packages.sh npm --dry-run
+   scripts/publish-packages.sh npm
+   ```
+3. Configure Trusted Publishing for all packages (uses `npm trust`, needs npm ≥ 11.10 and 2FA on your account):
+   ```bash
+   scripts/setup-trusted-publishing.sh --dry-run
+   scripts/setup-trusted-publishing.sh        # 2FA in the browser: tick "skip 2FA for 5 minutes"
+   scripts/setup-trusted-publishing.sh --list # verify
+   ```
+   Run it in a real terminal – without a TTY npm cannot wait for the browser 2FA and fails with `EOTP`.
+   With an authenticator app you can pass a code instead: `NPM_OTP=123456 scripts/setup-trusted-publishing.sh`.
+   Manual alternative, per package on npmjs.com → *Settings* → *Trusted Publisher* → *GitHub Actions*:
+   organization `kaminrunde`, repository `firescout`, workflow `publish.yml`, environment empty.
+4. Recommended: for each package set *Publishing access* to **"Require two-factor authentication and disallow tokens"** – then only the workflow can publish.
+5. `npm logout`
+
+> `scripts/publish-packages.sh` also overrides `@kaminrunde:registry`, so a GitHub scope mapping in your personal `~/.npmrc` does not redirect the publish to GitHub Packages.
+
+From then on every release goes through the workflow.
+
+### Manual prerelease / forced publish
+
+```bash
+# bump all packages even if unchanged
+yarn lerna version --force-publish '*'
+
+# release from a branch other than master
+yarn lerna version prerelease --preid alpha --allow-branch firescout-jest --force-publish '*'
+```
 
 ## Dev Setup
 

@@ -3,6 +3,9 @@
   "version": "1.0.1",
   "description": "transforms firescoutMock comments to firescout mocks",
   "main": "src/index.js",
+  "files": [
+    "src/index.js"
+  ],
   "scripts": {
     "start": "ts-node src/index.ts",
     "test": "jest --watch",
@@ -12,7 +15,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kaminrunde/firescout.git"
+    "url": "git+https://github.com/kaminrunde/firescout.git",
+    "directory": "packages/babel-plugin-firescout-mock"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",

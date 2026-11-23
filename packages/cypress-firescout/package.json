@@ -3,6 +3,10 @@
   "version": "1.0.1",
   "description": "",
   "main": "lib/index.js",
+  "files": [
+    "lib",
+    "scripts"
+  ],
   "scripts": {
     "start": "ts-node src/index.ts",
     "test": "jest --watch",
@@ -24,7 +28,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kaminrunde/firescout.git"
+    "url": "git+https://github.com/kaminrunde/firescout.git",
+    "directory": "packages/cypress-firescout"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
